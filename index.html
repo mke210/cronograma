@@ -116,6 +116,8 @@
         .btn-print:hover { background: #5A4BD1; transform: translateY(-1px); }
         .btn-excel { background: #217346; color: white; }
         .btn-excel:hover { background: #1A5E38; transform: translateY(-1px); }
+        .btn-implement { background: #FF6B35; color: white; }
+        .btn-implement:hover { background: #E55A2B; transform: translateY(-1px); }
 
         .tabs {
             display: flex;
@@ -649,7 +651,7 @@
         .dosificacion-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             background: var(--card-bg);
             border-radius: 8px;
             overflow: hidden;
@@ -678,6 +680,19 @@
             background: var(--primary-light);
             color: var(--primary-dark);
             vertical-align: middle;
+            min-width: 80px;
+        }
+        .dosificacion-table .trimestre-cell .trim-label {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .dosificacion-table .trimestre-cell .meses-label {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+            line-height: 1.3;
         }
         .dosificacion-table .proyecto-cell {
             font-weight: 600;
@@ -686,15 +701,6 @@
         .dosificacion-table .sesiones-cell {
             text-align: center;
             font-weight: 600;
-        }
-        .dosificacion-table .meses-cell {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-        }
-        .dosificacion-table .footer-cell {
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
         }
         .dosificacion-table .total-cell {
             text-align: right;
@@ -764,6 +770,13 @@
             width: 50px;
             margin: 0 auto;
         }
+
+        /* Anchos de columna específicos */
+        .dosificacion-table .col-trimestre { width: 10%; min-width: 80px; }
+        .dosificacion-table .col-proyecto { width: 22%; min-width: 150px; }
+        .dosificacion-table .col-contenido { width: 18%; min-width: 120px; }
+        .dosificacion-table .col-pda { width: 38%; min-width: 200px; }
+        .dosificacion-table .col-sesiones { width: 7%; min-width: 50px; }
 
         .dosificacion-grade-selector {
             display: flex;
@@ -950,6 +963,7 @@
                             <option value="3">3º Secundaria</option>
                         </select>
                     </div>
+                    <button class="btn btn-implement btn-sm" onclick="implementarDosificacion()">📌 Implementar en Cronograma</button>
                     <button class="btn btn-success btn-sm" onclick="saveDosificacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
                 </div>
@@ -1242,6 +1256,11 @@ const DOSIFICACION_DATA = {
         docente: 'Profr. José Emmanuel Chan Ibáñez',
         grado: '1.º Año',
         ciclo: '2025 – 2026',
+        meses: {
+            I: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
+            II: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
+            III: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO'
+        },
         trimestres: [
             {
                 nombre: 'I',
@@ -1278,6 +1297,11 @@ const DOSIFICACION_DATA = {
         docente: 'Profr. José Emmanuel Chan Ibáñez',
         grado: '2.º Año',
         ciclo: '2025 – 2026',
+        meses: {
+            I: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
+            II: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
+            III: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO'
+        },
         trimestres: [
             {
                 nombre: 'I',
@@ -1314,6 +1338,11 @@ const DOSIFICACION_DATA = {
         docente: 'Profr. José Emmanuel Chan Ibáñez',
         grado: '3.º Año',
         ciclo: '2025 – 2026',
+        meses: {
+            I: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
+            II: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
+            III: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO'
+        },
         trimestres: [
             {
                 nombre: 'I',
@@ -1528,7 +1557,122 @@ function getTrimestreMonths(trimestre) {
 }
 
 // ============================================================
-// RENDERIZADO DE DOSIFICACIÓN - CORREGIDA (SIN COLUMNA MESES)
+// IMPLEMENTAR DOSIFICACIÓN EN CRONOGRAMA
+// ============================================================
+function implementarDosificacion() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
+    
+    if (!data) {
+        showToast('⚠️ No hay datos para este grado');
+        return;
+    }
+    
+    // Mapeo de trimestre a meses y días de inicio
+    const trimestreMap = {
+        1: { months: [9, 10, 11], startDay: 1 }, // Septiembre, Octubre, Noviembre
+        2: { months: [12, 1, 2, 3], startDay: 1 }, // Diciembre, Enero, Febrero, Marzo
+        3: { months: [4, 5, 6, 7], startDay: 1 } // Abril, Mayo, Junio, Julio
+    };
+    
+    let count = 0;
+    let conflicts = 0;
+    const gradeLabel = grade === 'all' ? 'all' : parseInt(grade);
+    
+    // Primero eliminar proyectos existentes de este grado con nombre similar
+    for (const trim of data.trimestres) {
+        for (const proyecto of trim.proyectos) {
+            // Eliminar actividades que coincidan con el nombre del proyecto
+            const toRemove = activities.filter(a => {
+                const gradesAct = getGradesForActivity(a.grade);
+                return gradesAct.includes(parseInt(grade)) && a.activity === proyecto.nombre && isProject(a.type);
+            });
+            for (const r of toRemove) {
+                const idx = activities.indexOf(r);
+                if (idx >= 0) activities.splice(idx, 1);
+                conflicts++;
+            }
+        }
+    }
+    
+    // Ahora agregar los proyectos
+    let trimIndex = 0;
+    for (const trim of data.trimestres) {
+        trimIndex++;
+        const trimInfo = trimestreMap[trimIndex];
+        if (!trimInfo) continue;
+        
+        let currentMonthIndex = 0;
+        let currentDay = trimInfo.startDay;
+        let currentMonth = trimInfo.months[currentMonthIndex];
+        
+        for (const proyecto of trim.proyectos) {
+            const sesiones = parseInt(proyecto.sesiones) || 12;
+            let diasAgregados = 0;
+            let day = currentDay;
+            let month = currentMonth;
+            let monthIdx = currentMonthIndex;
+            
+            while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
+                const year = getYear(month);
+                // Saltar fines de semana
+                if (!isWeekend(month, day, year)) {
+                    // Verificar si ya existe actividad en este día
+                    const existingIdx = activities.findIndex(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(parseInt(grade)) && a.month === month && a.day === day;
+                    });
+                    
+                    if (existingIdx >= 0) {
+                        // Reemplazar actividad existente
+                        activities[existingIdx] = { 
+                            grade: parseInt(grade), 
+                            month: month, 
+                            day: day, 
+                            activity: proyecto.nombre, 
+                            type: 'proyecto', 
+                            duration: sesiones, 
+                            unit: 'days' 
+                        };
+                    } else {
+                        activities.push({ 
+                            grade: parseInt(grade), 
+                            month: month, 
+                            day: day, 
+                            activity: proyecto.nombre, 
+                            type: 'proyecto', 
+                            duration: sesiones, 
+                            unit: 'days' 
+                        });
+                    }
+                    diasAgregados++;
+                    count++;
+                }
+                day++;
+                const daysInMonth = getDaysInMonth(month);
+                if (day > daysInMonth) {
+                    day = 1;
+                    monthIdx++;
+                    if (monthIdx < trimInfo.months.length) {
+                        month = trimInfo.months[monthIdx];
+                    }
+                }
+            }
+            
+            // Actualizar posición para el siguiente proyecto
+            currentDay = day;
+            currentMonth = month;
+            currentMonthIndex = monthIdx;
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    showToast(`✅ Implementados ${count} días de actividades para ${data.grado}`);
+}
+
+// ============================================================
+// RENDERIZADO DE DOSIFICACIÓN - CON MESES EN TRIMESTRE
 // ============================================================
 function renderDosificacion() {
     const container = document.getElementById('dosificacionContainer');
@@ -1578,11 +1722,11 @@ function renderDosificacion() {
             </td>
         </tr>
         <tr>
-            <th style="width:8%;">TRIMESTRE</th>
-            <th style="width:27%;">PROYECTO</th>
-            <th style="width:20%;">CONTENIDO</th>
-            <th style="width:38%;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
-            <th style="width:7%;">SESIONES</th>
+            <th class="col-trimestre">TRIMESTRE</th>
+            <th class="col-proyecto">PROYECTO</th>
+            <th class="col-contenido">CONTENIDO</th>
+            <th class="col-pda">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
+            <th class="col-sesiones">SESIONES</th>
         </tr>`;
     
     let totalSesiones = 0;
@@ -1591,13 +1735,17 @@ function renderDosificacion() {
     for (const trim of data.trimestres) {
         trimCount++;
         let firstRow = true;
+        const mesesValue = data.meses ? data.meses[trim.nombre] : '';
         
         for (const proyecto of trim.proyectos) {
             totalSesiones += proyecto.sesiones;
             const rowspan = firstRow ? trim.proyectos.length : 1;
             
             html += `<tr>
-                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">${trim.nombre}</td>` : ''}
+                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
+                    <div class="trim-label">${trim.nombre}</div>
+                    <div class="meses-label">${mesesValue || 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE'}</div>
+                </td>` : ''}
                 <td>
                     <textarea class="editable-textarea" 
                               onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'nombre', this.value)" 
