@@ -210,7 +210,6 @@
             background: rgba(255, 107, 107, 0.15);
         }
         
-        /* Celdas de proyectos - TEXTO DISTRIBUIDO EN HORIZONTAL */
         .grid-cell.proyecto-cell {
             background: var(--color-proyecto);
             color: white;
@@ -653,9 +652,6 @@
             padding: 6px 10px;
         }
 
-        /* ============================================================
-           ESTILOS PARA DOSIFICACIÓN - COLUMNA TRIMESTRE REDUCIDA 60%
-           ============================================================ */
         .dosificacion-container {
             overflow-x: auto;
             padding: 4px 0;
@@ -787,7 +783,6 @@
             margin: 0 auto;
         }
 
-        /* Anchos de columna específicos - TRIMESTRE reducido 60% */
         .dosificacion-table .col-trimestre { width: 4%; min-width: 50px; max-width: 60px; }
         .dosificacion-table .col-proyecto { width: 24%; min-width: 150px; }
         .dosificacion-table .col-contenido { width: 20%; min-width: 120px; }
@@ -924,7 +919,6 @@
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
     </nav>
 
-    <!-- PESTAÑA CRONOGRAMA -->
     <div class="tab-content active" id="tab-cronograma">
         <div class="card">
             <div class="card-header">
@@ -965,7 +959,6 @@
         </div>
     </div>
 
-    <!-- PESTAÑA DOSIFICACIÓN -->
     <div class="tab-content" id="tab-dosificacion">
         <div class="card">
             <div class="card-header">
@@ -984,13 +977,10 @@
                     <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
                 </div>
             </div>
-            <div id="dosificacionContainer" class="dosificacion-container">
-                <!-- Generado por JavaScript -->
-            </div>
+            <div id="dosificacionContainer" class="dosificacion-container"></div>
         </div>
     </div>
 
-    <!-- PESTAÑA EDITOR -->
     <div class="tab-content" id="tab-editor">
         <div class="card">
             <div class="card-header">
@@ -1072,7 +1062,6 @@
         </div>
     </div>
 
-    <!-- PESTAÑA CONFIGURACIÓN -->
     <div class="tab-content" id="tab-config">
         <div class="card">
             <div class="card-header">
@@ -1118,7 +1107,6 @@
         </div>
     </div>
 
-    <!-- PESTAÑA EXPORTAR -->
     <div class="tab-content" id="tab-export">
         <div class="card">
             <div class="card-header">
@@ -1392,32 +1380,133 @@ const DOSIFICACION_DATA = {
 };
 
 // ============================================================
-// DATOS OFICIALES SEP 2026-2027
+// DATOS OFICIALES SEP 2026-2027 - CORREGIDOS COMPLETAMENTE
+// Basado en el PDF Calendario_SEP_2026-2027_ReporteIndigo.pdf
 // ============================================================
 const OFFICIAL_EVENTS = [
-    { grade: 'all', month: 8, day: 24, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 5, unit: 'days' },
+    // ==================== AGOSTO 2026 ====================
+    // CTE Fase Intensiva
+    { grade: 'all', month: 8, day: 24, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
+    { grade: 'all', month: 8, day: 25, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
+    { grade: 'all', month: 8, day: 26, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
+    { grade: 'all', month: 8, day: 27, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
+    { grade: 'all', month: 8, day: 28, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
+    // Inicio de clases
     { grade: 'all', month: 8, day: 31, activity: 'Inicio de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
+
+    // ==================== SEPTIEMBRE 2026 ====================
+    // CTE Sesión Ordinaria (todos los viernes)
+    { grade: 'all', month: 9, day: 4, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 9, day: 11, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 9, day: 16, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 9, day: 18, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 9, day: 25, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== OCTUBRE 2026 ====================
+    { grade: 'all', month: 10, day: 2, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 10, day: 9, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 10, day: 16, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 10, day: 23, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 10, day: 30, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== NOVIEMBRE 2026 ====================
     { grade: 'all', month: 11, day: 2, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 11, day: 6, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 11, day: 13, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 11, day: 16, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 11, day: 20, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 11, day: 27, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 21, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 11, unit: 'days' },
+
+    // ==================== DICIEMBRE 2026 ====================
+    { grade: 'all', month: 12, day: 4, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 11, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 18, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    // Receso invernal
+    { grade: 'all', month: 12, day: 21, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 22, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 23, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 24, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 25, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 26, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 27, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 28, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 29, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 30, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 31, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+
+    // ==================== ENERO 2027 ====================
+    { grade: 'all', month: 1, day: 1, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 2, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 3, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 4, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 5, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 6, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 7, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 8, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
     { grade: 'all', month: 1, day: 11, activity: 'Reanudación de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
     { grade: 'all', month: 1, day: 29, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== FEBRERO 2027 ====================
     { grade: 'all', month: 2, day: 1, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 2, day: 5, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 2, day: 12, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 2, day: 19, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 2, day: 26, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== MARZO 2027 ====================
+    { grade: 'all', month: 3, day: 5, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 12, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 3, day: 15, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 22, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 11, unit: 'days' },
+    { grade: 'all', month: 3, day: 19, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    // Vacaciones de Semana Santa
+    { grade: 'all', month: 3, day: 22, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 23, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 24, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 25, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 26, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 27, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 28, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 29, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 30, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 31, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+
+    // ==================== ABRIL 2027 ====================
+    { grade: 'all', month: 4, day: 1, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 4, day: 2, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
     { grade: 'all', month: 4, day: 5, activity: 'Reanudación de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
     { grade: 'all', month: 4, day: 30, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== MAYO 2027 ====================
     { grade: 'all', month: 5, day: 5, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 5, day: 7, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 5, day: 14, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 5, day: 15, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 5, day: 21, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 5, day: 28, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== JUNIO 2027 ====================
+    { grade: 'all', month: 6, day: 4, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 6, day: 11, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 6, day: 18, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 6, day: 25, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+
+    // ==================== JULIO 2027 ====================
+    { grade: 'all', month: 7, day: 2, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 9, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
     { grade: 'all', month: 7, day: 16, activity: 'Fin de Clases', type: 'fin-ciclo', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 19, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 3, unit: 'days' },
+    { grade: 'all', month: 7, day: 19, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 20, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 21, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 22, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 23, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 24, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 25, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 26, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 27, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 28, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 29, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 30, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 31, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
 ];
 
 const DEFAULT_CONFIG = {
@@ -1584,34 +1673,29 @@ function implementarDosificacion() {
         return;
     }
     
-    // Mapeo de trimestre a meses y días de inicio
     const trimestreMap = {
-        1: { months: [9, 10, 11], startDay: 1 }, // Septiembre, Octubre, Noviembre
-        2: { months: [12, 1, 2, 3], startDay: 1 }, // Diciembre, Enero, Febrero, Marzo
-        3: { months: [4, 5, 6, 7], startDay: 1 } // Abril, Mayo, Junio, Julio
+        1: { months: [9, 10, 11], startDay: 1 },
+        2: { months: [12, 1, 2, 3], startDay: 1 },
+        3: { months: [4, 5, 6, 7], startDay: 1 }
     };
     
     let count = 0;
-    let conflicts = 0;
-    const gradeLabel = grade === 'all' ? 'all' : parseInt(grade);
+    const gradeNum = parseInt(grade);
     
-    // Primero eliminar proyectos existentes de este grado con nombre similar
+    // Eliminar proyectos existentes
     for (const trim of data.trimestres) {
         for (const proyecto of trim.proyectos) {
-            // Eliminar actividades que coincidan con el nombre del proyecto
             const toRemove = activities.filter(a => {
                 const gradesAct = getGradesForActivity(a.grade);
-                return gradesAct.includes(parseInt(grade)) && a.activity === proyecto.nombre && isProject(a.type);
+                return gradesAct.includes(gradeNum) && a.activity === proyecto.nombre && isProject(a.type);
             });
             for (const r of toRemove) {
                 const idx = activities.indexOf(r);
                 if (idx >= 0) activities.splice(idx, 1);
-                conflicts++;
             }
         }
     }
     
-    // Ahora agregar los proyectos
     let trimIndex = 0;
     for (const trim of data.trimestres) {
         trimIndex++;
@@ -1631,18 +1715,15 @@ function implementarDosificacion() {
             
             while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
                 const year = getYear(month);
-                // Saltar fines de semana
                 if (!isWeekend(month, day, year)) {
-                    // Verificar si ya existe actividad en este día
                     const existingIdx = activities.findIndex(a => {
                         const gradesAct = getGradesForActivity(a.grade);
-                        return gradesAct.includes(parseInt(grade)) && a.month === month && a.day === day;
+                        return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
                     });
                     
                     if (existingIdx >= 0) {
-                        // Reemplazar actividad existente
                         activities[existingIdx] = { 
-                            grade: parseInt(grade), 
+                            grade: gradeNum, 
                             month: month, 
                             day: day, 
                             activity: proyecto.nombre, 
@@ -1652,7 +1733,7 @@ function implementarDosificacion() {
                         };
                     } else {
                         activities.push({ 
-                            grade: parseInt(grade), 
+                            grade: gradeNum, 
                             month: month, 
                             day: day, 
                             activity: proyecto.nombre, 
@@ -1675,7 +1756,6 @@ function implementarDosificacion() {
                 }
             }
             
-            // Actualizar posición para el siguiente proyecto
             currentDay = day;
             currentMonth = month;
             currentMonthIndex = monthIdx;
@@ -1688,7 +1768,7 @@ function implementarDosificacion() {
 }
 
 // ============================================================
-// RENDERIZADO DE DOSIFICACIÓN - CON MESES EN TRIMESTRE
+// RENDERIZADO DE DOSIFICACIÓN
 // ============================================================
 function renderDosificacion() {
     const container = document.getElementById('dosificacionContainer');
@@ -1824,14 +1904,10 @@ function renderDosificacion() {
     
     container.innerHTML = html;
     
-    // Actualizar total de sesiones automáticamente
     const display = document.getElementById('totalSesionesDisplay');
     if (display) display.textContent = totalSesiones;
 }
 
-// ============================================================
-// FUNCIONES PARA ACTUALIZAR DOSIFICACIÓN
-// ============================================================
 function updateDosificacionField(grade, field, value) {
     dosificacionData[grade][field] = value;
     localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
@@ -2016,7 +2092,7 @@ function confirmOverwrite() {
 }
 
 // ============================================================
-// RENDERIZADO DEL CRONOGRAMA - TEXTO DISTRIBUIDO EN HORIZONTAL
+// RENDERIZADO DEL CRONOGRAMA - CORREGIDO
 // ============================================================
 function renderCronograma() {
     const container = document.getElementById('cronogramaContainer');
@@ -2117,31 +2193,26 @@ function renderCronograma() {
                             isEnd = isLast;
                             isMiddle = !isFirst && !isLast;
                             
-                            // Dividir el texto en palabras para distribuirlo
                             const words = projectName.split(' ');
                             const wordIndex = dayIndex % words.length;
                             
-                            // Distribuir las palabras en todas las celdas
                             if (totalProjectDays === 1) {
                                 typeClass = 'proyecto proyecto-single';
                                 projectText = projectName;
                             } else if (isStart) {
                                 typeClass = 'proyecto proyecto-start';
-                                // Mostrar primeras palabras
                                 const wordsPerCell = Math.max(1, Math.floor(words.length / totalProjectDays));
                                 const startIdx = 0;
                                 const endIdx = Math.min(wordsPerCell, words.length);
                                 projectText = words.slice(startIdx, endIdx).join(' ');
                             } else if (isMiddle) {
                                 typeClass = 'proyecto proyecto-middle';
-                                // Distribuir palabras en celdas intermedias
                                 const wordsPerCell = Math.max(1, Math.floor(words.length / totalProjectDays));
                                 const startIdx = Math.min(dayIndex * wordsPerCell, words.length - 1);
                                 const endIdx = Math.min(startIdx + wordsPerCell, words.length);
                                 projectText = words.slice(startIdx, endIdx).join(' ');
                             } else if (isEnd) {
                                 typeClass = 'proyecto proyecto-end';
-                                // Últimas palabras
                                 const wordsPerCell = Math.max(1, Math.floor(words.length / totalProjectDays));
                                 const startIdx = Math.max(0, words.length - wordsPerCell);
                                 projectText = words.slice(startIdx).join(' ');
@@ -2169,7 +2240,6 @@ function renderCronograma() {
                         const weekendClass = weekend ? 'weekend' : '';
                         const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
                         
-                        // Dividir el texto en palabras para mostrarlas como elementos inline
                         const wordsHtml = displayContent.split(' ').map(w => `<span class="word">${w}</span>`).join('');
                         
                         html += `<div class="grid-cell ${weekendClass} ${selectClass} ${proyectoClass}" ${clickAttr}>
@@ -3454,7 +3524,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado');
+console.log('📚 Cronograma SEP 2026-2027 cargado con fechas corregidas');
 console.log(`📊 ${activities.length} actividades cargadas`);
 </script>
 </body>
