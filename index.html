@@ -118,6 +118,8 @@
         .btn-excel:hover { background: #1A5E38; transform: translateY(-1px); }
         .btn-implement { background: #FF6B35; color: white; }
         .btn-implement:hover { background: #E55A2B; transform: translateY(-1px); }
+        .btn-word { background: #2B5797; color: white; }
+        .btn-word:hover { background: #1A3D6E; transform: translateY(-1px); }
 
         .tabs {
             display: flex;
@@ -170,6 +172,505 @@
         }
         .card-title { font-size: 1.1rem; font-weight: 600; }
 
+        /* ============================================================
+           ESTILOS PARA PLAN ANUAL
+           ============================================================ */
+        .plan-container {
+            font-family: 'Times New Roman', Times, serif;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        .plan-container h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .plan-container .subtitle {
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .plan-container .dimension-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 25px 0 10px 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 5px;
+        }
+        .plan-container .dimension-subtitle {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .plan-table th,
+        .plan-table td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            vertical-align: top;
+            text-align: left;
+        }
+        .plan-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        .plan-table td {
+            background: var(--card-bg);
+        }
+        .plan-table .editable-text {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 3px;
+            min-height: 24px;
+            transition: all 0.2s ease;
+            resize: vertical;
+        }
+        .plan-table .editable-text:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .plan-table .editable-text:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .plan-table .editable-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 3px;
+            min-height: 40px;
+            transition: all 0.2s ease;
+            resize: vertical;
+            line-height: 1.4;
+        }
+        .plan-table .editable-textarea:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .plan-table .editable-textarea:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .plan-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .plan-footer .signature-block {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+        .plan-footer .signature-block strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .plan-footer .signature-block .signature-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .plan-footer .signature-block .signature-title {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .plan-footer .signature-block .editable-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .plan-footer .signature-block .editable-input:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .plan-footer .signature-block .editable-input:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .plan-footer .signature-block .editable-title {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .plan-footer .signature-block .editable-title:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .plan-footer .signature-block .editable-title:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .plan-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        @media print {
+            .plan-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .legend, .card-header .btn-group, .selection-info { display: none !important; }
+            .plan-container { border: none; padding: 10px; background: white; }
+            .plan-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .plan-table td { background: white !important; }
+            .editable-text, .editable-textarea, .editable-input, .editable-title {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                pointer-events: none;
+            }
+            .plan-container .dimension-title { color: #00467F !important; border-bottom-color: #00467F !important; }
+            .card { box-shadow: none; border: none; padding: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .plan-container { padding: 10px; }
+            .plan-table { font-size: 0.65rem; }
+            .plan-table th, .plan-table td { padding: 3px 4px; }
+            .plan-container h1 { font-size: 1.2rem; }
+            .plan-footer { flex-direction: column; }
+        }
+
+        /* ============================================================
+           ESTILOS PARA CALENDARIO SEP
+           ============================================================ */
+        .calendario-sep-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+        .calendario-sep-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .calendario-sep-table th,
+        .calendario-sep-table td {
+            border: 1px solid var(--border);
+            padding: 4px 6px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .calendario-sep-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        .calendario-sep-table .month-header {
+            background: #28A745;
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        .calendario-sep-table .weekday-header {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.6rem;
+        }
+        .calendario-sep-table .day-cell {
+            min-width: 30px;
+            height: 28px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .calendario-sep-table .day-cell:hover {
+            background: var(--primary-light);
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        .calendario-sep-table .day-cell .event-badge {
+            display: block;
+            font-size: 0.45rem;
+            padding: 1px 2px;
+            border-radius: 2px;
+            margin-top: 1px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        .calendario-sep-table .day-cell .event-badge.inicio-clases { background: var(--color-inicio); color: white; }
+        .calendario-sep-table .day-cell .event-badge.receso-vacaciones { background: var(--color-vacacion); color: #1A1A1A; }
+        .calendario-sep-table .day-cell .event-badge.festivo-suspension { background: var(--color-festivo); color: white; }
+        .calendario-sep-table .day-cell .event-badge.cte-intensiva { background: var(--color-cte-intensiva); color: white; }
+        .calendario-sep-table .day-cell .event-badge.cte-ordinaria { background: var(--color-cte-ordinaria); color: white; }
+        .calendario-sep-table .day-cell .event-badge.fortalecimiento { background: var(--color-fortalecimiento); color: white; }
+        .calendario-sep-table .day-cell .event-badge.fin-ciclo { background: var(--color-fin-ciclo); color: white; }
+        .calendario-sep-table .day-cell .event-badge.normal { background: var(--color-normal); color: var(--primary); }
+        .calendario-sep-table .day-cell.weekend {
+            background: var(--color-weekend);
+            opacity: 0.6;
+        }
+        .calendario-sep-table .day-cell.selected-cell {
+            outline: 2px solid var(--color-selected);
+            outline-offset: -2px;
+            z-index: 5;
+            background: rgba(255, 107, 107, 0.15);
+        }
+        .calendario-sep-table .day-cell .day-number {
+            font-weight: 600;
+            font-size: 0.6rem;
+        }
+
+        .calendario-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .calendario-actions .form-group {
+            margin-bottom: 0;
+            min-width: 120px;
+        }
+        .calendario-actions .form-group select,
+        .calendario-actions .form-group input {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+        }
+        .calendario-actions .form-group-inline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .calendario-sep-table .event-editor {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .calendario-sep-table .event-editor select,
+        .calendario-sep-table .event-editor input {
+            padding: 2px 4px;
+            font-size: 0.7rem;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+        }
+        .calendario-sep-table .event-editor .btn-sm {
+            padding: 2px 6px;
+            font-size: 0.6rem;
+        }
+
+        /* ============================================================
+           ESTILOS PARA DOSIFICACIÓN
+           ============================================================ */
+        .dosificacion-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+        .dosificacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .dosificacion-table th,
+        .dosificacion-table td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .dosificacion-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        .dosificacion-table .header-school {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        .dosificacion-table .trimestre-cell {
+            font-weight: 700;
+            text-align: center;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            vertical-align: middle;
+            width: 4%;
+            min-width: 50px;
+            max-width: 60px;
+            font-size: 0.6rem;
+            padding: 4px 2px;
+        }
+        .dosificacion-table .trimestre-cell .trim-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .dosificacion-table .trimestre-cell .meses-label {
+            font-size: 0.5rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+            line-height: 1.2;
+        }
+        .dosificacion-table .proyecto-cell {
+            font-weight: 600;
+            color: var(--color-proyecto);
+        }
+        .dosificacion-table .sesiones-cell {
+            text-align: center;
+            font-weight: 600;
+        }
+        .dosificacion-table .total-cell {
+            text-align: right;
+            font-weight: 700;
+            padding: 10px;
+            background: var(--primary-light);
+        }
+        .dosificacion-table .total-sesiones-cell {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            background: var(--primary-light);
+        }
+        .dosificacion-table .signature-cell {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .dosificacion-table .signature-cell strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .dosificacion-table .signature-cell .signature-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .dosificacion-table .signature-cell .signature-title {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .dosificacion-table .editable-input,
+        .dosificacion-table .editable-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            resize: vertical;
+            min-height: 24px;
+        }
+        .dosificacion-table .editable-input:focus,
+        .dosificacion-table .editable-textarea:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .dosificacion-table .editable-input:hover,
+        .dosificacion-table .editable-textarea:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .dosificacion-table .editable-textarea {
+            line-height: 1.4;
+            min-height: 40px;
+        }
+        .dosificacion-table .editable-input.proyecto-input {
+            font-weight: 600;
+            color: var(--color-proyecto);
+        }
+        .dosificacion-table .editable-input.sesiones-input {
+            text-align: center;
+            font-weight: 600;
+            width: 50px;
+            margin: 0 auto;
+        }
+
+        .dosificacion-table .col-trimestre { width: 4%; min-width: 50px; max-width: 60px; }
+        .dosificacion-table .col-proyecto { width: 24%; min-width: 150px; }
+        .dosificacion-table .col-contenido { width: 20%; min-width: 120px; }
+        .dosificacion-table .col-pda { width: 40%; min-width: 200px; }
+        .dosificacion-table .col-sesiones { width: 7%; min-width: 50px; }
+
+        .dosificacion-grade-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .dosificacion-grade-selector select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        .dosificacion-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* ============================================================
+           ESTILOS PARA CRONOGRAMA
+           ============================================================ */
         .cronograma-wrapper { 
             overflow-x: auto; 
             -webkit-overflow-scrolling: touch;
@@ -652,349 +1153,6 @@
             padding: 6px 10px;
         }
 
-        /* ============================================================
-           ESTILOS PARA CALENDARIO SEP (PESTAÑA NUEVA)
-           ============================================================ */
-        .calendario-sep-container {
-            overflow-x: auto;
-            padding: 4px 0;
-        }
-        .calendario-sep-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.7rem;
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .calendario-sep-table th,
-        .calendario-sep-table td {
-            border: 1px solid var(--border);
-            padding: 4px 6px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .calendario-sep-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
-        .calendario-sep-table .month-header {
-            background: #28A745;
-            color: white;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        .calendario-sep-table .weekday-header {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-weight: 600;
-            font-size: 0.6rem;
-        }
-        .calendario-sep-table .day-cell {
-            min-width: 30px;
-            height: 28px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        .calendario-sep-table .day-cell:hover {
-            background: var(--primary-light);
-            transform: scale(1.05);
-            z-index: 10;
-        }
-        .calendario-sep-table .day-cell .event-badge {
-            display: block;
-            font-size: 0.45rem;
-            padding: 1px 2px;
-            border-radius: 2px;
-            margin-top: 1px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-        }
-        .calendario-sep-table .day-cell .event-badge.inicio-clases { background: var(--color-inicio); color: white; }
-        .calendario-sep-table .day-cell .event-badge.receso-vacaciones { background: var(--color-vacacion); color: #1A1A1A; }
-        .calendario-sep-table .day-cell .event-badge.festivo-suspension { background: var(--color-festivo); color: white; }
-        .calendario-sep-table .day-cell .event-badge.cte-intensiva { background: var(--color-cte-intensiva); color: white; }
-        .calendario-sep-table .day-cell .event-badge.cte-ordinaria { background: var(--color-cte-ordinaria); color: white; }
-        .calendario-sep-table .day-cell .event-badge.fortalecimiento { background: var(--color-fortalecimiento); color: white; }
-        .calendario-sep-table .day-cell .event-badge.fin-ciclo { background: var(--color-fin-ciclo); color: white; }
-        .calendario-sep-table .day-cell .event-badge.normal { background: var(--color-normal); color: var(--primary); }
-        .calendario-sep-table .day-cell.weekend {
-            background: var(--color-weekend);
-            opacity: 0.6;
-        }
-        .calendario-sep-table .day-cell.selected-cell {
-            outline: 2px solid var(--color-selected);
-            outline-offset: -2px;
-            z-index: 5;
-            background: rgba(255, 107, 107, 0.15);
-        }
-        .calendario-sep-table .day-cell .day-number {
-            font-weight: 600;
-            font-size: 0.6rem;
-        }
-
-        .calendario-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-            margin: 8px 0;
-        }
-        .calendario-actions .form-group {
-            margin-bottom: 0;
-            min-width: 120px;
-        }
-        .calendario-actions .form-group select,
-        .calendario-actions .form-group input {
-            padding: 4px 8px;
-            font-size: 0.8rem;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-        }
-        .calendario-actions .form-group-inline {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .calendario-sep-table .event-editor {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .calendario-sep-table .event-editor select,
-        .calendario-sep-table .event-editor input {
-            padding: 2px 4px;
-            font-size: 0.7rem;
-            border-radius: 3px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-        }
-        .calendario-sep-table .event-editor .btn-sm {
-            padding: 2px 6px;
-            font-size: 0.6rem;
-        }
-
-        .dosificacion-container {
-            overflow-x: auto;
-            padding: 4px 0;
-        }
-        .dosificacion-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.7rem;
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .dosificacion-table th,
-        .dosificacion-table td {
-            border: 1px solid var(--border);
-            padding: 6px 8px;
-            text-align: left;
-            vertical-align: top;
-        }
-        .dosificacion-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            text-align: center;
-        }
-        .dosificacion-table .header-school {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-        .dosificacion-table .trimestre-cell {
-            font-weight: 700;
-            text-align: center;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            vertical-align: middle;
-            width: 4%;
-            min-width: 50px;
-            max-width: 60px;
-            font-size: 0.6rem;
-            padding: 4px 2px;
-        }
-        .dosificacion-table .trimestre-cell .trim-label {
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-        .dosificacion-table .trimestre-cell .meses-label {
-            font-size: 0.5rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-            display: block;
-            margin-top: 2px;
-            line-height: 1.2;
-        }
-        .dosificacion-table .proyecto-cell {
-            font-weight: 600;
-            color: var(--color-proyecto);
-        }
-        .dosificacion-table .sesiones-cell {
-            text-align: center;
-            font-weight: 600;
-        }
-        .dosificacion-table .total-cell {
-            text-align: right;
-            font-weight: 700;
-            padding: 10px;
-            background: var(--primary-light);
-        }
-        .dosificacion-table .total-sesiones-cell {
-            text-align: center;
-            font-weight: 700;
-            font-size: 1rem;
-            background: var(--primary-light);
-        }
-        .dosificacion-table .signature-cell {
-            padding: 12px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .dosificacion-table .signature-cell strong {
-            display: block;
-            margin-bottom: 8px;
-        }
-        .dosificacion-table .signature-cell .signature-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .dosificacion-table .signature-cell .signature-title {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-        }
-
-        .dosificacion-table .editable-input,
-        .dosificacion-table .editable-textarea {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            padding: 2px 4px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            resize: vertical;
-            min-height: 24px;
-        }
-        .dosificacion-table .editable-input:focus,
-        .dosificacion-table .editable-textarea:focus {
-            outline: none;
-            background: var(--primary-light);
-            box-shadow: 0 0 0 2px var(--primary);
-        }
-        .dosificacion-table .editable-input:hover,
-        .dosificacion-table .editable-textarea:hover {
-            background: rgba(0,70,127,0.05);
-        }
-        .dosificacion-table .editable-textarea {
-            line-height: 1.4;
-            min-height: 40px;
-        }
-        .dosificacion-table .editable-input.proyecto-input {
-            font-weight: 600;
-            color: var(--color-proyecto);
-        }
-        .dosificacion-table .editable-input.sesiones-input {
-            text-align: center;
-            font-weight: 600;
-            width: 50px;
-            margin: 0 auto;
-        }
-
-        .dosificacion-table .col-trimestre { width: 4%; min-width: 50px; max-width: 60px; }
-        .dosificacion-table .col-proyecto { width: 24%; min-width: 150px; }
-        .dosificacion-table .col-contenido { width: 20%; min-width: 120px; }
-        .dosificacion-table .col-pda { width: 40%; min-width: 200px; }
-        .dosificacion-table .col-sesiones { width: 7%; min-width: 50px; }
-
-        .dosificacion-grade-selector {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .dosificacion-grade-selector select {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-        .dosificacion-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        @media print {
-            body { padding: 0; background: white; }
-            .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .legend, .card-header .btn-group, .selection-info { display: none !important; }
-            .tab-content { display: block !important; }
-            .tab-content:not(.active) { display: block !important; }
-            .card { box-shadow: none; border: 1px solid #ddd; border-radius: 0; padding: 10px; }
-            .card-header { display: flex; justify-content: center; }
-            .cronograma-grid { border: 1px solid #333; }
-            .grid-cell { border: 1px solid #ddd; }
-            .grid-cell.weekend { background: #f0f0f0 !important; }
-            .grid-cell.trimestre-header { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .grid-cell.month-header { background: #28A745 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .grid-cell .activity { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .grid-cell .activity.inicio-clases { background: #FF8C00 !important; color: transparent !important; }
-            .grid-cell .activity.receso-vacaciones { background: #FFD700 !important; color: transparent !important; }
-            .grid-cell .activity.festivo-suspension { background: #DC3545 !important; color: transparent !important; }
-            .grid-cell .activity.cte-intensiva { background: #1A3A5C !important; color: transparent !important; }
-            .grid-cell .activity.cte-ordinaria { background: #E91E63 !important; color: transparent !important; }
-            .grid-cell .activity.fortalecimiento { background: #28A745 !important; color: transparent !important; }
-            .grid-cell .activity.fin-ciclo { background: #8B0000 !important; color: transparent !important; }
-            .grid-cell.proyecto-cell { background: #6C5CE7 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .grid-cell.proyecto-cell .proyecto-text .word {
-                display: inline-block;
-                font-size: inherit;
-                line-height: 1.1;
-            }
-            .print-footer {
-                text-align: center;
-                font-size: 0.8rem;
-                color: #666;
-                margin-top: 20px;
-                padding-top: 10px;
-                border-top: 1px solid #ddd;
-            }
-            .dosificacion-table { font-size: 0.6rem; }
-            .dosificacion-table th,
-            .dosificacion-table td { padding: 3px 5px; }
-            .dosificacion-table .editable-input,
-            .dosificacion-table .editable-textarea {
-                background: transparent !important;
-                box-shadow: none !important;
-                border: none !important;
-            }
-            .dosificacion-table .col-trimestre { width: 4%; min-width: 40px; }
-            .dosificacion-grade-selector { display: none !important; }
-            .dosificacion-actions .btn { display: none !important; }
-            .calendario-sep-table { font-size: 0.6rem; }
-            .calendario-sep-table th,
-            .calendario-sep-table td { padding: 2px 4px; }
-            .calendario-actions .btn { display: none !important; }
-        }
-
         @media (max-width: 768px) {
             body { padding: 8px; }
             .header { flex-direction: column; align-items: stretch; }
@@ -1020,6 +1178,10 @@
             .calendario-sep-table th,
             .calendario-sep-table td { padding: 2px 4px; }
             .calendario-actions .form-group { min-width: 80px; }
+            .plan-container { padding: 10px; }
+            .plan-table { font-size: 0.6rem; }
+            .plan-table th, .plan-table td { padding: 2px 3px; }
+            .plan-container h1 { font-size: 1rem; }
         }
         @media (max-width: 480px) {
             .header-title h1 { font-size: 1rem; }
@@ -1032,6 +1194,9 @@
             .calendario-sep-table { font-size: 0.5rem; }
             .calendario-sep-table th,
             .calendario-sep-table td { padding: 1px 2px; }
+            .plan-table { font-size: 0.5rem; }
+            .plan-table th, .plan-table td { padding: 1px 2px; }
+            .plan-container h1 { font-size: 0.9rem; }
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1057,6 +1222,7 @@
 
     <nav class="tabs" id="tabNav">
         <button class="tab-btn active" data-tab="cronograma">📅 Cronograma</button>
+        <button class="tab-btn" data-tab="plan">📋 Plan Anual</button>
         <button class="tab-btn" data-tab="calendario">📆 Calendario SEP</button>
         <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
         <button class="tab-btn" data-tab="editor">✏️ Editor</button>
@@ -1108,7 +1274,26 @@
     </div>
 
     <!-- ============================================================
-    PESTAÑA CALENDARIO SEP - NUEVA
+    PESTAÑA PLAN ANUAL
+    ============================================================ -->
+    <div class="tab-content" id="tab-plan">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📋 Plan Anual de Trabajo - Informática / Tecnología</span>
+                <div class="plan-actions">
+                    <button class="btn btn-word btn-sm" onclick="exportPlanWord()">📄 Exportar a Word</button>
+                    <button class="btn btn-print btn-sm" onclick="printPlan()">🖨️ Imprimir</button>
+                    <button class="btn btn-success btn-sm" onclick="savePlan()">💾 Guardar</button>
+                </div>
+            </div>
+            <div id="planContainer" class="plan-container">
+                <!-- Generado por JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    PESTAÑA CALENDARIO SEP
     ============================================================ -->
     <div class="tab-content" id="tab-calendario">
         <div class="card">
@@ -1327,6 +1512,7 @@
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button class="btn btn-excel" onclick="exportToExcel()">📊 Exportar a Excel</button>
+                <button class="btn btn-word" onclick="exportPlanWord()">📄 Exportar Plan Anual a Word</button>
                 <button class="btn btn-outline" onclick="exportJSON()">📋 Exportar JSON</button>
                 <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">📂 Importar backup</button>
                 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSONFile(event)">
@@ -1464,36 +1650,157 @@
 </script>
 <script>
 // ============================================================
-// DATOS DEL CALENDARIO SEP - EDITABLES
+// DATOS DEL PLAN ANUAL
+// ============================================================
+const PLAN_ANUAL_INICIAL = {
+    titulo: 'PLAN DE ANUAL DE TRABAJO',
+    materia: 'Informática / Tecnología',
+    nivel: 'Secundaria',
+    ciclo: '2026 – 2027',
+    dimensiones: [
+        {
+            nombre: 'I. DIMENSIÓN PEDAGÓGICA',
+            enfoque: 'Enfoque: Aprendizaje significativo, uso de TICs y evaluación formativa.',
+            metas: [
+                {
+                    meta: '1. Diagnóstico preciso y personalización del aprendizaje tecnológico.',
+                    acciones: [
+                        '- Aplicar un examen de diagnóstico integral que evalúe competencias en encendido/apagado correcto del equipo, uso de paquetería de oficina (Word, Excel, PowerPoint), hábitos de navegación en internet y conocimientos previos de tecnología.',
+                        '- Interpretar resultados diferenciando ritmos de aprendizaje y niveles de acceso a la tecnología (considerando alumnos de contexto con bajos recursos).',
+                        '- Diseñar planes inmediatos de nivelación en competencias digitales básicas para garantizar un punto de partida equitativo.'
+                    ],
+                    periodo: '02 de septiembre (inicio) y continuo',
+                    recursos: '- Examen de diagnóstico contextualizado (50 preguntas esenciales).\n- Hojas y hojas de cálculo para análisis de resultados.'
+                },
+                {
+                    meta: '2. Planeación curricular con enfoque en competencias tecnológicas y pensamiento computacional.',
+                    acciones: [
+                        '- Jerarquizar contenidos integrando la resolución de problemas técnicos reales aplicados al contexto comunitario de Esquipulas, Xoxocotlán.',
+                        '- Elaborar secuencias didácticas de informática que integren plataformas de programación por bloques (Scratch/Blockly), editores web (HTML5/CSS3), entornos de simulación electrónica y herramientas de Inteligencia Artificial.',
+                        '- Incorporate proyectos de diseño gráfico (banners, credenciales) y comunicación digital (podcasts estudiantiles).'
+                    ],
+                    periodo: 'Durante todo el ciclo escolar',
+                    recursos: '- Planes y programas de estudio (SEP / Nueva Escuela Mexicana).\n- Calendario escolar.\n- Computadoras de laboratorio de informática con acceso a internet.\n- Software de desarrollo, suites ofimáticas y plataformas de IA.'
+                },
+                {
+                    meta: '3. Evaluación formativa y retroalimentación interactiva digital.',
+                    acciones: [
+                        '- Implementar listas de cotejo y rúbricas digitales de autoevaluación y coevaluación para proyectos y prácticas informáticas.',
+                        '- Realizar retroalimentación descriptiva y continua sobre productos digitales (código, documentos, gráficos, archivos multimedia).',
+                        '- Implementar portafolios de evidencias digitales (carpetas de trabajo/repositorios en GitHub o Google Drive) para el seguimiento continuo del estudiante.',
+                        '- Elaborar guías de estudio y prácticas de recuperación con complejidad progresiva.'
+                    ],
+                    periodo: 'Durante el ciclo escolar y fin de trimestre',
+                    recursos: '- Rúbricas y listas de cotejo para proyectos técnicos.\n- Portafolios de evidencias digitales.\n- Bitácoras de avances prácticos en el aula/laboratorio.'
+                }
+            ]
+        },
+        {
+            nombre: 'II. DIMENSIÓN ADMINISTRATIVA',
+            enfoque: 'Enfoque: Eficiencia documental, gestión digitalizada de datos, mantenimiento técnico y puntualidad.',
+            metas: [
+                {
+                    meta: '1. Gestión documental oportuna y automatización de datos.',
+                    acciones: [
+                        '- Asistir puntualmente y firmar diariamente el libro de asistencia institucional.',
+                        '- Digitalizar y automatizar el registro de calificaciones, asistencias y parciales mediante sistemas de hojas de cálculo/plataformas escolares para evitar pérdidas y acelerar la entrega de reportes.',
+                        '- Establecer un calendario de entregas para anticipar la entrega de planeaciones, dosificaciones y listas a la subdirección.'
+                    ],
+                    periodo: 'Durante todo el ciclo escolar',
+                    recursos: '- Libro de asistencia oficial.\n- Computadora y sistemas de gestión de calificaciones.\n- Formatos oficiales de la escuela y calendario institucional.'
+                },
+                {
+                    meta: '2. Optimización, mantenimiento y cuidado de la infraestructura informática.',
+                    acciones: [
+                        '- Ejecutar un mantenimiento preventivo mensual del aula/laboratorio de informática, revisando hardware, periféricos (teclados, mouses), cables y sistemas operativos.',
+                        '- Diagnosticar e informar de manera inmediata fallas físicas o lógicas en el equipo de cómputo para solicitar reparaciones o refacciones.',
+                        '- Preservar el orden, la higiene y la entrega del aula de cómputo en óptimas condiciones al término de cada sesión y al fin del ciclo.'
+                    ],
+                    periodo: 'Inicio, mensual y fin del ciclo escolar',
+                    recursos: '- Formato de inventario de laboratorio informático.\n- Herramientas de mantenimiento preventivo de software y hardware.\n- Material de limpieza para periféricos y pantallas.'
+                },
+                {
+                    meta: '3. Control de calidad e incidencias de aula.',
+                    acciones: [
+                        '- Llevar un seguimiento estricto de la puntualidad, asistencia y uso adecuado de los equipos por grupo.',
+                        '- Presentar en tiempo y forma los informes de fin de curso y documentación administrativa requerida por la dirección.',
+                        '- Documentar incidencias técnicas, administrativas o de conducta con evidencia inmediata en los formatos institucionales.'
+                    ],
+                    periodo: 'Durante el ciclo escolar',
+                    recursos: '- Listas digitales de asistencia y conducta.\n- Bitácora de incidencias del laboratorio.'
+                }
+            ]
+        },
+        {
+            nombre: 'III. DIMENSIÓN COMUNITARIA',
+            enfoque: 'Enfoque: Vinculación familiar, prevención de la deserción, alfabetización digital e inclusión comunitaria.',
+            metas: [
+                {
+                    meta: '1. Monitoreo y atención temprana a la deserción y rezago.',
+                    acciones: [
+                        '- Reportar de inmediato a asesores de grupo y a la dirección cualquier problema persistente de aprovechamiento, inasistencias o mal uso del equipo de cómputo.',
+                        '- Realizar reuniones focalizadas con padres o tutores de alumnos en riesgo académico, estableciendo la firma de un "Acuerdo de Compromiso Familiar" enfocado en el seguimiento escolar.',
+                        '- Coordinar citatorios con la dirección ante inasistencias recurrentes.'
+                    ],
+                    periodo: 'Durante el ciclo escolar (inmediato al detectar el problema)',
+                    recursos: '- Formatos de reporte de incidencias y citatorios.\n- Formato de "Acuerdo de Compromiso Familiar".\n- Control de asistencia y seguimiento.'
+                },
+                {
+                    meta: '2. Prevención de reprobación e informe rindiendo cuentas.',
+                    acciones: [
+                        '- Informar en cada reunión de Consejo Técnico Escolar (CTE) los avances académicos, proyectos realizados y situaciones de riesgo por grupo con datos y evidencias digitales concretas.',
+                        '- Monitorear y comunicar de manera oportuna el rendimiento trimestral mediante boletas y reportes.'
+                    ],
+                    periodo: 'En cada sesión de CTE y fin de trimestre',
+                    recursos: '- Boletas y consolidados de calificaciones.\n- Estadísticas grupales de rendimiento en Informática.'
+                },
+                {
+                    meta: '3. Participación activa en proyectos comunitarios y divulgación tecnológica.',
+                    acciones: [
+                        '- Informar con anticipación a padres de familia sobre proyectos escolares multimedia (como el proyecto de podcast o publicaciones comunitarias).',
+                        '- Vincular las actividades tecnológicas con problemas y saberes del entorno social e histórico de Esquipulas y Oaxaca.',
+                        '- Fomentar la participación estudiantil en demostraciones tecnológicas, ferias de proyectos de innovación o muestras digitales escolares.'
+                    ],
+                    periodo: 'Según el calendario de actividades escolares y culturales',
+                    recursos: '- Programa de actividades institucionales y culturales.\n- Muestras y productos multimedia desarrollados por los alumnos.\n- Alianzas de colaboración con el comité de padres de familia.'
+                }
+            ]
+        }
+    ],
+    fecha: 'Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026',
+    elaboro: 'Profr. José Emmanuel Chan Ibáñez',
+    elaboroTitulo: 'Titular de Informática',
+    reviso: 'Subdirector Turno Mixto',
+    voBo: 'Profr. Melchor Sánchez Monjaraz',
+    voBoTitulo: 'Subdirector encargado de la dirección'
+};
+
+// ============================================================
+// DATOS DEL CALENDARIO SEP
 // ============================================================
 const CALENDARIO_SEP_INICIAL = [
-    // AGOSTO 2026
     { month: 8, day: 24, type: 'cte-intensiva' },
     { month: 8, day: 25, type: 'cte-intensiva' },
     { month: 8, day: 26, type: 'cte-intensiva' },
     { month: 8, day: 27, type: 'cte-intensiva' },
     { month: 8, day: 28, type: 'cte-intensiva' },
     { month: 8, day: 31, type: 'inicio-clases' },
-    // SEPTIEMBRE 2026
     { month: 9, day: 4, type: 'cte-ordinaria' },
     { month: 9, day: 11, type: 'cte-ordinaria' },
     { month: 9, day: 16, type: 'festivo-suspension' },
     { month: 9, day: 18, type: 'cte-ordinaria' },
     { month: 9, day: 25, type: 'cte-ordinaria' },
-    // OCTUBRE 2026
     { month: 10, day: 2, type: 'cte-ordinaria' },
     { month: 10, day: 9, type: 'cte-ordinaria' },
     { month: 10, day: 16, type: 'cte-ordinaria' },
     { month: 10, day: 23, type: 'cte-ordinaria' },
     { month: 10, day: 30, type: 'cte-ordinaria' },
-    // NOVIEMBRE 2026
     { month: 11, day: 2, type: 'festivo-suspension' },
     { month: 11, day: 6, type: 'cte-ordinaria' },
     { month: 11, day: 13, type: 'cte-ordinaria' },
     { month: 11, day: 16, type: 'festivo-suspension' },
     { month: 11, day: 20, type: 'cte-ordinaria' },
     { month: 11, day: 27, type: 'cte-ordinaria' },
-    // DICIEMBRE 2026
     { month: 12, day: 4, type: 'cte-ordinaria' },
     { month: 12, day: 11, type: 'cte-ordinaria' },
     { month: 12, day: 18, type: 'cte-ordinaria' },
@@ -1508,7 +1815,6 @@ const CALENDARIO_SEP_INICIAL = [
     { month: 12, day: 29, type: 'receso-vacaciones' },
     { month: 12, day: 30, type: 'receso-vacaciones' },
     { month: 12, day: 31, type: 'receso-vacaciones' },
-    // ENERO 2027
     { month: 1, day: 1, type: 'receso-vacaciones' },
     { month: 1, day: 2, type: 'receso-vacaciones' },
     { month: 1, day: 3, type: 'receso-vacaciones' },
@@ -1519,13 +1825,11 @@ const CALENDARIO_SEP_INICIAL = [
     { month: 1, day: 8, type: 'receso-vacaciones' },
     { month: 1, day: 11, type: 'inicio-clases' },
     { month: 1, day: 29, type: 'cte-ordinaria' },
-    // FEBRERO 2027
     { month: 2, day: 1, type: 'festivo-suspension' },
     { month: 2, day: 5, type: 'cte-ordinaria' },
     { month: 2, day: 12, type: 'cte-ordinaria' },
     { month: 2, day: 19, type: 'cte-ordinaria' },
     { month: 2, day: 26, type: 'cte-ordinaria' },
-    // MARZO 2027
     { month: 3, day: 5, type: 'cte-ordinaria' },
     { month: 3, day: 12, type: 'cte-ordinaria' },
     { month: 3, day: 15, type: 'festivo-suspension' },
@@ -1540,24 +1844,20 @@ const CALENDARIO_SEP_INICIAL = [
     { month: 3, day: 29, type: 'receso-vacaciones' },
     { month: 3, day: 30, type: 'receso-vacaciones' },
     { month: 3, day: 31, type: 'receso-vacaciones' },
-    // ABRIL 2027
     { month: 4, day: 1, type: 'receso-vacaciones' },
     { month: 4, day: 2, type: 'receso-vacaciones' },
     { month: 4, day: 5, type: 'inicio-clases' },
     { month: 4, day: 30, type: 'cte-ordinaria' },
-    // MAYO 2027
     { month: 5, day: 5, type: 'festivo-suspension' },
     { month: 5, day: 7, type: 'cte-ordinaria' },
     { month: 5, day: 14, type: 'cte-ordinaria' },
     { month: 5, day: 15, type: 'festivo-suspension' },
     { month: 5, day: 21, type: 'cte-ordinaria' },
     { month: 5, day: 28, type: 'cte-ordinaria' },
-    // JUNIO 2027
     { month: 6, day: 4, type: 'cte-ordinaria' },
     { month: 6, day: 11, type: 'cte-ordinaria' },
     { month: 6, day: 18, type: 'cte-ordinaria' },
     { month: 6, day: 25, type: 'cte-ordinaria' },
-    // JULIO 2027
     { month: 7, day: 2, type: 'cte-ordinaria' },
     { month: 7, day: 9, type: 'cte-ordinaria' },
     { month: 7, day: 16, type: 'fin-ciclo' },
@@ -1822,6 +2122,7 @@ const DEFAULT_CONFIG = {
 let activities = [];
 let config = {};
 let calendarioData = [];
+let planData = {};
 let editingIndex = -1;
 let selectedCells = [];
 let editingProject = null;
@@ -1829,6 +2130,15 @@ let selectedSearchActivity = null;
 let dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
 
 function loadData() {
+    // Cargar Plan Anual
+    const savedPlan = localStorage.getItem('cronograma_plan');
+    if (savedPlan) {
+        try { planData = JSON.parse(savedPlan); } 
+        catch(e) { planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL)); }
+    } else {
+        planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
+    }
+
     // Cargar calendario SEP
     const savedCalendario = localStorage.getItem('cronograma_calendario');
     if (savedCalendario) {
@@ -1838,7 +2148,7 @@ function loadData() {
         calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL));
     }
 
-    // Cargar actividades (cronograma)
+    // Cargar actividades
     const saved = localStorage.getItem('cronograma_activities');
     if (saved) {
         try { activities = JSON.parse(saved); } 
@@ -1878,7 +2188,10 @@ function loadData() {
 
 function saveActivities() { localStorage.setItem('cronograma_activities', JSON.stringify(activities)); }
 function saveCalendario() { localStorage.setItem('cronograma_calendario', JSON.stringify(calendarioData)); }
-
+function savePlan() { 
+    localStorage.setItem('cronograma_plan', JSON.stringify(planData)); 
+    showToast('✅ Plan Anual guardado');
+}
 function saveConfig() {
     config.schoolName = document.getElementById('schoolName').value;
     config.schoolCycle = document.getElementById('schoolCycle').value;
@@ -1898,14 +2211,17 @@ function saveConfig() {
 
 function resetData() {
     if (confirm('¿Restaurar datos de fábrica?')) {
+        planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
         calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL));
         activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
+        localStorage.setItem('cronograma_plan', JSON.stringify(planData));
         saveCalendario();
         saveActivities();
         saveConfig();
         localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+        renderPlan();
         renderCalendario();
         renderCronograma();
         renderDosificacion();
@@ -1921,13 +2237,6 @@ function getWeekday(month, day, year) {
 }
 const WEEKDAYS_SHORT = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 const WEEKDAYS_LONG = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-
-function getTrimestre(month, year) {
-    if (year === 2026 && month >= 8) return 'TRIMESTRE I (Agosto - Noviembre 2026)';
-    if (year === 2027 && month <= 3) return 'TRIMESTRE II (Diciembre 2026 - Marzo 2027)';
-    if (year === 2027 && month >= 4) return 'TRIMESTRE III (Abril - Julio 2027)';
-    return '';
-}
 
 function getYear(month) {
     return month >= 8 && month <= 12 ? 2026 : 2027;
@@ -1975,7 +2284,272 @@ function getTrimestreMonths(trimestre) {
 }
 
 // ============================================================
-// CALENDARIO SEP - RENDERIZADO Y EDICIÓN
+// RENDERIZADO DEL PLAN ANUAL
+// ============================================================
+function renderPlan() {
+    const container = document.getElementById('planContainer');
+    const data = planData;
+    
+    let html = `
+    <h1>${data.titulo}</h1>
+    <div class="subtitle">Materia: ${data.materia} | Nivel ${data.nivel} | Ciclo Escolar ${data.ciclo}</div>
+    `;
+    
+    for (const dim of data.dimensiones) {
+        html += `
+        <div class="dimension-title">${dim.nombre}</div>
+        <div class="dimension-subtitle">${dim.enfoque}</div>
+        <table class="plan-table">
+            <thead>
+                <tr>
+                    <th style="width:20%;">METAS</th>
+                    <th style="width:40%;">ACCIONES ESTRATÉGICAS</th>
+                    <th style="width:15%;">PERIODO DE REALIZACIÓN</th>
+                    <th style="width:25%;">RECURSOS NECESARIOS</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        
+        for (const meta of dim.metas) {
+            const accionesHtml = meta.acciones.map(a => 
+                `<textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'acciones', ${meta.acciones.indexOf(a)}, this.value)">${a}</textarea>`
+            ).join('<br>');
+            
+            html += `
+            <tr>
+                <td>
+                    <textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'meta', 0, this.value)" style="font-weight:600;">${meta.meta}</textarea>
+                </td>
+                <td>${accionesHtml}</td>
+                <td>
+                    <textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'periodo', 0, this.value)">${meta.periodo}</textarea>
+                </td>
+                <td>
+                    <textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'recursos', 0, this.value)">${meta.recursos}</textarea>
+                </td>
+            </tr>`;
+        }
+        
+        html += `
+            </tbody>
+        </table>`;
+    }
+    
+    html += `
+    <div style="text-align:center; margin-top:10px; font-weight:500;">${data.fecha}</div>
+    
+    <div class="plan-footer">
+        <div class="signature-block">
+            <strong>Elaboró</strong>
+            <input type="text" class="editable-input" value="${data.elaboro}" 
+                   onchange="updatePlanField('elaboro', this.value)" 
+                   style="font-weight:600; text-align:center; font-size:0.9rem;">
+            <input type="text" class="editable-title" value="${data.elaboroTitulo}" 
+                   onchange="updatePlanField('elaboroTitulo', this.value)">
+        </div>
+        <div class="signature-block">
+            <strong>Revisó</strong>
+            <input type="text" class="editable-input" value="${data.reviso}" 
+                   onchange="updatePlanField('reviso', this.value)" 
+                   style="font-weight:600; text-align:center; font-size:0.9rem;">
+        </div>
+        <div class="signature-block">
+            <strong>Vo. Bo.</strong>
+            <input type="text" class="editable-input" value="${data.voBo}" 
+                   onchange="updatePlanField('voBo', this.value)" 
+                   style="font-weight:600; text-align:center; font-size:0.9rem;">
+            <input type="text" class="editable-title" value="${data.voBoTitulo}" 
+                   onchange="updatePlanField('voBoTitulo', this.value)">
+        </div>
+    </div>`;
+    
+    container.innerHTML = html;
+}
+
+// ============================================================
+// FUNCIONES PARA ACTUALIZAR PLAN ANUAL
+// ============================================================
+function updatePlanField(field, value) {
+    planData[field] = value;
+    localStorage.setItem('cronograma_plan', JSON.stringify(planData));
+}
+
+function updatePlanMeta(dimNombre, metaText, field, index, value) {
+    const dim = planData.dimensiones.find(d => d.nombre === dimNombre);
+    if (!dim) return;
+    const meta = dim.metas.find(m => m.meta === metaText);
+    if (!meta) return;
+    
+    if (field === 'meta') {
+        meta.meta = value;
+    } else if (field === 'acciones') {
+        meta.acciones[index] = value;
+    } else if (field === 'periodo') {
+        meta.periodo = value;
+    } else if (field === 'recursos') {
+        meta.recursos = value;
+    }
+    localStorage.setItem('cronograma_plan', JSON.stringify(planData));
+}
+
+function printPlan() {
+    const content = document.getElementById('planContainer');
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) {
+        showToast('⚠️ Permite ventanas emergentes para imprimir');
+        return;
+    }
+    const styles = document.querySelector('style').innerHTML;
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Plan Anual - Informática</title>
+            <style>
+                ${styles}
+                body { padding: 20px; background: white; }
+                .plan-container { border: none; padding: 10px; background: white; }
+                .plan-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .plan-table td { background: white !important; }
+                .editable-text, .editable-textarea, .editable-input, .editable-title {
+                    background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    pointer-events: none;
+                }
+                .plan-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .card-header .btn-group, .selection-info { display: none !important; }
+                .plan-container .dimension-title { color: #00467F !important; border-bottom-color: #00467F !important; }
+                .card { box-shadow: none; border: none; padding: 0; }
+            </style>
+        </head>
+        <body>
+            ${content.innerHTML}
+            <script>
+                window.print();
+            <\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+// ============================================================
+// EXPORTAR PLAN A WORD (.DOCX)
+// ============================================================
+function exportPlanWord() {
+    const content = document.getElementById('planContainer');
+    const data = planData;
+    
+    // Construir HTML para Word
+    let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+          xmlns:w="urn:schemas-microsoft-com:office:word" 
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <title>Plan Anual - Informática</title>
+        <!--[if gte mso 9]>
+        <xml>
+            <w:WordDocument>
+                <w:View>Print</w:View>
+            </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
+            h1 { text-align: center; font-size: 18pt; font-weight: bold; }
+            .subtitle { text-align: center; font-size: 14pt; margin-bottom: 20px; }
+            .dimension-title { font-size: 14pt; font-weight: bold; margin-top: 20px; color: #00467F; border-bottom: 2px solid #00467F; padding-bottom: 5px; }
+            .dimension-subtitle { font-size: 11pt; font-style: italic; margin-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; font-size: 10pt; margin-bottom: 20px; }
+            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
+            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+            .footer { text-align: center; margin-top: 20px; font-weight: 500; }
+            .signature-block { text-align: center; margin-top: 30px; display: inline-block; width: 30%; }
+            .signature-block strong { display: block; }
+            .signature-name { font-weight: 600; font-size: 11pt; }
+            .signature-title { font-size: 9pt; color: #555; }
+            .signature-row { text-align: center; margin-top: 20px; }
+            .signature-row div { display: inline-block; width: 30%; }
+    `;
+    
+    // Agregar estilos para las tablas
+    html += `
+        </style>
+    </head>
+    <body>
+        <h1>${data.titulo}</h1>
+        <div class="subtitle">Materia: ${data.materia} | Nivel ${data.nivel} | Ciclo Escolar ${data.ciclo}</div>
+    `;
+    
+    for (const dim of data.dimensiones) {
+        html += `
+        <div class="dimension-title">${dim.nombre}</div>
+        <div class="dimension-subtitle">${dim.enfoque}</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:20%;">METAS</th>
+                    <th style="width:40%;">ACCIONES ESTRATÉGICAS</th>
+                    <th style="width:15%;">PERIODO DE REALIZACIÓN</th>
+                    <th style="width:25%;">RECURSOS NECESARIOS</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        
+        for (const meta of dim.metas) {
+            const accionesText = meta.acciones.join('<br>');
+            html += `
+            <tr>
+                <td style="font-weight:600;">${meta.meta}</td>
+                <td>${accionesText}</td>
+                <td>${meta.periodo}</td>
+                <td>${meta.recursos.replace(/\n/g, '<br>')}</td>
+            </tr>`;
+        }
+        
+        html += `
+            </tbody>
+        </table>`;
+    }
+    
+    html += `
+    <div class="footer">${data.fecha}</div>
+    
+    <div class="signature-row">
+        <div class="signature-block">
+            <strong>Elaboró</strong>
+            <div class="signature-name">${data.elaboro}</div>
+            <div class="signature-title">${data.elaboroTitulo}</div>
+        </div>
+        <div class="signature-block">
+            <strong>Revisó</strong>
+            <div class="signature-name">${data.reviso}</div>
+        </div>
+        <div class="signature-block">
+            <strong>Vo. Bo.</strong>
+            <div class="signature-name">${data.voBo}</div>
+            <div class="signature-title">${data.voBoTitulo}</div>
+        </div>
+    </div>
+    </body>
+    </html>`;
+    
+    const blob = new Blob([html], { 
+        type: 'application/msword;charset=utf-8' 
+    });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Plan_Anual_Informatica_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    showToast('📄 Plan Anual exportado a Word (.doc)');
+}
+
+// ============================================================
+// RENDERIZADO DEL CALENDARIO SEP
 // ============================================================
 function renderCalendario() {
     const container = document.getElementById('calendarioContainer');
@@ -2018,10 +2592,6 @@ function renderCalendario() {
         </thead>
         <tbody>`;
 
-    // Ordenar eventos por mes y día
-    const sortedEvents = [...calendarioData].sort((a, b) => a.month - b.month || a.day - b.day);
-    
-    // Crear un mapa para búsqueda rápida
     const eventMap = {};
     for (const ev of calendarioData) {
         const key = `${ev.month}-${ev.day}`;
@@ -2077,7 +2647,6 @@ function updateCalEventFromRow(btn) {
     const day = parseInt(select.dataset.day);
     const type = select.value;
     
-    // Eliminar evento existente
     const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
     if (idx >= 0) {
         calendarioData.splice(idx, 1);
@@ -2142,7 +2711,6 @@ function removeCalendarEvent() {
 }
 
 function applyCalendarToCronograma() {
-    // Crear actividades a partir del calendario
     const newActivities = [];
     const typeToActivity = {
         'inicio-clases': 'Inicio de clases',
@@ -2155,7 +2723,6 @@ function applyCalendarToCronograma() {
         'normal': 'Normal'
     };
     
-    // Eliminar eventos oficiales existentes (no proyectos)
     const toRemove = activities.filter(a => {
         const gradesAct = getGradesForActivity(a.grade);
         return isOfficialEvent(a.type);
@@ -2165,7 +2732,6 @@ function applyCalendarToCronograma() {
         if (idx >= 0) activities.splice(idx, 1);
     }
     
-    // Agregar eventos del calendario
     for (const ev of calendarioData) {
         const activity = typeToActivity[ev.type];
         if (activity) {
@@ -2181,7 +2747,6 @@ function applyCalendarToCronograma() {
         }
     }
     
-    // Fusionar con actividades existentes (proyectos)
     for (const a of newActivities) {
         const exists = activities.some(ex => ex.month === a.month && ex.day === a.day && ex.type === a.type);
         if (!exists) {
@@ -2201,112 +2766,6 @@ function resetCalendar() {
         renderCalendario();
         showToast('🔄 Calendario SEP restaurado');
     }
-}
-
-// ============================================================
-// IMPLEMENTAR DOSIFICACIÓN EN CRONOGRAMA
-// ============================================================
-function implementarDosificacion() {
-    const grade = document.getElementById('dosificacionGrade').value;
-    const data = dosificacionData[grade];
-    
-    if (!data) {
-        showToast('⚠️ No hay datos para este grado');
-        return;
-    }
-    
-    const trimestreMap = {
-        1: { months: [9, 10, 11], startDay: 1 },
-        2: { months: [12, 1, 2, 3], startDay: 1 },
-        3: { months: [4, 5, 6, 7], startDay: 1 }
-    };
-    
-    let count = 0;
-    const gradeNum = parseInt(grade);
-    
-    // Eliminar proyectos existentes
-    for (const trim of data.trimestres) {
-        for (const proyecto of trim.proyectos) {
-            const toRemove = activities.filter(a => {
-                const gradesAct = getGradesForActivity(a.grade);
-                return gradesAct.includes(gradeNum) && a.activity === proyecto.nombre && isProject(a.type);
-            });
-            for (const r of toRemove) {
-                const idx = activities.indexOf(r);
-                if (idx >= 0) activities.splice(idx, 1);
-            }
-        }
-    }
-    
-    let trimIndex = 0;
-    for (const trim of data.trimestres) {
-        trimIndex++;
-        const trimInfo = trimestreMap[trimIndex];
-        if (!trimInfo) continue;
-        
-        let currentMonthIndex = 0;
-        let currentDay = trimInfo.startDay;
-        let currentMonth = trimInfo.months[currentMonthIndex];
-        
-        for (const proyecto of trim.proyectos) {
-            const sesiones = parseInt(proyecto.sesiones) || 12;
-            let diasAgregados = 0;
-            let day = currentDay;
-            let month = currentMonth;
-            let monthIdx = currentMonthIndex;
-            
-            while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
-                const year = getYear(month);
-                if (!isWeekend(month, day, year)) {
-                    const existingIdx = activities.findIndex(a => {
-                        const gradesAct = getGradesForActivity(a.grade);
-                        return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
-                    });
-                    
-                    if (existingIdx >= 0) {
-                        activities[existingIdx] = { 
-                            grade: gradeNum, 
-                            month: month, 
-                            day: day, 
-                            activity: proyecto.nombre, 
-                            type: 'proyecto', 
-                            duration: sesiones, 
-                            unit: 'days' 
-                        };
-                    } else {
-                        activities.push({ 
-                            grade: gradeNum, 
-                            month: month, 
-                            day: day, 
-                            activity: proyecto.nombre, 
-                            type: 'proyecto', 
-                            duration: sesiones, 
-                            unit: 'days' 
-                        });
-                    }
-                    diasAgregados++;
-                    count++;
-                }
-                day++;
-                const daysInMonth = getDaysInMonth(month);
-                if (day > daysInMonth) {
-                    day = 1;
-                    monthIdx++;
-                    if (monthIdx < trimInfo.months.length) {
-                        month = trimInfo.months[monthIdx];
-                    }
-                }
-            }
-            
-            currentDay = day;
-            currentMonth = month;
-            currentMonthIndex = monthIdx;
-        }
-    }
-    
-    saveActivities();
-    renderCronograma();
-    showToast(`✅ Implementados ${count} días de actividades para ${data.grado}`);
 }
 
 // ============================================================
@@ -2526,115 +2985,110 @@ function printDosificacion() {
     printWindow.document.close();
 }
 
-// ============================================================
-// ACTUALIZACIÓN DE INFORMACIÓN EN EL MODAL
-// ============================================================
-function updateFechaInfo() {
-    const month = parseInt(document.getElementById('editMonth').value);
-    const day = parseInt(document.getElementById('editDay').value);
-    const duration = parseInt(document.getElementById('editDuration').value);
-    const unit = document.getElementById('editUnit').value;
-    const year = getYear(month);
+function implementarDosificacion() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
     
-    const wd = getWeekday(month, day, year);
-    const wdName = WEEKDAYS_LONG[wd];
-    const monthName = getMonthName(month);
+    if (!data) {
+        showToast('⚠️ No hay datos para este grado');
+        return;
+    }
     
-    document.getElementById('fechaInfo').textContent = `📅 ${wdName} ${day} de ${monthName} ${year}`;
-    document.getElementById('weekdayBadge').textContent = wdName;
+    const trimestreMap = {
+        1: { months: [9, 10, 11], startDay: 1 },
+        2: { months: [12, 1, 2, 3], startDay: 1 },
+        3: { months: [4, 5, 6, 7], startDay: 1 }
+    };
     
-    const totalDays = unit === 'weeks' ? duration * 7 : duration;
-    let endMonth = month;
-    let endDay = day + totalDays - 1;
-    let endYear = year;
-    let tempMonth = month;
-    let tempDay = day;
-    let diasValidos = 0;
-    let contador = 0;
+    let count = 0;
+    const gradeNum = parseInt(grade);
     
-    while (diasValidos < totalDays && contador < 100) {
-        const y = getYear(tempMonth);
-        if (!isWeekend(tempMonth, tempDay, y)) {
-            diasValidos++;
-        }
-        if (diasValidos < totalDays) {
-            tempDay++;
-            const daysInMonth = getDaysInMonth(tempMonth);
-            if (tempDay > daysInMonth) {
-                tempDay = 1;
-                tempMonth++;
-                if (tempMonth > 12) tempMonth = 1;
+    for (const trim of data.trimestres) {
+        for (const proyecto of trim.proyectos) {
+            const toRemove = activities.filter(a => {
+                const gradesAct = getGradesForActivity(a.grade);
+                return gradesAct.includes(gradeNum) && a.activity === proyecto.nombre && isProject(a.type);
+            });
+            for (const r of toRemove) {
+                const idx = activities.indexOf(r);
+                if (idx >= 0) activities.splice(idx, 1);
             }
         }
-        contador++;
     }
     
-    endMonth = tempMonth;
-    endDay = tempDay;
-    endYear = getYear(endMonth);
-    
-    const endWk = getWeekday(endMonth, endDay, endYear);
-    const endWkName = WEEKDAYS_LONG[endWk];
-    const endMonthName = getMonthName(endMonth);
-    
-    const rangeInfo = document.getElementById('rangeInfo');
-    if (totalDays > 1) {
-        rangeInfo.style.display = 'flex';
-        document.getElementById('rangoTexto').textContent = `Del ${wdName} ${day} de ${monthName} al ${endWkName} ${endDay} de ${endMonthName} ${endYear}`;
-        document.getElementById('diasTotales').textContent = `${totalDays} días`;
-    } else {
-        rangeInfo.style.display = 'none';
-    }
-    
-    checkModalConflict();
-}
-
-function checkModalConflict() {
-    const grade = document.getElementById('editGrade').value;
-    const month = parseInt(document.getElementById('editMonth').value);
-    const day = parseInt(document.getElementById('editDay').value);
-    const activity = document.getElementById('editActivity').value.trim();
-    
-    const grades = getGradesForActivity(grade);
-    let conflict = false;
-    let conflictText = '';
-    
-    for (const g of grades) {
-        const exists = activities.some(a => {
-            const gradesAct = getGradesForActivity(a.grade);
-            return gradesAct.includes(g) && 
-                   a.month === month && 
-                   a.day === day && 
-                   a.activity !== activity &&
-                   !(editingProject !== null && a.activity === editingProject);
-        });
-        if (exists) {
-            conflict = true;
-            conflictText = `Ya existe una actividad en ${g}º Grado en ${getMonthName(month)} ${day}, ${getYear(month)}`;
-            break;
+    let trimIndex = 0;
+    for (const trim of data.trimestres) {
+        trimIndex++;
+        const trimInfo = trimestreMap[trimIndex];
+        if (!trimInfo) continue;
+        
+        let currentMonthIndex = 0;
+        let currentDay = trimInfo.startDay;
+        let currentMonth = trimInfo.months[currentMonthIndex];
+        
+        for (const proyecto of trim.proyectos) {
+            const sesiones = parseInt(proyecto.sesiones) || 12;
+            let diasAgregados = 0;
+            let day = currentDay;
+            let month = currentMonth;
+            let monthIdx = currentMonthIndex;
+            
+            while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
+                const year = getYear(month);
+                if (!isWeekend(month, day, year)) {
+                    const existingIdx = activities.findIndex(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
+                    });
+                    
+                    if (existingIdx >= 0) {
+                        activities[existingIdx] = { 
+                            grade: gradeNum, 
+                            month: month, 
+                            day: day, 
+                            activity: proyecto.nombre, 
+                            type: 'proyecto', 
+                            duration: sesiones, 
+                            unit: 'days' 
+                        };
+                    } else {
+                        activities.push({ 
+                            grade: gradeNum, 
+                            month: month, 
+                            day: day, 
+                            activity: proyecto.nombre, 
+                            type: 'proyecto', 
+                            duration: sesiones, 
+                            unit: 'days' 
+                        });
+                    }
+                    diasAgregados++;
+                    count++;
+                }
+                day++;
+                const daysInMonth = getDaysInMonth(month);
+                if (day > daysInMonth) {
+                    day = 1;
+                    monthIdx++;
+                    if (monthIdx < trimInfo.months.length) {
+                        month = trimInfo.months[monthIdx];
+                    }
+                }
+            }
+            
+            currentDay = day;
+            currentMonth = month;
+            currentMonthIndex = monthIdx;
         }
     }
     
-    const alert = document.getElementById('modalConflictAlert');
-    if (conflict) {
-        alert.style.display = 'block';
-        alert.innerHTML = `⚠️ ¡Conflicto! ${conflictText}. 
-            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:8px;">Sobrescribir</button>`;
-    } else {
-        alert.style.display = 'none';
-    }
-}
-
-let pendingOverwrite = false;
-
-function confirmOverwrite() {
-    pendingOverwrite = true;
-    document.getElementById('modalConflictAlert').style.display = 'none';
-    showToast('✅ Puedes guardar para sobrescribir la actividad existente');
+    saveActivities();
+    renderCronograma();
+    showToast(`✅ Implementados ${count} días de actividades para ${data.grado}`);
 }
 
 // ============================================================
-// RENDERIZADO DEL CRONOGRAMA
+// FUNCIONES PARA CRONOGRAMA (resumidas)
 // ============================================================
 function renderCronograma() {
     const container = document.getElementById('cronogramaContainer');
@@ -2814,9 +3268,6 @@ function renderCronograma() {
     updateSelectionInfo();
 }
 
-// ============================================================
-// MANEJO DE CLICKS
-// ============================================================
 function handleCellClick(grade, month, day, event) {
     const year = getYear(month);
     if (isWeekend(month, day, year)) {
@@ -2908,257 +3359,7 @@ function updateSelectionInfo() {
 }
 
 // ============================================================
-// EDITOR - BÚSQUEDA CON RESULTADOS DIRECTOS
-// ============================================================
-function searchActivities() {
-    const query = document.getElementById('searchActivity').value.toLowerCase().trim();
-    const resultsContainer = document.getElementById('searchResultsContainer');
-    const resultsList = document.getElementById('searchResultsList');
-    const noResults = document.getElementById('noResultsMessage');
-    const selectedInfo = document.getElementById('selectedActivityInfo');
-    
-    resultsContainer.style.display = 'none';
-    noResults.style.display = 'none';
-    selectedInfo.style.display = 'none';
-    selectedSearchActivity = null;
-    document.getElementById('conflictAlert').style.display = 'none';
-    
-    if (!query || query.length < 2) {
-        return;
-    }
-    
-    const found = activities.filter(a => {
-        return a.activity.toLowerCase().includes(query);
-    });
-    
-    const unique = [];
-    const seen = new Set();
-    for (const item of found) {
-        const key = `${item.activity}-${item.grade}`;
-        if (!seen.has(key)) {
-            seen.add(key);
-            unique.push(item);
-        }
-    }
-    
-    if (unique.length === 0) {
-        noResults.style.display = 'block';
-        return;
-    }
-    
-    resultsContainer.style.display = 'block';
-    resultsList.innerHTML = '';
-    
-    for (const item of unique) {
-        const year = getYear(item.month);
-        const wd = getWeekday(item.month, item.day, year);
-        const gradeLabel = item.grade === 'all' ? 'Todos' : `${item.grade}º`;
-        const typeIcons = { 
-            'proyecto': '🎯', 'inicio-clases': '🟠', 'receso-vacaciones': '🟡', 
-            'festivo-suspension': '🔴', 'cte-intensiva': '🔵', 'cte-ordinaria': '🩷',
-            'fortalecimiento': '🟢', 'fin-ciclo': '🏁', 'normal': '⚪'
-        };
-        const icon = typeIcons[item.type] || '📘';
-        const durationLabel = item.duration && item.duration > 1 ? ` (${item.duration} ${item.unit})` : '';
-        
-        const div = document.createElement('div');
-        div.className = 'search-result-item';
-        div.dataset.grade = item.grade;
-        div.dataset.month = item.month;
-        div.dataset.day = item.day;
-        div.dataset.activity = item.activity;
-        div.dataset.type = item.type;
-        div.dataset.duration = item.duration || 1;
-        div.dataset.unit = item.unit || 'days';
-        
-        div.innerHTML = `
-            <span class="result-name">${icon} ${item.activity}${durationLabel}</span>
-            <span class="result-detail">${getMonthName(item.month)} ${item.day}, ${year} (${WEEKDAYS_SHORT[wd]})</span>
-            <span class="result-badge">${gradeLabel}</span>
-        `;
-        
-        div.addEventListener('click', function() {
-            selectSearchResult(this);
-        });
-        
-        resultsList.appendChild(div);
-    }
-}
-
-function selectSearchResult(element) {
-    document.querySelectorAll('.search-result-item').forEach(el => el.classList.remove('selected'));
-    element.classList.add('selected');
-    
-    const data = {
-        grade: element.dataset.grade,
-        month: parseInt(element.dataset.month),
-        day: parseInt(element.dataset.day),
-        activity: element.dataset.activity,
-        type: element.dataset.type,
-        duration: parseInt(element.dataset.duration) || 1,
-        unit: element.dataset.unit || 'days'
-    };
-    
-    selectedSearchActivity = data;
-    
-    const year = getYear(data.month);
-    const wd = getWeekday(data.month, data.day, year);
-    const gradeLabel = data.grade === 'all' ? 'Todos' : `${data.grade}º`;
-    
-    document.getElementById('selectedActName').textContent = data.activity;
-    document.getElementById('selectedActDate').textContent = `${WEEKDAYS_LONG[wd]} ${data.day} de ${getMonthName(data.month)} ${year}`;
-    
-    document.getElementById('selectedActivityInfo').style.display = 'block';
-    document.getElementById('moveGrade').value = data.grade;
-    document.getElementById('moveTrimestre').value = 'all';
-    document.getElementById('moveMonth').value = data.month;
-    document.getElementById('moveDay').value = data.day;
-    document.getElementById('conflictAlert').style.display = 'none';
-    
-    checkConflict();
-}
-
-function checkConflict() {
-    if (!selectedSearchActivity) return;
-    
-    const newMonth = parseInt(document.getElementById('moveMonth').value);
-    const newDay = parseInt(document.getElementById('moveDay').value);
-    const grade = document.getElementById('moveGrade').value;
-    const activity = selectedSearchActivity.activity;
-    
-    const grades = getGradesForActivity(grade);
-    let conflict = false;
-    let conflictText = '';
-    
-    for (const g of grades) {
-        const exists = activities.some(a => {
-            const gradesAct = getGradesForActivity(a.grade);
-            return gradesAct.includes(g) && 
-                   a.month === newMonth && 
-                   a.day === newDay && 
-                   a.activity !== activity;
-        });
-        if (exists) {
-            conflict = true;
-            conflictText = `${g}º Grado en ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}`;
-            break;
-        }
-    }
-    
-    const alert = document.getElementById('conflictAlert');
-    if (conflict) {
-        alert.style.display = 'block';
-        alert.textContent = `⚠️ ¡Conflicto! Ya existe una actividad en ${conflictText}.`;
-    } else {
-        alert.style.display = 'none';
-    }
-}
-
-function moveActivity() {
-    if (!selectedSearchActivity) {
-        showToast('⚠️ Primero selecciona una actividad de la lista');
-        return;
-    }
-    
-    const newMonth = parseInt(document.getElementById('moveMonth').value);
-    const newDay = parseInt(document.getElementById('moveDay').value);
-    const moveGrade = document.getElementById('moveGrade').value;
-    const moveTrimestre = document.getElementById('moveTrimestre').value;
-    const activity = selectedSearchActivity.activity;
-    const type = selectedSearchActivity.type;
-    const duration = selectedSearchActivity.duration || 1;
-    const unit = selectedSearchActivity.unit || 'days';
-    
-    const allowedMonths = getTrimestreMonths(parseInt(moveTrimestre));
-    
-    if (moveTrimestre !== 'all' && !allowedMonths.includes(newMonth)) {
-        showToast(`⚠️ La fecha seleccionada no pertenece al ${moveTrimestre === '1' ? 'TRIMESTRE I' : moveTrimestre === '2' ? 'TRIMESTRE II' : 'TRIMESTRE III'}`);
-        return;
-    }
-    
-    const grades = getGradesForActivity(moveGrade);
-    let conflict = false;
-    for (const g of grades) {
-        const exists = activities.some(a => {
-            const gradesAct = getGradesForActivity(a.grade);
-            return gradesAct.includes(g) && 
-                   a.month === newMonth && 
-                   a.day === newDay && 
-                   a.activity !== activity;
-        });
-        if (exists) {
-            conflict = true;
-            break;
-        }
-    }
-    
-    if (conflict) {
-        if (!confirm(`⚠️ Hay un conflicto en la fecha ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}. ¿Deseas sobrescribir?`)) {
-            return;
-        }
-    }
-    
-    let count = 0;
-    for (const g of grades) {
-        const toRemove = activities.filter(a => {
-            const gradesAct = getGradesForActivity(a.grade);
-            return gradesAct.includes(g) && 
-                   a.activity === activity && 
-                   a.type === type &&
-                   (moveTrimestre === 'all' || allowedMonths.includes(a.month));
-        });
-        count += toRemove.length;
-        for (const r of toRemove) {
-            const idx = activities.indexOf(r);
-            if (idx >= 0) activities.splice(idx, 1);
-        }
-    }
-    
-    let currentMonth = newMonth;
-    let currentDay = newDay;
-    let diasCreados = 0;
-    const totalDays = unit === 'weeks' ? duration * 7 : duration;
-    
-    while (diasCreados < totalDays && diasCreados < 60) {
-        const year = getYear(currentMonth);
-        if (!isWeekend(currentMonth, currentDay, year)) {
-            for (const g of grades) {
-                activities.push({
-                    grade: g,
-                    month: currentMonth,
-                    day: currentDay,
-                    activity: activity,
-                    type: type,
-                    duration: duration,
-                    unit: unit
-                });
-            }
-            diasCreados++;
-        }
-        currentDay++;
-        const daysInMonth = getDaysInMonth(currentMonth);
-        if (currentDay > daysInMonth) {
-            currentDay = 1;
-            currentMonth++;
-            if (currentMonth > 12) currentMonth = 1;
-        }
-    }
-    
-    saveActivities();
-    renderCronograma();
-    
-    document.getElementById('searchActivity').value = '';
-    document.getElementById('searchResultsContainer').style.display = 'none';
-    document.getElementById('noResultsMessage').style.display = 'none';
-    document.getElementById('selectedActivityInfo').style.display = 'none';
-    document.getElementById('conflictAlert').style.display = 'none';
-    selectedSearchActivity = null;
-    
-    showToast(`✅ "${activity}" movida a ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)} (${count} celdas)`);
-}
-
-// ============================================================
-// MODALES
+// MODALES Y FUNCIONES RESTANTES (resumidas)
 // ============================================================
 function openNewActivityModal() {
     document.getElementById('modalTitle').textContent = '➕ Nueva Actividad';
@@ -3326,9 +3527,110 @@ function closeModal() {
     pendingOverwrite = false;
 }
 
-// ============================================================
-// GUARDAR ACTIVIDAD
-// ============================================================
+function updateFechaInfo() {
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const duration = parseInt(document.getElementById('editDuration').value);
+    const unit = document.getElementById('editUnit').value;
+    const year = getYear(month);
+    
+    const wd = getWeekday(month, day, year);
+    const wdName = WEEKDAYS_LONG[wd];
+    const monthName = getMonthName(month);
+    
+    document.getElementById('fechaInfo').textContent = `📅 ${wdName} ${day} de ${monthName} ${year}`;
+    document.getElementById('weekdayBadge').textContent = wdName;
+    
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    let endMonth = month;
+    let endDay = day + totalDays - 1;
+    let endYear = year;
+    let tempMonth = month;
+    let tempDay = day;
+    let diasValidos = 0;
+    let contador = 0;
+    
+    while (diasValidos < totalDays && contador < 100) {
+        const y = getYear(tempMonth);
+        if (!isWeekend(tempMonth, tempDay, y)) {
+            diasValidos++;
+        }
+        if (diasValidos < totalDays) {
+            tempDay++;
+            const daysInMonth = getDaysInMonth(tempMonth);
+            if (tempDay > daysInMonth) {
+                tempDay = 1;
+                tempMonth++;
+                if (tempMonth > 12) tempMonth = 1;
+            }
+        }
+        contador++;
+    }
+    
+    endMonth = tempMonth;
+    endDay = tempDay;
+    endYear = getYear(endMonth);
+    
+    const endWk = getWeekday(endMonth, endDay, endYear);
+    const endWkName = WEEKDAYS_LONG[endWk];
+    const endMonthName = getMonthName(endMonth);
+    
+    const rangeInfo = document.getElementById('rangeInfo');
+    if (totalDays > 1) {
+        rangeInfo.style.display = 'flex';
+        document.getElementById('rangoTexto').textContent = `Del ${wdName} ${day} de ${monthName} al ${endWkName} ${endDay} de ${endMonthName} ${endYear}`;
+        document.getElementById('diasTotales').textContent = `${totalDays} días`;
+    } else {
+        rangeInfo.style.display = 'none';
+    }
+    
+    checkModalConflict();
+}
+
+function checkModalConflict() {
+    const grade = document.getElementById('editGrade').value;
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const activity = document.getElementById('editActivity').value.trim();
+    
+    const grades = getGradesForActivity(grade);
+    let conflict = false;
+    let conflictText = '';
+    
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === month && 
+                   a.day === day && 
+                   a.activity !== activity &&
+                   !(editingProject !== null && a.activity === editingProject);
+        });
+        if (exists) {
+            conflict = true;
+            conflictText = `Ya existe una actividad en ${g}º Grado en ${getMonthName(month)} ${day}, ${getYear(month)}`;
+            break;
+        }
+    }
+    
+    const alert = document.getElementById('modalConflictAlert');
+    if (conflict) {
+        alert.style.display = 'block';
+        alert.innerHTML = `⚠️ ¡Conflicto! ${conflictText}. 
+            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:8px;">Sobrescribir</button>`;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+let pendingOverwrite = false;
+
+function confirmOverwrite() {
+    pendingOverwrite = true;
+    document.getElementById('modalConflictAlert').style.display = 'none';
+    showToast('✅ Puedes guardar para sobrescribir la actividad existente');
+}
+
 function saveActivity() {
     const grade = document.getElementById('editGrade').value;
     const month = parseInt(document.getElementById('editMonth').value);
@@ -3510,9 +3812,6 @@ function deleteActivity() {
     showToast(`🗑️ Proyecto "${activity}" eliminado (${count} celdas)`);
 }
 
-// ============================================================
-// BULK MODAL
-// ============================================================
 function openBulkModal() {
     if (selectedCells.length === 0) {
         showToast('⚠️ Primero selecciona celdas');
@@ -3561,13 +3860,262 @@ function saveBulk() {
     showToast(`✅ "${activity}" asignado a ${count} celdas`);
 }
 
+function searchActivities() {
+    const query = document.getElementById('searchActivity').value.toLowerCase().trim();
+    const resultsContainer = document.getElementById('searchResultsContainer');
+    const resultsList = document.getElementById('searchResultsList');
+    const noResults = document.getElementById('noResultsMessage');
+    const selectedInfo = document.getElementById('selectedActivityInfo');
+    
+    resultsContainer.style.display = 'none';
+    noResults.style.display = 'none';
+    selectedInfo.style.display = 'none';
+    selectedSearchActivity = null;
+    document.getElementById('conflictAlert').style.display = 'none';
+    
+    if (!query || query.length < 2) return;
+    
+    const found = activities.filter(a => a.activity.toLowerCase().includes(query));
+    const unique = [];
+    const seen = new Set();
+    for (const item of found) {
+        const key = `${item.activity}-${item.grade}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+            unique.push(item);
+        }
+    }
+    
+    if (unique.length === 0) {
+        noResults.style.display = 'block';
+        return;
+    }
+    
+    resultsContainer.style.display = 'block';
+    resultsList.innerHTML = '';
+    
+    for (const item of unique) {
+        const year = getYear(item.month);
+        const wd = getWeekday(item.month, item.day, year);
+        const gradeLabel = item.grade === 'all' ? 'Todos' : `${item.grade}º`;
+        const typeIcons = { 
+            'proyecto': '🎯', 'inicio-clases': '🟠', 'receso-vacaciones': '🟡', 
+            'festivo-suspension': '🔴', 'cte-intensiva': '🔵', 'cte-ordinaria': '🩷',
+            'fortalecimiento': '🟢', 'fin-ciclo': '🏁', 'normal': '⚪'
+        };
+        const icon = typeIcons[item.type] || '📘';
+        const durationLabel = item.duration && item.duration > 1 ? ` (${item.duration} ${item.unit})` : '';
+        
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        div.dataset.grade = item.grade;
+        div.dataset.month = item.month;
+        div.dataset.day = item.day;
+        div.dataset.activity = item.activity;
+        div.dataset.type = item.type;
+        div.dataset.duration = item.duration || 1;
+        div.dataset.unit = item.unit || 'days';
+        
+        div.innerHTML = `
+            <span class="result-name">${icon} ${item.activity}${durationLabel}</span>
+            <span class="result-detail">${getMonthName(item.month)} ${item.day}, ${year} (${WEEKDAYS_SHORT[wd]})</span>
+            <span class="result-badge">${gradeLabel}</span>
+        `;
+        
+        div.addEventListener('click', function() {
+            selectSearchResult(this);
+        });
+        resultsList.appendChild(div);
+    }
+}
+
+function selectSearchResult(element) {
+    document.querySelectorAll('.search-result-item').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    const data = {
+        grade: element.dataset.grade,
+        month: parseInt(element.dataset.month),
+        day: parseInt(element.dataset.day),
+        activity: element.dataset.activity,
+        type: element.dataset.type,
+        duration: parseInt(element.dataset.duration) || 1,
+        unit: element.dataset.unit || 'days'
+    };
+    
+    selectedSearchActivity = data;
+    
+    const year = getYear(data.month);
+    const wd = getWeekday(data.month, data.day, year);
+    const gradeLabel = data.grade === 'all' ? 'Todos' : `${data.grade}º`;
+    
+    document.getElementById('selectedActName').textContent = data.activity;
+    document.getElementById('selectedActDate').textContent = `${WEEKDAYS_LONG[wd]} ${data.day} de ${getMonthName(data.month)} ${year}`;
+    
+    document.getElementById('selectedActivityInfo').style.display = 'block';
+    document.getElementById('moveGrade').value = data.grade;
+    document.getElementById('moveTrimestre').value = 'all';
+    document.getElementById('moveMonth').value = data.month;
+    document.getElementById('moveDay').value = data.day;
+    document.getElementById('conflictAlert').style.display = 'none';
+    checkConflict();
+}
+
+function checkConflict() {
+    if (!selectedSearchActivity) return;
+    
+    const newMonth = parseInt(document.getElementById('moveMonth').value);
+    const newDay = parseInt(document.getElementById('moveDay').value);
+    const grade = document.getElementById('moveGrade').value;
+    const activity = selectedSearchActivity.activity;
+    
+    const grades = getGradesForActivity(grade);
+    let conflict = false;
+    let conflictText = '';
+    
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === newMonth && 
+                   a.day === newDay && 
+                   a.activity !== activity;
+        });
+        if (exists) {
+            conflict = true;
+            conflictText = `${g}º Grado en ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}`;
+            break;
+        }
+    }
+    
+    const alert = document.getElementById('conflictAlert');
+    if (conflict) {
+        alert.style.display = 'block';
+        alert.textContent = `⚠️ ¡Conflicto! Ya existe una actividad en ${conflictText}.`;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+function moveActivity() {
+    if (!selectedSearchActivity) {
+        showToast('⚠️ Primero selecciona una actividad de la lista');
+        return;
+    }
+    
+    const newMonth = parseInt(document.getElementById('moveMonth').value);
+    const newDay = parseInt(document.getElementById('moveDay').value);
+    const moveGrade = document.getElementById('moveGrade').value;
+    const moveTrimestre = document.getElementById('moveTrimestre').value;
+    const activity = selectedSearchActivity.activity;
+    const type = selectedSearchActivity.type;
+    const duration = selectedSearchActivity.duration || 1;
+    const unit = selectedSearchActivity.unit || 'days';
+    
+    const allowedMonths = getTrimestreMonths(parseInt(moveTrimestre));
+    
+    if (moveTrimestre !== 'all' && !allowedMonths.includes(newMonth)) {
+        showToast(`⚠️ La fecha seleccionada no pertenece al ${moveTrimestre === '1' ? 'TRIMESTRE I' : moveTrimestre === '2' ? 'TRIMESTRE II' : 'TRIMESTRE III'}`);
+        return;
+    }
+    
+    const grades = getGradesForActivity(moveGrade);
+    let conflict = false;
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === newMonth && 
+                   a.day === newDay && 
+                   a.activity !== activity;
+        });
+        if (exists) {
+            conflict = true;
+            break;
+        }
+    }
+    
+    if (conflict) {
+        if (!confirm(`⚠️ Hay un conflicto en la fecha ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}. ¿Deseas sobrescribir?`)) {
+            return;
+        }
+    }
+    
+    let count = 0;
+    for (const g of grades) {
+        const toRemove = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.activity === activity && 
+                   a.type === type &&
+                   (moveTrimestre === 'all' || allowedMonths.includes(a.month));
+        });
+        count += toRemove.length;
+        for (const r of toRemove) {
+            const idx = activities.indexOf(r);
+            if (idx >= 0) activities.splice(idx, 1);
+        }
+    }
+    
+    let currentMonth = newMonth;
+    let currentDay = newDay;
+    let diasCreados = 0;
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    
+    while (diasCreados < totalDays && diasCreados < 60) {
+        const year = getYear(currentMonth);
+        if (!isWeekend(currentMonth, currentDay, year)) {
+            for (const g of grades) {
+                activities.push({
+                    grade: g,
+                    month: currentMonth,
+                    day: currentDay,
+                    activity: activity,
+                    type: type,
+                    duration: duration,
+                    unit: unit
+                });
+            }
+            diasCreados++;
+        }
+        currentDay++;
+        const daysInMonth = getDaysInMonth(currentMonth);
+        if (currentDay > daysInMonth) {
+            currentDay = 1;
+            currentMonth++;
+            if (currentMonth > 12) currentMonth = 1;
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    
+    document.getElementById('searchActivity').value = '';
+    document.getElementById('searchResultsContainer').style.display = 'none';
+    document.getElementById('noResultsMessage').style.display = 'none';
+    document.getElementById('selectedActivityInfo').style.display = 'none';
+    document.getElementById('conflictAlert').style.display = 'none';
+    selectedSearchActivity = null;
+    
+    showToast(`✅ "${activity}" movida a ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)} (${count} celdas)`);
+}
+
+function clearAllActivities() {
+    if (confirm('¿Eliminar TODAS las actividades?')) {
+        activities = [];
+        saveActivities();
+        renderCronograma();
+        showToast('🗑️ Todas las actividades eliminadas');
+    }
+}
+
 // ============================================================
 // EXPORTAR A EXCEL
 // ============================================================
 async function exportToExcel() {
     try {
         if (typeof ExcelJS === 'undefined') {
-            showToast('⚠️ No se pudo cargar la librería de Excel (revisa tu conexión a internet)');
+            showToast('⚠️ No se pudo cargar la librería de Excel');
             return;
         }
 
@@ -3597,7 +4145,6 @@ async function exportToExcel() {
         ];
 
         const TOTAL_COLS = 32;
-
         const ACT_STYLES = {
             'inicio-clases':      { bg: 'FF8C00' },
             'receso-vacaciones':  { bg: 'FFD700' },
@@ -3642,7 +4189,6 @@ async function exportToExcel() {
             return row.number;
         }
 
-        // --- Encabezado del documento ---
         addFullWidthRow('📚 Cronograma Escolar 2026-2027', '00467F', 'FFFFFF', 14);
         addFullWidthRow(`${config.schoolName || 'Escuela'} · ${config.schoolCycle || ''} · ${filterLabel}`, 'FFFFFF', '555555', 10);
         addFullWidthRow(`Generado el ${new Date().toLocaleDateString()}`, 'FFFFFF', '666666', 9);
@@ -3653,7 +4199,6 @@ async function exportToExcel() {
             for (const trim of trimestres) {
                 addFullWidthRow(trim.name, '00467F', 'FFFFFF', 11);
 
-                // Fila de encabezado de días (1-31)
                 const headerValues = ['Mes/Día'];
                 for (let d = 1; d <= 31; d++) headerValues.push(d);
                 const headerRow = ws.addRow(headerValues);
@@ -3673,7 +4218,6 @@ async function exportToExcel() {
 
                     styleCell(row.getCell(1), { bg: '28A745', color: 'FFFFFF', bold: true, size: 8, text: monthData.name });
 
-                    // Fusiona celdas contiguas de un mismo proyecto
                     let runStart = null;
                     let runText = '';
                     const flushRun = (endDay) => {
@@ -3724,7 +4268,6 @@ async function exportToExcel() {
                                 }
                                 if (!nextDayAct) flushRun(day);
                             } else {
-                                // Evento oficial - solo color, sin texto
                                 const act = acts[0];
                                 styleKey = act.type || 'normal';
                                 isProjectCell = false;
@@ -3732,12 +4275,10 @@ async function exportToExcel() {
                         }
 
                         if (isProjectCell) {
-                            // Ya se maneja en flushRun
                             if (!runStart) {
                                 styleCell(cell, { bg: ACT_STYLES.proyecto.bg, size: 1 });
                             }
                         } else if (styleKey && ACT_STYLES[styleKey]) {
-                            // Evento oficial - solo color, sin texto
                             styleCell(cell, { bg: ACT_STYLES[styleKey].bg, size: 1 });
                         } else if (weekend) {
                             styleCell(cell, { bg: 'F0F0F0', size: 1 });
@@ -3771,14 +4312,11 @@ async function exportToExcel() {
     }
 }
 
-// ============================================================
-// VISTA PREVIA E IMPRESIÓN
-// ============================================================
 function printPreview() {
     const filter = document.getElementById('gradeFilter').value;
     const filterLabel = filter === 'all' ? 'Todos los grados' : `${filter}º Grado`;
     
-    if (!confirm(`¿Imprimir cronograma para ${filterLabel}?\nSe generará una vista previa.`)) return;
+    if (!confirm(`¿Imprimir cronograma para ${filterLabel}?`)) return;
     
     const container = document.getElementById('cronogramaContainer');
     const cronoHTML = container.innerHTML;
@@ -3907,14 +4445,12 @@ function printPreview() {
     printWindow.document.close();
 }
 
-// ============================================================
-// EXPORTAR JSON
-// ============================================================
 function exportJSON() {
     const data = { 
         activities: activities,
         config: config,
         calendario: calendarioData,
+        plan: planData,
         dosificacion: dosificacionData,
         exportedAt: new Date().toISOString()
     };
@@ -3933,24 +4469,11 @@ function importJSONFile(event) {
     reader.onload = function(e) {
         try {
             const data = JSON.parse(e.target.result);
-            if (data.activities && Array.isArray(data.activities)) {
-                activities = data.activities;
-                saveActivities();
-            }
-            if (data.calendario && Array.isArray(data.calendario)) {
-                calendarioData = data.calendario;
-                saveCalendario();
-                renderCalendario();
-            }
-            if (data.config) {
-                config = { ...config, ...data.config };
-                saveConfig();
-            }
-            if (data.dosificacion) {
-                dosificacionData = data.dosificacion;
-                localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-                renderDosificacion();
-            }
+            if (data.activities) { activities = data.activities; saveActivities(); }
+            if (data.calendario) { calendarioData = data.calendario; saveCalendario(); renderCalendario(); }
+            if (data.plan) { planData = data.plan; localStorage.setItem('cronograma_plan', JSON.stringify(planData)); renderPlan(); }
+            if (data.config) { config = { ...config, ...data.config }; saveConfig(); }
+            if (data.dosificacion) { dosificacionData = data.dosificacion; localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData)); renderDosificacion(); }
             renderCronograma();
             showToast('📂 Backup importado');
         } catch(err) {
@@ -3960,40 +4483,6 @@ function importJSONFile(event) {
     reader.readAsText(file);
     event.target.value = '';
 }
-
-function clearAllActivities() {
-    if (confirm('¿Eliminar TODAS las actividades?')) {
-        activities = [];
-        saveActivities();
-        renderCronograma();
-        showToast('🗑️ Todas las actividades eliminadas');
-    }
-}
-
-// ============================================================
-// TABS
-// ============================================================
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const tabId = this.dataset.tab;
-        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-        document.getElementById(`tab-${tabId}`).classList.add('active');
-        if (tabId === 'cronograma') renderCronograma();
-        if (tabId === 'calendario') renderCalendario();
-        if (tabId === 'dosificacion') renderDosificacion();
-        if (tabId === 'config') {
-            document.getElementById('schoolName').value = config.schoolName || '';
-            document.getElementById('schoolCycle').value = config.schoolCycle || '';
-            document.getElementById('schoolCCT').value = config.schoolCCT || '';
-            document.getElementById('teacherName').value = config.teacherName || '';
-            document.getElementById('directorName').value = config.directorName || '';
-            document.getElementById('primaryColor').value = config.primaryColor || '#00467F';
-            document.getElementById('themeSelect').value = config.theme || 'light';
-        }
-    });
-});
 
 // ============================================================
 // THEME
@@ -4018,9 +4507,6 @@ function toggleTheme() {
     showToast(`🌓 Tema: ${newTheme === 'dark' ? 'Oscuro' : 'Claro'}`);
 }
 
-// ============================================================
-// UTILITY
-// ============================================================
 function adjustColor(hex, percent) {
     let r = parseInt(hex.slice(1,3), 16);
     let g = parseInt(hex.slice(3,5), 16);
@@ -4040,19 +4526,42 @@ function showToast(message) {
 }
 
 // ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const tabId = this.dataset.tab;
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+        if (tabId === 'cronograma') renderCronograma();
+        if (tabId === 'plan') renderPlan();
+        if (tabId === 'calendario') renderCalendario();
+        if (tabId === 'dosificacion') renderDosificacion();
+        if (tabId === 'config') {
+            document.getElementById('schoolName').value = config.schoolName || '';
+            document.getElementById('schoolCycle').value = config.schoolCycle || '';
+            document.getElementById('schoolCCT').value = config.schoolCCT || '';
+            document.getElementById('teacherName').value = config.teacherName || '';
+            document.getElementById('directorName').value = config.directorName || '';
+            document.getElementById('primaryColor').value = config.primaryColor || '#00467F';
+            document.getElementById('themeSelect').value = config.theme || 'light';
+        }
+    });
+});
+
+// ============================================================
 // INIT
 // ============================================================
 loadData();
 renderCronograma();
+renderPlan();
 renderCalendario();
 renderDosificacion();
 
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { 
-        closeModal(); 
-        closeBulkModal();
-        clearSelection();
-    }
+    if (e.key === 'Escape') { closeModal(); closeBulkModal(); clearSelection(); }
 });
 
 document.getElementById('activityModal').addEventListener('click', function(e) {
@@ -4071,7 +4580,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado con calendario editable');
+console.log('📚 Cronograma SEP 2026-2027 cargado con Plan Anual');
 console.log(`📊 ${activities.length} actividades cargadas`);
 </script>
 </body>
