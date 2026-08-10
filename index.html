@@ -640,7 +640,7 @@
         }
 
         /* ============================================================
-           ESTILOS PARA DOSIFICACIÓN EDITABLE
+           ESTILOS PARA DOSIFICACIÓN EDITABLE - CORREGIDA
            ============================================================ */
         .dosificacion-container {
             overflow-x: auto;
@@ -726,7 +726,6 @@
             color: var(--text-secondary);
         }
 
-        /* Campos editables dentro de la tabla */
         .dosificacion-table .editable-input,
         .dosificacion-table .editable-textarea {
             width: 100%;
@@ -766,7 +765,6 @@
             margin: 0 auto;
         }
 
-        /* Selector de grado en dosificación */
         .dosificacion-grade-selector {
             display: flex;
             gap: 8px;
@@ -826,9 +824,9 @@
                 padding-top: 10px;
                 border-top: 1px solid #ddd;
             }
-            .dosificacion-table { font-size: 0.65rem; }
+            .dosificacion-table { font-size: 0.6rem; }
             .dosificacion-table th,
-            .dosificacion-table td { padding: 4px 6px; }
+            .dosificacion-table td { padding: 3px 5px; }
             .dosificacion-table .editable-input,
             .dosificacion-table .editable-textarea {
                 background: transparent !important;
@@ -855,9 +853,9 @@
             .form-row-3 { grid-template-columns: 1fr; }
             .move-options { grid-template-columns: 1fr; }
             .search-result-item { flex-direction: column; align-items: flex-start; }
-            .dosificacion-table { font-size: 0.6rem; }
+            .dosificacion-table { font-size: 0.55rem; }
             .dosificacion-table th,
-            .dosificacion-table td { padding: 3px 4px; }
+            .dosificacion-table td { padding: 2px 4px; }
         }
         @media (max-width: 480px) {
             .header-title h1 { font-size: 1rem; }
@@ -897,9 +895,7 @@
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
     </nav>
 
-    <!-- ============================================================
-    PESTAÑA CRONOGRAMA
-    ============================================================ -->
+    <!-- PESTAÑA CRONOGRAMA -->
     <div class="tab-content active" id="tab-cronograma">
         <div class="card">
             <div class="card-header">
@@ -940,9 +936,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    PESTAÑA DOSIFICACIÓN - COMPLETAMENTE EDITABLE
-    ============================================================ -->
+    <!-- PESTAÑA DOSIFICACIÓN - CORREGIDA -->
     <div class="tab-content" id="tab-dosificacion">
         <div class="card">
             <div class="card-header">
@@ -966,9 +960,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    PESTAÑA EDITOR
-    ============================================================ -->
+    <!-- PESTAÑA EDITOR -->
     <div class="tab-content" id="tab-editor">
         <div class="card">
             <div class="card-header">
@@ -1050,9 +1042,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    PESTAÑA CONFIGURACIÓN
-    ============================================================ -->
+    <!-- PESTAÑA CONFIGURACIÓN -->
     <div class="tab-content" id="tab-config">
         <div class="card">
             <div class="card-header">
@@ -1098,9 +1088,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    PESTAÑA EXPORTAR
-    ============================================================ -->
+    <!-- PESTAÑA EXPORTAR -->
     <div class="tab-content" id="tab-export">
         <div class="card">
             <div class="card-header">
@@ -1245,7 +1233,7 @@
 </script>
 <script>
 // ============================================================
-// DATOS DE DOSIFICACIÓN - INFORMÁTICA (COMPLETOS)
+// DATOS DE DOSIFICACIÓN - INFORMÁTICA (CORREGIDA)
 // ============================================================
 const DOSIFICACION_DATA = {
     1: {
@@ -1257,7 +1245,6 @@ const DOSIFICACION_DATA = {
         trimestres: [
             {
                 nombre: 'I',
-                meses: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
                 proyectos: [
                     { nombre: '1. Primeros Pasos Digitales: Encendido, Hardware y Sistema Operativo', contenido: 'Herramientas, máquinas e instrumentos como extensión corporal.', pda: 'Explora las partes fundamentales del equipo de cómputo (hardware/software), aprende las técnicas adecuadas de encendido, apagado y cuidado de los dispositivos informáticos, e interactúa con la interfaz del sistema operativo.', sesiones: 13 },
                     { nombre: '2. Mi Primer Documento Digital: Formato de Texto en Word', contenido: 'Comunicación y representación técnica.', pda: 'Utiliza procesadores de texto para redactar, dar formato (fuente, alineación, interlineado) y organizar documentos básicos que expresen ideas o proyectos escolares de manera clara y estructurada.', sesiones: 12 },
@@ -1267,7 +1254,6 @@ const DOSIFICACION_DATA = {
             },
             {
                 nombre: 'II',
-                meses: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
                 proyectos: [
                     { nombre: '5. Organizadores Visuales: Creación de Presentaciones Electrónicas', contenido: 'Comunicación y representación técnica para la divulgación de saberes.', pda: 'Diseña presentaciones diapositiva por diapositiva integrando texto, imágenes y tablas para exponer temas escolares, seleccionando recursos tipográficos y visuales pertinentes.', sesiones: 12 },
                     { nombre: '6. Mi Primera Hoja de Cálculo: Tablas y Operaciones Básicas', contenido: 'Herramientas y tecnologías de la información para el cálculo y organización.', pda: 'Emplea hojas de cálculo para ingresar, ordenar y dar formato a datos, aplicando fórmulas matemáticas básicas (suma, promedio, resta) en situaciones cotidianas.', sesiones: 12 },
@@ -1277,7 +1263,6 @@ const DOSIFICACION_DATA = {
             },
             {
                 nombre: 'III',
-                meses: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO',
                 proyectos: [
                     { nombre: '9. Explorando el Ciberespacio: Búsqueda y Evaluación de Información', contenido: 'Evaluación de sistemas informáticos y fuentes de información.', pda: 'Aplica criterios éticos y técnicos para buscar, seleccionar, filtrar y citar información verídica en buscadores web académicos y bases de datos.', sesiones: 12 },
                     { nombre: '10. Edición Multimedia: Creación de Banners y Gráficos Visuales', contenido: 'Procesos técnicos de comunicación visual y diseño.', pda: 'Produce material gráfico digital publicitario o informativo (banners, carteles) aplicando principios de diseño, combinación de colores y edición de imágenes.', sesiones: 12 },
@@ -1296,7 +1281,6 @@ const DOSIFICACION_DATA = {
         trimestres: [
             {
                 nombre: 'I',
-                meses: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
                 proyectos: [
                     { nombre: '1. Procesamiento Avanzado de Documentos e Informes Técnicos', contenido: 'Comunicación y representación técnica en documentos complejos.', pda: 'Integra tablas avanzadas, combinaciones de correspondencia, estilos, índices automáticos y encabezados organizados en procesadores de texto para la elaboración de reportes técnicos.', sesiones: 13 },
                     { nombre: '2. Gestión de Datos y Funciones Condicionales en Excel', contenido: 'Procesamiento informático y análisis de información cuantitativa.', pda: 'Utiliza funciones lógicas y matemáticas en hojas de cálculo (SI, BUSCARV, promedios ponderados) y genera gráficos estadísticos para analizar datos del entorno escolar o social.', sesiones: 12 },
@@ -1306,7 +1290,6 @@ const DOSIFICACION_DATA = {
             },
             {
                 nombre: 'II',
-                meses: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
                 proyectos: [
                     { nombre: '5. Redes de Computadoras y Comunicación Digital', contenido: 'Infraestructura de redes, conectividad y transmisión de datos.', pda: 'Explora la topología de redes de computadoras (LAN, WAN, Wi-Fi), los protocolos de comunicación e identifica los elementos necesarios para compartir recursos e información.', sesiones: 12 },
                     { nombre: '6. Edición Digital de Fotografía y Diseño Institucional', contenido: 'Representación técnica y uso de software de diseño vectorial y bitmap.', pda: 'Aplica herramientas avanzadas de edición gráfica digital para retocar fotos, diseñar credenciales, banners y logotipos informativos con estándares de precisión técnica.', sesiones: 12 },
@@ -1316,7 +1299,6 @@ const DOSIFICACION_DATA = {
             },
             {
                 nombre: 'III',
-                meses: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO',
                 proyectos: [
                     { nombre: '9. Mantenimiento Preventivo y Correctivo Sólido del Sistema', contenido: 'Evaluación y mantenimiento de sistemas tecnológicos.', pda: 'Ejecuta tareas de optimización de sistemas operativos (desfragmentación, limpieza de archivos temporales, instalación de programas y antivirus) para mantener los equipos eficientes.', sesiones: 12 },
                     { nombre: '10. Principios de Electrónica Digital y Circuitos Básicos', contenido: 'Procesos informáticos, energía y control en sistemas tecnológicos.', pda: 'Conoce los principios fundamentales de la electrónica (voltaje, corriente, resistencia, leds) y simula circuitos digitales sencillos para la automatización de procesos.', sesiones: 12 },
@@ -1335,7 +1317,6 @@ const DOSIFICACION_DATA = {
         trimestres: [
             {
                 nombre: 'I',
-                meses: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
                 proyectos: [
                     { nombre: '1. Lógica de Programación e Introducción a Lenguajes de Código', contenido: 'Lenguajes de programación y pensamiento computacional avanzado.', pda: 'Traduce diagramas de flujo a código en lenguajes de programación (como Python o JavaScript), utilizando sintaxis formal, funciones y estructuras de control.', sesiones: 13 },
                     { nombre: '2. Diseño Web Interactivo: Maquetación con HTML5 y CSS3', contenido: 'Desarrollo web responsive e interfaces de usuario.', pda: 'Diseña y personaliza sitios web adaptativos empleando CSS para dar estilos, colores, tipografías y maquetación profesional a la estructura HTML5.', sesiones: 12 },
@@ -1345,7 +1326,6 @@ const DOSIFICACION_DATA = {
             },
             {
                 nombre: 'II',
-                meses: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
                 proyectos: [
                     { nombre: '5. Programación Web Dinámica e Interacción con el Usuario', contenido: 'Desarrollo de aplicaciones web cliente-servidor.', pda: 'Incorpora scripts interactivos que respondan a eventos del usuario (botones, formularios, validación de datos) para crear aplicaciones web funcionales.', sesiones: 12 },
                     { nombre: '6. Robótica Educativa y Microcontroladores (Arduino)', contenido: 'Integración de programación, electrónica y robótica.', pda: 'Programa microcontroladores para interactuar con sensores (luz, temperatura, distancia) y actuadores (motores, leds), automatizando un prototipo físico.', sesiones: 12 },
@@ -1355,7 +1335,6 @@ const DOSIFICACION_DATA = {
             },
             {
                 nombre: 'III',
-                meses: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO',
                 proyectos: [
                     { nombre: '9. Modelado 3D e Impresión Digital para Proyectos', contenido: 'Sistemas CAD (Diseño Asistido por Computadora) y manufactura digital.', pda: 'Diseña objetos y piezas tridimensionales mediante software de modelado 3D, preparando los archivos para simulación o fabricación digital.', sesiones: 12 },
                     { nombre: '10. Aplicación de Inteligencia Artificial y Automatización', contenido: 'Automatización de procesos e Inteligencia Artificial en proyectos.', pda: 'Integra modelos de IA (procesamiento de lenguaje o visión por computadora) e instrumentos de automatización para resolver tareas repetitivas o analizar datos.', sesiones: 12 },
@@ -1549,7 +1528,7 @@ function getTrimestreMonths(trimestre) {
 }
 
 // ============================================================
-// RENDERIZADO DE DOSIFICACIÓN - COMPLETAMENTE EDITABLE
+// RENDERIZADO DE DOSIFICACIÓN - CORREGIDA (SIN COLUMNA MESES)
 // ============================================================
 function renderDosificacion() {
     const container = document.getElementById('dosificacionContainer');
@@ -1564,12 +1543,12 @@ function renderDosificacion() {
     let html = `
     <table class="dosificacion-table">
         <tr>
-            <td colspan="6" style="text-align:center; font-size:1.1rem; font-weight:700; background:var(--primary); color:white; padding:12px;">
+            <td colspan="5" style="text-align:center; font-size:1.1rem; font-weight:700; background:var(--primary); color:white; padding:12px;">
                 ${data.titulo}
             </td>
         </tr>
         <tr>
-            <td colspan="6" style="background:var(--primary-light); padding:8px 10px;">
+            <td colspan="5" style="background:var(--primary-light); padding:8px 10px;">
                 <strong>Nombre de la Escuela:</strong>
                 <input type="text" class="editable-input" value="${data.escuela}" 
                        onchange="updateDosificacionField(${grade}, 'escuela', this.value)" 
@@ -1577,7 +1556,7 @@ function renderDosificacion() {
             </td>
         </tr>
         <tr>
-            <td colspan="6" style="background:var(--primary-light); padding:8px 10px;">
+            <td colspan="5" style="background:var(--primary-light); padding:8px 10px;">
                 <strong>Nombre del Docente:</strong>
                 <input type="text" class="editable-input" value="${data.docente}" 
                        onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
@@ -1585,7 +1564,7 @@ function renderDosificacion() {
             </td>
         </tr>
         <tr>
-            <td colspan="3" style="background:var(--primary-light); padding:8px 10px;">
+            <td colspan="2" style="background:var(--primary-light); padding:8px 10px;">
                 <strong>Grado y Grupo:</strong>
                 <input type="text" class="editable-input" value="${data.grado}" 
                        onchange="updateDosificacionField(${grade}, 'grado', this.value)" 
@@ -1600,10 +1579,9 @@ function renderDosificacion() {
         </tr>
         <tr>
             <th style="width:8%;">TRIMESTRE</th>
-            <th style="width:10%;">MESES</th>
-            <th style="width:22%;">PROYECTO</th>
-            <th style="width:18%;">CONTENIDO</th>
-            <th style="width:32%;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
+            <th style="width:27%;">PROYECTO</th>
+            <th style="width:20%;">CONTENIDO</th>
+            <th style="width:38%;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
             <th style="width:7%;">SESIONES</th>
         </tr>`;
     
@@ -1613,21 +1591,13 @@ function renderDosificacion() {
     for (const trim of data.trimestres) {
         trimCount++;
         let firstRow = true;
-        const mesesValue = trim.meses || 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE';
         
         for (const proyecto of trim.proyectos) {
             totalSesiones += proyecto.sesiones;
             const rowspan = firstRow ? trim.proyectos.length : 1;
             
             html += `<tr>
-                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
-                    ${trim.nombre}
-                    <div style="font-size:0.65rem; font-weight:normal; margin-top:4px;">
-                        <textarea class="editable-textarea" 
-                                  onchange="updateDosificacionTrimestre(${grade}, ${trimCount-1}, 'meses', this.value)" 
-                                  style="width:100%; min-height:60px; font-size:0.6rem; text-align:center;">${mesesValue.replace(/<br>/g, '\n')}</textarea>
-                    </div>
-                </td>` : ''}
+                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">${trim.nombre}</td>` : ''}
                 <td>
                     <textarea class="editable-textarea" 
                               onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'nombre', this.value)" 
@@ -1656,18 +1626,18 @@ function renderDosificacion() {
     
     html += `
         <tr>
-            <td colspan="5" class="total-cell">
+            <td colspan="4" class="total-cell">
                 TOTAL DE SESIONES ANUALES
             </td>
             <td class="total-sesiones-cell" id="totalSesionesDisplay">${totalSesiones}</td>
         </tr>
         <tr>
-            <td colspan="6" class="footer-cell" style="padding:12px;">
+            <td colspan="5" class="footer-cell" style="padding:12px;">
                 Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026
             </td>
         </tr>
         <tr>
-            <td colspan="2" class="signature-cell">
+            <td colspan="1" class="signature-cell" style="width:25%;">
                 <strong>Elaboró</strong>
                 <div class="signature-name">
                     <input type="text" class="editable-input" value="${data.docente}" 
@@ -1676,11 +1646,11 @@ function renderDosificacion() {
                 </div>
                 <div class="signature-title">Titular de Informática</div>
             </td>
-            <td colspan="2" class="signature-cell">
+            <td colspan="2" class="signature-cell" style="width:35%;">
                 <strong>Revisó</strong>
                 <div class="signature-name">Subdirector Turno Mixto</div>
             </td>
-            <td colspan="2" class="signature-cell">
+            <td colspan="2" class="signature-cell" style="width:40%;">
                 <strong>Vo. Bo.</strong>
                 <div class="signature-name">Profr. Melchor Sánchez Monjaraz</div>
                 <div class="signature-title">Subdirector encargado de la dirección</div>
@@ -1691,7 +1661,8 @@ function renderDosificacion() {
     container.innerHTML = html;
     
     // Actualizar total de sesiones automáticamente
-    document.getElementById('totalSesionesDisplay').textContent = totalSesiones;
+    const display = document.getElementById('totalSesionesDisplay');
+    if (display) display.textContent = totalSesiones;
 }
 
 // ============================================================
@@ -1700,20 +1671,11 @@ function renderDosificacion() {
 function updateDosificacionField(grade, field, value) {
     dosificacionData[grade][field] = value;
     localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-    // No re-renderizar para mantener el foco
-}
-
-function updateDosificacionTrimestre(grade, trimIndex, field, value) {
-    dosificacionData[grade].trimestres[trimIndex][field] = value;
-    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-    // Actualizar el total si se modifican sesiones
-    recalcTotalSesiones(grade);
 }
 
 function updateDosificacionProyecto(grade, trimIndex, projIndex, field, value) {
     dosificacionData[grade].trimestres[trimIndex].proyectos[projIndex][field] = value;
     localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-    // Actualizar el total si se modifican sesiones
     if (field === 'sesiones') {
         recalcTotalSesiones(grade);
     }
@@ -1737,7 +1699,6 @@ function saveDosificacion() {
 
 function printDosificacion() {
     const grade = document.getElementById('dosificacionGrade').value;
-    const data = dosificacionData[grade];
     const content = document.getElementById('dosificacionContainer');
     
     const printWindow = window.open('', '_blank', 'width=1100,height=700');
