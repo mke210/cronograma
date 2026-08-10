@@ -1,0 +1,2753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#00467F">
+    <title>Cronograma SEP 2026-2027</title>
+    <style>
+        :root {
+            --primary: #00467F;
+            --primary-dark: #002C54;
+            --primary-light: #E6F0FA;
+            --bg: #F2F2F2;
+            --card-bg: #FFFFFF;
+            --text: #1A1A1A;
+            --text-secondary: #5F6368;
+            --border: #DADCE0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --radius: 10px;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            
+            --color-inicio: #FF8C00;
+            --color-vacacion: #FFD700;
+            --color-festivo: #DC3545;
+            --color-cte-intensiva: #1A3A5C;
+            --color-cte-ordinaria: #E91E63;
+            --color-fortalecimiento: #28A745;
+            --color-fin-ciclo: #8B0000;
+            --color-normal: #E8F0FE;
+            --color-selected: #FF6B6B;
+            --color-weekend: #e8e8e8;
+            --color-proyecto: #6C5CE7;
+            --color-result-hover: #E8F0FE;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1A1A1A;
+            --card-bg: #2D2D2D;
+            --text: #E8EAED;
+            --text-secondary: #9AA0A6;
+            --border: #3C4043;
+            --shadow: 0 2px 8px rgba(0,0,0,0.4);
+            --color-inicio: #CC7000;
+            --color-vacacion: #B8960F;
+            --color-festivo: #B33A3A;
+            --color-cte-intensiva: #2A4A6C;
+            --color-cte-ordinaria: #C2185B;
+            --color-fortalecimiento: #1A7A35;
+            --color-fin-ciclo: #6B0000;
+            --color-selected: #CC4444;
+            --color-weekend: #2a2a2a;
+            --color-proyecto: #4A3A8A;
+            --color-result-hover: #2A3A5A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            padding: 16px;
+            min-height: 100vh;
+            user-select: none;
+        }
+        .app-container { max-width: 100%; margin: 0 auto; }
+
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-left: 4px solid var(--primary);
+        }
+        .header-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .header-title h1 { font-size: 1.3rem; font-weight: 600; }
+        .header-title .school-badge {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--primary-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--border);
+            color: var(--text);
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-success { background: #28A745; color: white; }
+        .btn-danger { background: #DC3545; color: white; }
+        .btn-danger:hover { background: #B02A37; transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); }
+        .btn-sm { padding: 4px 10px; font-size: 0.75rem; }
+        .btn-warning { background: #FF8C00; color: white; }
+        .btn-warning:hover { background: #E67A00; transform: translateY(-1px); }
+        .btn-print { background: #6C5CE7; color: white; }
+        .btn-print:hover { background: #5A4BD1; transform: translateY(-1px); }
+        .btn-excel { background: #217346; color: white; }
+        .btn-excel:hover { background: #1A5E38; transform: translateY(-1px); }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 4px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-secondary);
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+        .tab-btn.active { background: var(--primary); color: white; }
+        .tab-btn:hover:not(.active) { background: var(--primary-light); }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-title { font-size: 1.1rem; font-weight: 600; }
+
+        .cronograma-wrapper { 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+        .cronograma-grid {
+            display: grid;
+            grid-template-columns: 70px repeat(31, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 1100px;
+            font-size: 0.6rem;
+        }
+
+        .grid-cell {
+            background: var(--card-bg);
+            padding: 2px 1px;
+            text-align: center;
+            min-height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.55rem;
+            cursor: pointer;
+        }
+        .grid-cell:hover:not(.weekend):not(.header-cell):not(.month-header):not(.trimestre-header):not(.proyecto-cell):not(.color-only) {
+            background: var(--primary-light);
+        }
+        .grid-cell.selected {
+            outline: 2px solid var(--color-selected);
+            outline-offset: -2px;
+            z-index: 5;
+            background: rgba(255, 107, 107, 0.15);
+        }
+        
+        /* Celdas de proyectos con texto distribuido en TODAS las celdas */
+        .grid-cell.proyecto-cell {
+            background: var(--color-proyecto);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            min-height: 28px;
+        }
+        .grid-cell.proyecto-cell:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+        .grid-cell.proyecto-cell .proyecto-text {
+            width: 100%;
+            padding: 0 2px;
+            text-align: center;
+            font-size: 0.5rem;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.2;
+            color: white;
+        }
+        /* Texto más grande para proyectos de una sola celda */
+        .grid-cell.proyecto-cell.proyecto-single .proyecto-text {
+            font-size: 0.8rem;
+        }
+        .grid-cell.proyecto-cell.proyecto-start .proyecto-text {
+            font-size: 0.65rem;
+        }
+        .grid-cell.proyecto-cell.proyecto-middle .proyecto-text {
+            font-size: 0.5rem;
+        }
+        .grid-cell.proyecto-cell.proyecto-end .proyecto-text {
+            font-size: 0.65rem;
+        }
+        .grid-cell.proyecto-cell.proyecto-start {
+            border-radius: 3px 0 0 3px;
+        }
+        .grid-cell.proyecto-cell.proyecto-end {
+            border-radius: 0 3px 3px 0;
+        }
+        .grid-cell.proyecto-cell.proyecto-middle {
+            border-radius: 0;
+        }
+        .grid-cell.proyecto-cell.proyecto-single {
+            border-radius: 3px;
+        }
+
+        /* Celdas con solo color - relleno completo */
+        .grid-cell.color-only {
+            cursor: pointer;
+            min-height: 26px;
+            padding: 2px 1px;
+        }
+        .grid-cell.color-only:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+        .grid-cell.color-only .activity {
+            font-size: 0.4rem;
+            min-height: 16px;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+        }
+
+        .grid-cell.header-cell {
+            font-weight: 700;
+            background: var(--primary);
+            color: white;
+            font-size: 0.6rem;
+            cursor: default;
+        }
+        .grid-cell.header-cell:hover {
+            background: var(--primary);
+        }
+        .grid-cell.trimestre-header {
+            font-weight: 700;
+            background: var(--primary);
+            color: white;
+            padding: 4px 2px;
+            font-size: 0.75rem;
+            grid-column: 1 / span 32;
+            text-align: center;
+            cursor: default;
+        }
+        .grid-cell.trimestre-header:hover {
+            background: var(--primary);
+        }
+        .grid-cell.month-header {
+            font-weight: 700;
+            background: #28A745;
+            color: white;
+            padding: 4px 2px;
+            font-size: 0.65rem;
+            cursor: default;
+            grid-column: 1;
+        }
+        .grid-cell.month-header:hover {
+            background: #28A745;
+        }
+        .grid-cell.day-number-header {
+            font-weight: 600;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.5rem;
+            cursor: default;
+        }
+        .grid-cell.day-number-header:hover {
+            background: var(--primary-light);
+        }
+        .grid-cell.weekend {
+            background: var(--color-weekend);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .grid-cell.weekend:hover {
+            background: var(--color-weekend);
+        }
+        .grid-cell.weekend .activity {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .grid-cell.weekend .activity:hover {
+            transform: none;
+            border-color: transparent;
+        }
+
+        .grid-cell .activity {
+            padding: 1px 2px;
+            border-radius: 3px;
+            font-size: 0.5rem;
+            line-height: 1.1;
+            width: 100%;
+            min-height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-word;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-align: center;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .grid-cell .activity:hover:not(.weekend .activity) {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            z-index: 10;
+        }
+
+        /* Colores para eventos oficiales - con relleno completo */
+        .grid-cell .activity.inicio-clases { background: var(--color-inicio); color: transparent; }
+        .grid-cell .activity.receso-vacaciones { background: var(--color-vacacion); color: transparent; }
+        .grid-cell .activity.festivo-suspension { background: var(--color-festivo); color: transparent; }
+        .grid-cell .activity.cte-intensiva { background: var(--color-cte-intensiva); color: transparent; }
+        .grid-cell .activity.cte-ordinaria { background: var(--color-cte-ordinaria); color: transparent; }
+        .grid-cell .activity.fortalecimiento { background: var(--color-fortalecimiento); color: transparent; }
+        .grid-cell .activity.fin-ciclo { background: var(--color-fin-ciclo); color: transparent; }
+        .grid-cell .activity.normal { background: var(--color-normal); color: transparent; }
+        .grid-cell .activity.filled { border-radius: 3px; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            max-width: 620px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal h3 { margin-bottom: 12px; }
+        .modal .form-group { margin-bottom: 12px; }
+        .modal .info-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: var(--bg);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .modal .info-text .weekday-badge {
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+        .modal .info-text .range-info {
+            font-weight: 500;
+            color: var(--color-proyecto);
+        }
+        .modal .alert-conflict {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            border-left: 4px solid #DC3545;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-group label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,70,127,0.2);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin: 12px 0;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            max-width: 350px;
+            font-size: 0.9rem;
+        }
+        .toast.show { transform: translateX(0); }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+
+        .selection-info {
+            background: var(--primary-light);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--color-selected);
+        }
+        .selection-info .count { font-weight: 700; color: var(--color-selected); }
+
+        .config-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        .color-picker-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .color-picker-group input[type="color"] {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 2px;
+            background: var(--bg);
+        }
+        .btn-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .search-results-list {
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--card-bg);
+        }
+        .search-result-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            transition: background 0.2s ease;
+        }
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        .search-result-item:hover {
+            background: var(--color-result-hover);
+        }
+        .search-result-item.selected {
+            background: var(--primary-light);
+            border-left: 3px solid var(--primary);
+        }
+        .search-result-item .result-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .search-result-item .result-detail {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .search-result-item .result-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .move-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 8px 0 12px 0;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 6px;
+        }
+        .move-options .form-group {
+            margin-bottom: 0;
+        }
+        .move-options select {
+            font-size: 0.8rem;
+            padding: 6px 10px;
+        }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .legend, .card-header .btn-group, .selection-info { display: none !important; }
+            .tab-content { display: block !important; }
+            .tab-content:not(.active) { display: block !important; }
+            .card { box-shadow: none; border: 1px solid #ddd; border-radius: 0; padding: 10px; }
+            .card-header { display: flex; justify-content: center; }
+            .cronograma-grid { border: 1px solid #333; }
+            .grid-cell { border: 1px solid #ddd; }
+            .grid-cell.weekend { background: #f0f0f0 !important; }
+            .grid-cell.trimestre-header { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .grid-cell.month-header { background: #28A745 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .grid-cell .activity { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .grid-cell .activity.inicio-clases { background: #FF8C00 !important; color: transparent !important; }
+            .grid-cell .activity.receso-vacaciones { background: #FFD700 !important; color: transparent !important; }
+            .grid-cell .activity.festivo-suspension { background: #DC3545 !important; color: transparent !important; }
+            .grid-cell .activity.cte-intensiva { background: #1A3A5C !important; color: transparent !important; }
+            .grid-cell .activity.cte-ordinaria { background: #E91E63 !important; color: transparent !important; }
+            .grid-cell .activity.fortalecimiento { background: #28A745 !important; color: transparent !important; }
+            .grid-cell .activity.fin-ciclo { background: #8B0000 !important; color: transparent !important; }
+            .grid-cell.proyecto-cell { background: #6C5CE7 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .grid-cell.proyecto-cell .proyecto-text {
+                width: 100%;
+                padding: 0 2px;
+                text-align: center;
+                font-size: inherit;
+                color: white !important;
+                white-space: normal;
+                word-break: break-word;
+            }
+            .print-footer {
+                text-align: center;
+                font-size: 0.8rem;
+                color: #666;
+                margin-top: 20px;
+                padding-top: 10px;
+                border-top: 1px solid #ddd;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+            .header { flex-direction: column; align-items: stretch; }
+            .header-actions { justify-content: center; }
+            .tab-btn { padding: 8px 12px; font-size: 0.8rem; }
+            .config-form { grid-template-columns: 1fr; }
+            .cronograma-grid { font-size: 0.45rem; min-width: 850px; grid-template-columns: 45px repeat(31, 1fr); }
+            .grid-cell { min-height: 20px; padding: 1px; }
+            .grid-cell .activity { font-size: 0.4rem; min-height: 12px; }
+            .grid-cell.proyecto-cell .proyecto-text { font-size: 0.4rem; }
+            .grid-cell.proyecto-cell.proyecto-single .proyecto-text { font-size: 0.6rem; }
+            .theme-toggle { bottom: 10px; right: 10px; width: 40px; height: 40px; font-size: 1rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-row-3 { grid-template-columns: 1fr; }
+            .move-options { grid-template-columns: 1fr; }
+            .search-result-item { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 480px) {
+            .header-title h1 { font-size: 1rem; }
+            .cronograma-grid { min-width: 700px; grid-template-columns: 35px repeat(31, 1fr); }
+            .modal { padding: 16px; }
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="app-container">
+    <header class="header">
+        <div class="header-title">
+            <h1>📚 Cronograma SEP 2026-2027</h1>
+            <span class="school-badge" id="schoolBadge">Configurar escuela</span>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-outline btn-sm" onclick="toggleTheme()">🌓 Tema</button>
+            <button class="btn btn-outline btn-sm" onclick="resetData()">🔄 Reiniciar</button>
+        </div>
+    </header>
+
+    <nav class="tabs" id="tabNav">
+        <button class="tab-btn active" data-tab="cronograma">📅 Cronograma</button>
+        <button class="tab-btn" data-tab="editor">✏️ Editor</button>
+        <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
+        <button class="tab-btn" data-tab="export">📤 Exportar</button>
+    </nav>
+
+    <div class="tab-content active" id="tab-cronograma">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📅 Cronograma SEP 2026-2027</span>
+                <div class="btn-group">
+                    <select id="gradeFilter" onchange="renderCronograma()" style="padding:4px 8px; border-radius:6px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.85rem;">
+                        <option value="all">Todos los grados</option>
+                        <option value="1">1º Grado</option>
+                        <option value="2">2º Grado</option>
+                        <option value="3">3º Grado</option>
+                    </select>
+                    <button class="btn btn-excel btn-sm" onclick="exportToExcel()">📊 Exportar a Excel</button>
+                    <button class="btn btn-print btn-sm" onclick="printPreview()">🖨️ Vista previa</button>
+                    <button class="btn btn-primary btn-sm" onclick="clearSelection()">✖ Limpiar selección</button>
+                </div>
+            </div>
+            
+            <div id="selectionInfo" class="selection-info" style="display:none;">
+                <span>📌 <span id="selectedCount" class="count">0</span> celdas seleccionadas</span>
+                <button class="btn btn-success btn-sm" onclick="openBulkModal()">📊 Asignar tema</button>
+                <button class="btn btn-outline btn-sm" onclick="clearSelection()">✖ Limpiar</button>
+            </div>
+
+            <div class="legend">
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-inicio);"></span> Inicio de clases</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-vacacion);"></span> Receso / Vacaciones</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-festivo);"></span> Festivo / Suspensión laboral</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-cte-intensiva);"></span> CTE Fase Intensiva</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-cte-ordinaria);"></span> CTE Sesión Ordinaria</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-fortalecimiento);"></span> Fortalecimiento</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-fin-ciclo);"></span> Fin de ciclo</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-proyecto);"></span> Proyecto / Tema</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-selected);"></span> Seleccionado</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-weekend); border:1px solid #ccc;"></span> Fin de semana</span>
+            </div>
+
+            <div class="cronograma-wrapper" id="cronogramaContainer"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-editor">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">✏️ Editor - Buscar y Mover Actividades</span>
+                <button class="btn btn-danger btn-sm" onclick="clearAllActivities()">🗑️ Limpiar todas</button>
+            </div>
+            
+            <div class="form-group">
+                <label>🔍 Buscar actividad por nombre</label>
+                <input type="text" id="searchActivity" placeholder="Escribe para buscar..." oninput="searchActivities()" autocomplete="off">
+            </div>
+            
+            <div id="searchResultsContainer" style="display:none;">
+                <div class="search-results-list" id="searchResultsList"></div>
+            </div>
+            
+            <div id="noResultsMessage" style="display:none; padding:12px; text-align:center; color:var(--text-secondary); margin-top:8px;">
+                No se encontraron actividades con ese nombre.
+            </div>
+            
+            <div id="selectedActivityInfo" style="display:none; background:var(--primary-light); padding:12px; border-radius:6px; margin-top:12px;">
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+                    <span><strong>📝 Actividad:</strong> <span id="selectedActName"></span></span>
+                    <span><strong>📅 Fecha actual:</strong> <span id="selectedActDate"></span></span>
+                </div>
+                
+                <div class="move-options">
+                    <div class="form-group">
+                        <label>📚 Grado a mover</label>
+                        <select id="moveGrade">
+                            <option value="all">🌐 Todos los grados</option>
+                            <option value="1">1º Grado</option>
+                            <option value="2">2º Grado</option>
+                            <option value="3">3º Grado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Trimestre a mover</label>
+                        <select id="moveTrimestre">
+                            <option value="all">🌐 Todos los trimestres</option>
+                            <option value="1">TRIMESTRE I</option>
+                            <option value="2">TRIMESTRE II</option>
+                            <option value="3">TRIMESTRE III</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>📅 Nuevo mes</label>
+                        <select id="moveMonth" onchange="checkConflict()">
+                            <option value="8">Agosto 2026</option>
+                            <option value="9">Septiembre 2026</option>
+                            <option value="10">Octubre 2026</option>
+                            <option value="11">Noviembre 2026</option>
+                            <option value="12">Diciembre 2026</option>
+                            <option value="1">Enero 2027</option>
+                            <option value="2">Febrero 2027</option>
+                            <option value="3">Marzo 2027</option>
+                            <option value="4">Abril 2027</option>
+                            <option value="5">Mayo 2027</option>
+                            <option value="6">Junio 2027</option>
+                            <option value="7">Julio 2027</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Día de inicio</label>
+                        <input type="number" id="moveDay" min="1" max="31" value="1" onchange="checkConflict()" oninput="checkConflict()">
+                    </div>
+                    <div class="form-group" style="justify-content:flex-end;">
+                        <button class="btn btn-warning" onclick="moveActivity()" style="height:42px;">🔄 Mover actividad</button>
+                    </div>
+                </div>
+                
+                <div id="conflictAlert" class="alert-conflict" style="display:none;">
+                    ⚠️ ¡Conflicto! Ya existe una actividad en esta fecha y grado.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-config">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">⚙️ Configuración</span>
+                <button class="btn btn-success btn-sm" onclick="saveConfig()">💾 Guardar</button>
+            </div>
+            <div class="config-form" id="configForm">
+                <div class="form-group">
+                    <label>🏫 Nombre de la Escuela</label>
+                    <input type="text" id="schoolName" placeholder="Ej. Secundaria Técnica No. 1">
+                </div>
+                <div class="form-group">
+                    <label>📅 Ciclo Escolar</label>
+                    <input type="text" id="schoolCycle" placeholder="Ej. 2026-2027">
+                </div>
+                <div class="form-group">
+                    <label>📋 Centro de Trabajo (CCT)</label>
+                    <input type="text" id="schoolCCT" placeholder="Ej. 15DST0012A">
+                </div>
+                <div class="form-group">
+                    <label>👨‍🏫 Profesor(a)</label>
+                    <input type="text" id="teacherName" placeholder="Ej. Mtra. Ishelt González">
+                </div>
+                <div class="form-group">
+                    <label>👔 Director(a)</label>
+                    <input type="text" id="directorName" placeholder="Ej. Profr. Melchor Sánchez">
+                </div>
+                <div class="form-group">
+                    <label>🎨 Color Primario</label>
+                    <div class="color-picker-group">
+                        <input type="color" id="primaryColor" value="#00467F">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>🌓 Tema</label>
+                    <select id="themeSelect">
+                        <option value="light">Claro</option>
+                        <option value="dark">Oscuro</option>
+                        <option value="system">Sistema</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-export">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📤 Exportar</span>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn btn-excel" onclick="exportToExcel()">📊 Exportar a Excel</button>
+                <button class="btn btn-outline" onclick="exportJSON()">📋 Exportar JSON</button>
+                <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">📂 Importar backup</button>
+                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSONFile(event)">
+            </div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+</div>
+
+<!-- Modal Edición -->
+<div class="modal-overlay" id="activityModal">
+    <div class="modal">
+        <h3 id="modalTitle">✏️ Editar Actividad</h3>
+        
+        <div class="info-text" id="modalInfo">
+            <span id="fechaInfo">📅 Selecciona una fecha</span>
+            <span class="weekday-badge" id="weekdayBadge">Lunes</span>
+        </div>
+        
+        <div class="info-text" id="rangeInfo" style="background:var(--color-proyecto); color:white; display:none;">
+            <span>📌 Rango: <span id="rangoTexto" class="range-info" style="color:white;">Del 15 al 27 de agosto</span></span>
+            <span id="diasTotales" style="font-weight:bold;">13 días</span>
+        </div>
+        
+        <div id="modalConflictAlert" class="alert-conflict" style="display:none;">
+            ⚠️ ¡Conflicto! Ya existe una actividad en esta fecha y grado. 
+            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:8px;">Sobrescribir</button>
+        </div>
+        
+        <div class="form-group">
+            <label>📚 Grado(s)</label>
+            <select id="editGrade">
+                <option value="all">🌐 Todos los grados</option>
+                <option value="1">1º Grado</option>
+                <option value="2">2º Grado</option>
+                <option value="3">3º Grado</option>
+            </select>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>Mes de inicio</label>
+                <select id="editMonth" onchange="updateFechaInfo()">
+                    <option value="8">Agosto 2026</option>
+                    <option value="9">Septiembre 2026</option>
+                    <option value="10">Octubre 2026</option>
+                    <option value="11">Noviembre 2026</option>
+                    <option value="12">Diciembre 2026</option>
+                    <option value="1">Enero 2027</option>
+                    <option value="2">Febrero 2027</option>
+                    <option value="3">Marzo 2027</option>
+                    <option value="4">Abril 2027</option>
+                    <option value="5">Mayo 2027</option>
+                    <option value="6">Junio 2027</option>
+                    <option value="7">Julio 2027</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Día de inicio</label>
+                <input type="number" id="editDay" min="1" max="31" value="1" onchange="updateFechaInfo()" oninput="updateFechaInfo()">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>📏 Duración (espacios a la derecha)</label>
+            <div class="form-row-3">
+                <input type="number" id="editDuration" min="1" max="60" value="1" onchange="updateFechaInfo()" oninput="updateFechaInfo()">
+                <select id="editUnit" style="grid-column:2 / span 2;" onchange="updateFechaInfo()">
+                    <option value="days">Días</option>
+                    <option value="weeks">Semanas</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>📝 Actividad / Tema / Proyecto</label>
+            <input type="text" id="editActivity" placeholder="Ej. Proyecto de electrónica" autofocus>
+        </div>
+        
+        <div class="form-group">
+            <label>🎨 Tipo</label>
+            <select id="editType">
+                <option value="proyecto">🎯 Proyecto / Tema</option>
+                <option value="normal">⚪ Normal</option>
+                <option value="inicio-clases">🟠 Inicio de clases</option>
+                <option value="receso-vacaciones">🟡 Receso / Vacaciones</option>
+                <option value="festivo-suspension">🔴 Festivo / Suspensión laboral</option>
+                <option value="cte-intensiva">🔵 CTE Fase Intensiva</option>
+                <option value="cte-ordinaria">🔵 CTE Sesión Ordinaria</option>
+                <option value="fortalecimiento">🟢 Fortalecimiento</option>
+                <option value="fin-ciclo">🏁 Fin de ciclo</option>
+            </select>
+        </div>
+        
+        <div class="modal-actions">
+            <button class="btn btn-danger" id="deleteBtn" style="display:none;" onclick="deleteActivity()">🗑️ Eliminar todo el proyecto</button>
+            <button class="btn btn-outline" onclick="closeModal()">❌ Cancelar</button>
+            <button class="btn btn-primary" onclick="saveActivity()">💾 Guardar cambios</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Bulk -->
+<div class="modal-overlay" id="bulkModal">
+    <div class="modal">
+        <h3>📊 Asignar tema a <span id="bulkCount">0</span> celdas</h3>
+        <div class="info-text"><span id="bulkDetails" style="font-size:0.8rem;"></span></div>
+        <div class="form-group">
+            <label>📝 Actividad / Tema</label>
+            <input type="text" id="bulkActivity" placeholder="Ej. Proyecto" autofocus>
+        </div>
+        <div class="form-group">
+            <label>🎨 Tipo</label>
+            <select id="bulkType">
+                <option value="proyecto">🎯 Proyecto / Tema</option>
+                <option value="normal">⚪ Normal</option>
+                <option value="inicio-clases">🟠 Inicio de clases</option>
+                <option value="receso-vacaciones">🟡 Receso / Vacaciones</option>
+                <option value="festivo-suspension">🔴 Festivo</option>
+                <option value="cte-intensiva">🔵 CTE Fase Intensiva</option>
+                <option value="cte-ordinaria">🔵 CTE Ordinaria</option>
+                <option value="fortalecimiento">🟢 Fortalecimiento</option>
+                <option value="fin-ciclo">🏁 Fin de ciclo</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeBulkModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="saveBulk()">💾 Asignar</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js">
+</script>
+<script>
+// ============================================================
+// DATOS OFICIALES SEP 2026-2027
+// ============================================================
+const OFFICIAL_EVENTS = [
+    { grade: 'all', month: 8, day: 24, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 5, unit: 'days' },
+    { grade: 'all', month: 8, day: 31, activity: 'Inicio de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
+    { grade: 'all', month: 9, day: 16, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 9, day: 25, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 10, day: 30, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 11, day: 2, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 11, day: 16, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 11, day: 27, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 12, day: 21, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 11, unit: 'days' },
+    { grade: 'all', month: 1, day: 11, activity: 'Reanudación de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
+    { grade: 'all', month: 1, day: 29, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 2, day: 1, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 2, day: 26, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 15, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 3, day: 22, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 11, unit: 'days' },
+    { grade: 'all', month: 4, day: 5, activity: 'Reanudación de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
+    { grade: 'all', month: 4, day: 30, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 5, day: 5, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 5, day: 15, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
+    { grade: 'all', month: 5, day: 28, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 6, day: 25, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 16, activity: 'Fin de Clases', type: 'fin-ciclo', duration: 1, unit: 'days' },
+    { grade: 'all', month: 7, day: 19, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 3, unit: 'days' },
+];
+
+const DEFAULT_CONFIG = {
+    schoolName: 'Secundaria Técnica No. 1',
+    schoolCycle: '2026-2027',
+    schoolCCT: '15DST0012A',
+    teacherName: 'Mtra. Ishelt González Pineda',
+    directorName: 'Profr. Melchor Sánchez Monjaraz',
+    primaryColor: '#00467F',
+    theme: 'light'
+};
+
+// ============================================================
+// GESTIÓN DE DATOS
+// ============================================================
+let activities = [];
+let config = {};
+let editingIndex = -1;
+let selectedCells = [];
+let editingProject = null;
+let selectedSearchActivity = null;
+
+function loadData() {
+    const saved = localStorage.getItem('cronograma_activities');
+    if (saved) {
+        try { activities = JSON.parse(saved); } 
+        catch(e) { activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS)); }
+    } else {
+        activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS));
+    }
+
+    const savedConfig = localStorage.getItem('cronograma_config');
+    if (savedConfig) {
+        try { config = JSON.parse(savedConfig); } 
+        catch(e) { config = JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
+    } else {
+        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    }
+
+    applyTheme(config.theme || 'light');
+    document.documentElement.style.setProperty('--primary', config.primaryColor || '#00467F');
+    document.documentElement.style.setProperty('--primary-dark', adjustColor(config.primaryColor || '#00467F', -20));
+
+    document.getElementById('schoolName').value = config.schoolName || '';
+    document.getElementById('schoolCycle').value = config.schoolCycle || '';
+    document.getElementById('schoolCCT').value = config.schoolCCT || '';
+    document.getElementById('teacherName').value = config.teacherName || '';
+    document.getElementById('directorName').value = config.directorName || '';
+    document.getElementById('primaryColor').value = config.primaryColor || '#00467F';
+    document.getElementById('themeSelect').value = config.theme || 'light';
+
+    document.getElementById('schoolBadge').textContent = config.schoolName ? `${config.schoolName} · ${config.schoolCycle || ''}` : 'Configurar escuela ⚙️';
+}
+
+function saveActivities() { localStorage.setItem('cronograma_activities', JSON.stringify(activities)); }
+function saveConfig() {
+    config.schoolName = document.getElementById('schoolName').value;
+    config.schoolCycle = document.getElementById('schoolCycle').value;
+    config.schoolCCT = document.getElementById('schoolCCT').value;
+    config.teacherName = document.getElementById('teacherName').value;
+    config.directorName = document.getElementById('directorName').value;
+    config.primaryColor = document.getElementById('primaryColor').value;
+    config.theme = document.getElementById('themeSelect').value;
+    localStorage.setItem('cronograma_config', JSON.stringify(config));
+    document.documentElement.style.setProperty('--primary', config.primaryColor);
+    document.documentElement.style.setProperty('--primary-dark', adjustColor(config.primaryColor, -20));
+    applyTheme(config.theme);
+    document.getElementById('schoolBadge').textContent = config.schoolName ? `${config.schoolName} · ${config.schoolCycle || ''}` : 'Configurar escuela ⚙️';
+    renderCronograma();
+    showToast('✅ Configuración guardada');
+}
+
+function resetData() {
+    if (confirm('¿Restaurar datos de fábrica?')) {
+        activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS));
+        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        saveActivities();
+        saveConfig();
+        renderCronograma();
+        showToast('🔄 Datos restaurados');
+    }
+}
+
+// ============================================================
+// FUNCIONES DE FECHA
+// ============================================================
+function getWeekday(month, day, year) {
+    return new Date(year, month - 1, day).getDay();
+}
+const WEEKDAYS_SHORT = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+const WEEKDAYS_LONG = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+function getTrimestre(month, year) {
+    if (year === 2026 && month >= 8) return 'TRIMESTRE I (Agosto - Noviembre 2026)';
+    if (year === 2027 && month <= 3) return 'TRIMESTRE II (Diciembre 2026 - Marzo 2027)';
+    if (year === 2027 && month >= 4) return 'TRIMESTRE III (Abril - Julio 2027)';
+    return '';
+}
+
+function getYear(month) {
+    return month >= 8 && month <= 12 ? 2026 : 2027;
+}
+
+function isWeekend(month, day, year) {
+    const wd = getWeekday(month, day, year);
+    return wd === 0 || wd === 6;
+}
+
+function getMonthName(month) {
+    const names = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return names[month] || '';
+}
+
+function getCellKey(grade, month, day) {
+    return `${grade}-${month}-${day}`;
+}
+
+function getDaysInMonth(month) {
+    const days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return days[month] || 31;
+}
+
+function getGradesForActivity(grade) {
+    if (grade === 'all') return [1, 2, 3];
+    return [parseInt(grade)];
+}
+
+function isProject(type) {
+    return type === 'proyecto';
+}
+
+function isOfficialEvent(type) {
+    const officialTypes = ['inicio-clases', 'receso-vacaciones', 'festivo-suspension', 
+                           'cte-intensiva', 'cte-ordinaria', 'fortalecimiento', 'fin-ciclo', 'normal'];
+    return officialTypes.includes(type);
+}
+
+function getTrimestreMonths(trimestre) {
+    if (trimestre === 1) return [8, 9, 10, 11];
+    if (trimestre === 2) return [12, 1, 2, 3];
+    if (trimestre === 3) return [4, 5, 6, 7];
+    return [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
+}
+
+// ============================================================
+// ACTUALIZACIÓN DE INFORMACIÓN EN EL MODAL
+// ============================================================
+function updateFechaInfo() {
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const duration = parseInt(document.getElementById('editDuration').value);
+    const unit = document.getElementById('editUnit').value;
+    const year = getYear(month);
+    
+    const wd = getWeekday(month, day, year);
+    const wdName = WEEKDAYS_LONG[wd];
+    const monthName = getMonthName(month);
+    
+    document.getElementById('fechaInfo').textContent = `📅 ${wdName} ${day} de ${monthName} ${year}`;
+    document.getElementById('weekdayBadge').textContent = wdName;
+    
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    let endMonth = month;
+    let endDay = day + totalDays - 1;
+    let endYear = year;
+    let tempMonth = month;
+    let tempDay = day;
+    let diasValidos = 0;
+    let contador = 0;
+    
+    while (diasValidos < totalDays && contador < 100) {
+        const y = getYear(tempMonth);
+        if (!isWeekend(tempMonth, tempDay, y)) {
+            diasValidos++;
+        }
+        if (diasValidos < totalDays) {
+            tempDay++;
+            const daysInMonth = getDaysInMonth(tempMonth);
+            if (tempDay > daysInMonth) {
+                tempDay = 1;
+                tempMonth++;
+                if (tempMonth > 12) tempMonth = 1;
+            }
+        }
+        contador++;
+    }
+    
+    endMonth = tempMonth;
+    endDay = tempDay;
+    endYear = getYear(endMonth);
+    
+    const endWk = getWeekday(endMonth, endDay, endYear);
+    const endWkName = WEEKDAYS_LONG[endWk];
+    const endMonthName = getMonthName(endMonth);
+    
+    const rangeInfo = document.getElementById('rangeInfo');
+    if (totalDays > 1) {
+        rangeInfo.style.display = 'flex';
+        document.getElementById('rangoTexto').textContent = `Del ${wdName} ${day} de ${monthName} al ${endWkName} ${endDay} de ${endMonthName} ${endYear}`;
+        document.getElementById('diasTotales').textContent = `${totalDays} días`;
+    } else {
+        rangeInfo.style.display = 'none';
+    }
+    
+    checkModalConflict();
+}
+
+function checkModalConflict() {
+    const grade = document.getElementById('editGrade').value;
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const activity = document.getElementById('editActivity').value.trim();
+    
+    const grades = getGradesForActivity(grade);
+    let conflict = false;
+    let conflictText = '';
+    
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === month && 
+                   a.day === day && 
+                   a.activity !== activity &&
+                   !(editingProject !== null && a.activity === editingProject);
+        });
+        if (exists) {
+            conflict = true;
+            conflictText = `Ya existe una actividad en ${g}º Grado en ${getMonthName(month)} ${day}, ${getYear(month)}`;
+            break;
+        }
+    }
+    
+    const alert = document.getElementById('modalConflictAlert');
+    if (conflict) {
+        alert.style.display = 'block';
+        alert.innerHTML = `⚠️ ¡Conflicto! ${conflictText}. 
+            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:8px;">Sobrescribir</button>`;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+let pendingOverwrite = false;
+
+function confirmOverwrite() {
+    pendingOverwrite = true;
+    document.getElementById('modalConflictAlert').style.display = 'none';
+    showToast('✅ Puedes guardar para sobrescribir la actividad existente');
+}
+
+// ============================================================
+// RENDERIZADO DEL CRONOGRAMA - TEXTO EN TODAS LAS CELDAS
+// ============================================================
+function renderCronograma() {
+    const container = document.getElementById('cronogramaContainer');
+    const filter = document.getElementById('gradeFilter').value;
+
+    const months = [
+        { num: 8, name: 'Agosto', year: 2026 },
+        { num: 9, name: 'Septiembre', year: 2026 },
+        { num: 10, name: 'Octubre', year: 2026 },
+        { num: 11, name: 'Noviembre', year: 2026 },
+        { num: 12, name: 'Diciembre', year: 2026 },
+        { num: 1, name: 'Enero', year: 2027 },
+        { num: 2, name: 'Febrero', year: 2027 },
+        { num: 3, name: 'Marzo', year: 2027 },
+        { num: 4, name: 'Abril', year: 2027 },
+        { num: 5, name: 'Mayo', year: 2027 },
+        { num: 6, name: 'Junio', year: 2027 },
+        { num: 7, name: 'Julio', year: 2027 }
+    ];
+
+    const grades = filter === 'all' ? [1, 2, 3] : [parseInt(filter)];
+
+    let html = '<div class="cronograma-grid">';
+    
+    for (const grade of grades) {
+        const gradeLabel = `${grade}º Grado`;
+        html += `<div class="grid-cell trimestre-header" style="grid-column:1 / span 32; background:var(--primary-dark);">${gradeLabel}</div>`;
+        
+        const trimestres = [
+            { name: 'TRIMESTRE I', months: [8, 9, 10, 11], year: 2026 },
+            { name: 'TRIMESTRE II', months: [12, 1, 2, 3], year: 2026 },
+            { name: 'TRIMESTRE III', months: [4, 5, 6, 7], year: 2027 }
+        ];
+        
+        for (const trim of trimestres) {
+            html += `<div class="grid-cell trimestre-header" style="grid-column:1 / span 32;">${trim.name}</div>`;
+            
+            html += `<div class="grid-cell month-header" style="grid-column:1; background:var(--primary-light); color:var(--primary-dark); font-weight:600;">Mes/Día</div>`;
+            for (let d = 1; d <= 31; d++) {
+                html += `<div class="grid-cell day-number-header">${d}</div>`;
+            }
+            
+            for (const monthNum of trim.months) {
+                const monthData = months.find(m => m.num === monthNum);
+                if (!monthData) continue;
+                const monthYear = monthData.year;
+                const monthName = monthData.name;
+                
+                html += `<div class="grid-cell month-header" style="grid-column:1;">${monthName}</div>`;
+                
+                for (let day = 1; day <= 31; day++) {
+                    const year = monthYear;
+                    const weekend = isWeekend(monthNum, day, year);
+                    
+                    const acts = activities.filter(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(grade) && a.month === monthNum && a.day === day;
+                    });
+                    
+                    const key = getCellKey(grade, monthNum, day);
+                    const isSelected = selectedCells.includes(key);
+                    
+                    let content = '';
+                    let typeClass = '';
+                    let isProjectCell = false;
+                    let isOfficial = false;
+                    let projectText = '';
+                    let isStart = false;
+                    let isEnd = false;
+                    let isMiddle = false;
+                    let totalProjectDays = 0;
+                    let projectName = '';
+                    let projectDaysArray = [];
+                    
+                    if (acts.length > 0) {
+                        // Verificar si es proyecto (tiene texto) o evento oficial (solo color)
+                        const projectAct = acts.find(a => isProject(a.type));
+                        if (projectAct) {
+                            isProjectCell = true;
+                            isOfficial = false;
+                            projectName = projectAct.activity;
+                            typeClass = 'proyecto';
+                            
+                            // Obtener todas las celdas del proyecto
+                            projectDaysArray = activities.filter(a => {
+                                const gradesAct = getGradesForActivity(a.grade);
+                                return gradesAct.includes(grade) && 
+                                       a.month === monthNum && 
+                                       a.activity === projectName &&
+                                       a.type === 'proyecto';
+                            }).sort((a, b) => a.day - b.day);
+                            
+                            totalProjectDays = projectDaysArray.length;
+                            
+                            // Encontrar la posición del día actual en el proyecto
+                            const dayIndex = projectDaysArray.findIndex(a => a.day === day);
+                            const isFirst = dayIndex === 0;
+                            const isLast = dayIndex === totalProjectDays - 1;
+                            
+                            isStart = isFirst;
+                            isEnd = isLast;
+                            isMiddle = !isFirst && !isLast;
+                            
+                            // El texto se muestra en TODAS las celdas del proyecto
+                            // con tamaño de fuente ajustado según la duración
+                            if (totalProjectDays === 1) {
+                                typeClass = 'proyecto proyecto-single';
+                                projectText = projectName;
+                            } else if (isStart) {
+                                typeClass = 'proyecto proyecto-start';
+                                projectText = projectName;
+                            } else if (isMiddle) {
+                                typeClass = 'proyecto proyecto-middle';
+                                projectText = projectName;
+                            } else if (isEnd) {
+                                typeClass = 'proyecto proyecto-end';
+                                projectText = projectName;
+                            }
+                            
+                            content = projectText;
+                        } else {
+                            // Evento oficial - solo color, sin texto
+                            const act = acts[0];
+                            isOfficial = true;
+                            isProjectCell = false;
+                            typeClass = act.type || 'normal';
+                            content = ''; // No mostrar texto para eventos oficiales
+                        }
+                    }
+                    
+                    // Determinar clases CSS
+                    let proyectoClass = '';
+                    let colorOnlyClass = '';
+                    let displayContent = '';
+                    
+                    if (isProjectCell) {
+                        proyectoClass = 'proyecto-cell';
+                        displayContent = content || '';
+                        
+                        const selectClass = isSelected ? 'selected' : '';
+                        const weekendClass = weekend ? 'weekend' : '';
+                        const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
+                        
+                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${proyectoClass}" ${clickAttr}>
+                            <div class="proyecto-text ${typeClass}">${displayContent}</div>
+                        </div>`;
+                    } else if (isOfficial) {
+                        // Evento oficial - solo color, sin texto
+                        colorOnlyClass = 'color-only';
+                        const selectClass = isSelected ? 'selected' : '';
+                        const weekendClass = weekend ? 'weekend' : '';
+                        const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
+                        
+                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${colorOnlyClass}" ${clickAttr}>
+                            <div class="activity ${typeClass} filled"></div>
+                        </div>`;
+                    } else {
+                        // Celda vacía o fin de semana
+                        const selectClass = isSelected ? 'selected' : '';
+                        const weekendClass = weekend ? 'weekend' : '';
+                        const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
+                        
+                        html += `<div class="grid-cell ${weekendClass} ${selectClass}" ${clickAttr}>
+                            <div class=""></div>
+                        </div>`;
+                    }
+                }
+            }
+        }
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+    updateSelectionInfo();
+}
+
+// ============================================================
+// MANEJO DE CLICKS
+// ============================================================
+function handleCellClick(grade, month, day, event) {
+    const year = getYear(month);
+    if (isWeekend(month, day, year)) {
+        showToast('⚠️ Los fines de semana no son laborables');
+        return;
+    }
+
+    const key = getCellKey(grade, month, day);
+    const isSelected = selectedCells.includes(key);
+    
+    if (event.ctrlKey || event.metaKey) {
+        toggleCellSelection(grade, month, day);
+        return;
+    }
+    
+    if (event.shiftKey && selectedCells.length > 0) {
+        const lastKey = selectedCells[selectedCells.length - 1];
+        const [lastGrade, lastMonth, lastDay] = lastKey.split('-').map(Number);
+        const allKeys = [];
+        for (const g of [1, 2, 3]) {
+            for (const m of [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7]) {
+                for (let d = 1; d <= 31; d++) {
+                    const y = getYear(m);
+                    if (!isWeekend(m, d, y)) {
+                        allKeys.push(getCellKey(g, m, d));
+                    }
+                }
+            }
+        }
+        const startIdx = allKeys.indexOf(lastKey);
+        const endIdx = allKeys.indexOf(key);
+        if (startIdx >= 0 && endIdx >= 0) {
+            const minIdx = Math.min(startIdx, endIdx);
+            const maxIdx = Math.max(startIdx, endIdx);
+            for (let i = minIdx; i <= maxIdx; i++) {
+                if (!selectedCells.includes(allKeys[i])) {
+                    selectedCells.push(allKeys[i]);
+                }
+            }
+            renderCronograma();
+            updateSelectionInfo();
+            return;
+        }
+    }
+    
+    openEditModal(grade, month, day);
+}
+
+function toggleCellSelection(grade, month, day) {
+    const year = getYear(month);
+    if (isWeekend(month, day, year)) {
+        showToast('⚠️ No se pueden seleccionar fines de semana');
+        return;
+    }
+    const key = getCellKey(grade, month, day);
+    const idx = selectedCells.indexOf(key);
+    if (idx >= 0) {
+        selectedCells.splice(idx, 1);
+    } else {
+        selectedCells.push(key);
+    }
+    renderCronograma();
+    updateSelectionInfo();
+}
+
+function clearSelection() {
+    selectedCells = [];
+    renderCronograma();
+    updateSelectionInfo();
+}
+
+function updateSelectionInfo() {
+    const info = document.getElementById('selectionInfo');
+    const count = document.getElementById('selectedCount');
+    if (selectedCells.length > 0) {
+        info.style.display = 'flex';
+        count.textContent = selectedCells.length;
+        const details = document.getElementById('bulkDetails');
+        const cellInfo = selectedCells.slice(0, 5).map(key => {
+            const [grade, month, day] = key.split('-').map(Number);
+            const year = getYear(month);
+            const wd = getWeekday(month, day, year);
+            return `${grade}º · ${getMonthName(month)} ${day} (${WEEKDAYS_SHORT[wd]})`;
+        });
+        details.textContent = cellInfo.join('; ') + (selectedCells.length > 5 ? ` ... +${selectedCells.length - 5} más` : '');
+    } else {
+        info.style.display = 'none';
+    }
+}
+
+// ============================================================
+// EDITOR - BÚSQUEDA CON RESULTADOS DIRECTOS
+// ============================================================
+function searchActivities() {
+    const query = document.getElementById('searchActivity').value.toLowerCase().trim();
+    const resultsContainer = document.getElementById('searchResultsContainer');
+    const resultsList = document.getElementById('searchResultsList');
+    const noResults = document.getElementById('noResultsMessage');
+    const selectedInfo = document.getElementById('selectedActivityInfo');
+    
+    resultsContainer.style.display = 'none';
+    noResults.style.display = 'none';
+    selectedInfo.style.display = 'none';
+    selectedSearchActivity = null;
+    document.getElementById('conflictAlert').style.display = 'none';
+    
+    if (!query || query.length < 2) {
+        return;
+    }
+    
+    const found = activities.filter(a => {
+        return a.activity.toLowerCase().includes(query);
+    });
+    
+    const unique = [];
+    const seen = new Set();
+    for (const item of found) {
+        const key = `${item.activity}-${item.grade}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+            unique.push(item);
+        }
+    }
+    
+    if (unique.length === 0) {
+        noResults.style.display = 'block';
+        return;
+    }
+    
+    resultsContainer.style.display = 'block';
+    resultsList.innerHTML = '';
+    
+    for (const item of unique) {
+        const year = getYear(item.month);
+        const wd = getWeekday(item.month, item.day, year);
+        const gradeLabel = item.grade === 'all' ? 'Todos' : `${item.grade}º`;
+        const typeIcons = { 
+            'proyecto': '🎯', 'inicio-clases': '🟠', 'receso-vacaciones': '🟡', 
+            'festivo-suspension': '🔴', 'cte-intensiva': '🔵', 'cte-ordinaria': '🩷',
+            'fortalecimiento': '🟢', 'fin-ciclo': '🏁', 'normal': '⚪'
+        };
+        const icon = typeIcons[item.type] || '📘';
+        const durationLabel = item.duration && item.duration > 1 ? ` (${item.duration} ${item.unit})` : '';
+        
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        div.dataset.grade = item.grade;
+        div.dataset.month = item.month;
+        div.dataset.day = item.day;
+        div.dataset.activity = item.activity;
+        div.dataset.type = item.type;
+        div.dataset.duration = item.duration || 1;
+        div.dataset.unit = item.unit || 'days';
+        
+        div.innerHTML = `
+            <span class="result-name">${icon} ${item.activity}${durationLabel}</span>
+            <span class="result-detail">${getMonthName(item.month)} ${item.day}, ${year} (${WEEKDAYS_SHORT[wd]})</span>
+            <span class="result-badge">${gradeLabel}</span>
+        `;
+        
+        div.addEventListener('click', function() {
+            selectSearchResult(this);
+        });
+        
+        resultsList.appendChild(div);
+    }
+}
+
+function selectSearchResult(element) {
+    document.querySelectorAll('.search-result-item').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    const data = {
+        grade: element.dataset.grade,
+        month: parseInt(element.dataset.month),
+        day: parseInt(element.dataset.day),
+        activity: element.dataset.activity,
+        type: element.dataset.type,
+        duration: parseInt(element.dataset.duration) || 1,
+        unit: element.dataset.unit || 'days'
+    };
+    
+    selectedSearchActivity = data;
+    
+    const year = getYear(data.month);
+    const wd = getWeekday(data.month, data.day, year);
+    const gradeLabel = data.grade === 'all' ? 'Todos' : `${data.grade}º`;
+    
+    document.getElementById('selectedActName').textContent = data.activity;
+    document.getElementById('selectedActDate').textContent = `${WEEKDAYS_LONG[wd]} ${data.day} de ${getMonthName(data.month)} ${year}`;
+    
+    document.getElementById('selectedActivityInfo').style.display = 'block';
+    document.getElementById('moveGrade').value = data.grade;
+    document.getElementById('moveTrimestre').value = 'all';
+    document.getElementById('moveMonth').value = data.month;
+    document.getElementById('moveDay').value = data.day;
+    document.getElementById('conflictAlert').style.display = 'none';
+    
+    checkConflict();
+}
+
+function checkConflict() {
+    if (!selectedSearchActivity) return;
+    
+    const newMonth = parseInt(document.getElementById('moveMonth').value);
+    const newDay = parseInt(document.getElementById('moveDay').value);
+    const grade = document.getElementById('moveGrade').value;
+    const activity = selectedSearchActivity.activity;
+    
+    const grades = getGradesForActivity(grade);
+    let conflict = false;
+    let conflictText = '';
+    
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === newMonth && 
+                   a.day === newDay && 
+                   a.activity !== activity;
+        });
+        if (exists) {
+            conflict = true;
+            conflictText = `${g}º Grado en ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}`;
+            break;
+        }
+    }
+    
+    const alert = document.getElementById('conflictAlert');
+    if (conflict) {
+        alert.style.display = 'block';
+        alert.textContent = `⚠️ ¡Conflicto! Ya existe una actividad en ${conflictText}.`;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+function moveActivity() {
+    if (!selectedSearchActivity) {
+        showToast('⚠️ Primero selecciona una actividad de la lista');
+        return;
+    }
+    
+    const newMonth = parseInt(document.getElementById('moveMonth').value);
+    const newDay = parseInt(document.getElementById('moveDay').value);
+    const moveGrade = document.getElementById('moveGrade').value;
+    const moveTrimestre = document.getElementById('moveTrimestre').value;
+    const activity = selectedSearchActivity.activity;
+    const type = selectedSearchActivity.type;
+    const duration = selectedSearchActivity.duration || 1;
+    const unit = selectedSearchActivity.unit || 'days';
+    
+    const allowedMonths = getTrimestreMonths(parseInt(moveTrimestre));
+    
+    if (moveTrimestre !== 'all' && !allowedMonths.includes(newMonth)) {
+        showToast(`⚠️ La fecha seleccionada no pertenece al ${moveTrimestre === '1' ? 'TRIMESTRE I' : moveTrimestre === '2' ? 'TRIMESTRE II' : 'TRIMESTRE III'}`);
+        return;
+    }
+    
+    const grades = getGradesForActivity(moveGrade);
+    let conflict = false;
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === newMonth && 
+                   a.day === newDay && 
+                   a.activity !== activity;
+        });
+        if (exists) {
+            conflict = true;
+            break;
+        }
+    }
+    
+    if (conflict) {
+        if (!confirm(`⚠️ Hay un conflicto en la fecha ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}. ¿Deseas sobrescribir?`)) {
+            return;
+        }
+    }
+    
+    let count = 0;
+    for (const g of grades) {
+        const toRemove = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.activity === activity && 
+                   a.type === type &&
+                   (moveTrimestre === 'all' || allowedMonths.includes(a.month));
+        });
+        count += toRemove.length;
+        for (const r of toRemove) {
+            const idx = activities.indexOf(r);
+            if (idx >= 0) activities.splice(idx, 1);
+        }
+    }
+    
+    let currentMonth = newMonth;
+    let currentDay = newDay;
+    let diasCreados = 0;
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    
+    while (diasCreados < totalDays && diasCreados < 60) {
+        const year = getYear(currentMonth);
+        if (!isWeekend(currentMonth, currentDay, year)) {
+            for (const g of grades) {
+                activities.push({
+                    grade: g,
+                    month: currentMonth,
+                    day: currentDay,
+                    activity: activity,
+                    type: type,
+                    duration: duration,
+                    unit: unit
+                });
+            }
+            diasCreados++;
+        }
+        currentDay++;
+        const daysInMonth = getDaysInMonth(currentMonth);
+        if (currentDay > daysInMonth) {
+            currentDay = 1;
+            currentMonth++;
+            if (currentMonth > 12) currentMonth = 1;
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    
+    document.getElementById('searchActivity').value = '';
+    document.getElementById('searchResultsContainer').style.display = 'none';
+    document.getElementById('noResultsMessage').style.display = 'none';
+    document.getElementById('selectedActivityInfo').style.display = 'none';
+    document.getElementById('conflictAlert').style.display = 'none';
+    selectedSearchActivity = null;
+    
+    showToast(`✅ "${activity}" movida a ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)} (${count} celdas)`);
+}
+
+// ============================================================
+// MODALES
+// ============================================================
+function openNewActivityModal() {
+    document.getElementById('modalTitle').textContent = '➕ Nueva Actividad';
+    document.getElementById('deleteBtn').style.display = 'none';
+    editingIndex = -1;
+    editingProject = null;
+    pendingOverwrite = false;
+    
+    const today = new Date();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+    let year = today.getFullYear();
+    
+    while (isWeekend(month, day, year)) {
+        day++;
+        if (day > getDaysInMonth(month)) {
+            day = 1;
+            month++;
+            if (month > 12) { month = 1; year++; }
+        }
+    }
+    
+    if (year < 2026 || (year === 2026 && month < 8)) {
+        month = 8;
+        day = 1;
+        year = 2026;
+    }
+    if (year > 2027 || (year === 2027 && month > 7)) {
+        month = 7;
+        day = 31;
+        year = 2027;
+    }
+    
+    document.getElementById('editGrade').value = 'all';
+    document.getElementById('editMonth').value = month;
+    document.getElementById('editDay').value = day;
+    document.getElementById('editDuration').value = 1;
+    document.getElementById('editUnit').value = 'days';
+    document.getElementById('editActivity').value = '';
+    document.getElementById('editType').value = 'proyecto';
+    document.getElementById('modalConflictAlert').style.display = 'none';
+    
+    updateFechaInfo();
+    document.getElementById('activityModal').classList.add('show');
+    setTimeout(() => document.getElementById('editActivity').focus(), 100);
+}
+
+function openEditModal(grade, month, day) {
+    const year = getYear(month);
+    if (isWeekend(month, day, year)) {
+        showToast('⚠️ No se pueden editar fines de semana');
+        return;
+    }
+    
+    pendingOverwrite = false;
+    document.getElementById('modalConflictAlert').style.display = 'none';
+    
+    const acts = activities.filter(a => {
+        const gradesAct = getGradesForActivity(a.grade);
+        return gradesAct.includes(grade) && a.month === month && a.day === day;
+    });
+    
+    let projectAct = acts.find(a => isProject(a.type));
+    let normalAct = acts.find(a => !isProject(a.type));
+    
+    if (projectAct) {
+        const projectName = projectAct.activity;
+        const projectType = projectAct.type;
+        const projectGrade = projectAct.grade;
+        
+        const projectCells = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(grade) && 
+                   a.activity === projectName && 
+                   a.type === projectType &&
+                   a.grade === projectGrade;
+        });
+        
+        if (projectCells.length > 0) {
+            projectCells.sort((a, b) => a.month - b.month || a.day - b.day);
+            const first = projectCells[0];
+            const last = projectCells[projectCells.length - 1];
+            
+            let tempMonth = first.month;
+            let tempDay = first.day;
+            let durationDays = 0;
+            
+            while (tempMonth < last.month || (tempMonth === last.month && tempDay <= last.day)) {
+                const y = getYear(tempMonth);
+                if (!isWeekend(tempMonth, tempDay, y)) {
+                    durationDays++;
+                }
+                tempDay++;
+                const daysInMonth = getDaysInMonth(tempMonth);
+                if (tempDay > daysInMonth) {
+                    tempDay = 1;
+                    tempMonth++;
+                    if (tempMonth > 12) tempMonth = 1;
+                }
+            }
+            
+            document.getElementById('modalTitle').textContent = '✏️ Editar Proyecto';
+            document.getElementById('deleteBtn').style.display = 'inline-flex';
+            editingIndex = activities.indexOf(first);
+            editingProject = projectName;
+            
+            document.getElementById('editGrade').value = first.grade;
+            document.getElementById('editMonth').value = first.month;
+            document.getElementById('editDay').value = first.day;
+            document.getElementById('editDuration').value = durationDays;
+            document.getElementById('editUnit').value = 'days';
+            document.getElementById('editActivity').value = first.activity;
+            document.getElementById('editType').value = first.type;
+            
+            updateFechaInfo();
+            document.getElementById('activityModal').classList.add('show');
+            setTimeout(() => document.getElementById('editActivity').focus(), 100);
+            return;
+        }
+    }
+    
+    if (normalAct) {
+        document.getElementById('modalTitle').textContent = '✏️ Editar Actividad';
+        document.getElementById('deleteBtn').style.display = 'inline-flex';
+        editingIndex = activities.indexOf(normalAct);
+        editingProject = null;
+        
+        document.getElementById('editGrade').value = normalAct.grade;
+        document.getElementById('editMonth').value = normalAct.month;
+        document.getElementById('editDay').value = normalAct.day;
+        document.getElementById('editDuration').value = 1;
+        document.getElementById('editUnit').value = 'days';
+        document.getElementById('editActivity').value = normalAct.activity;
+        document.getElementById('editType').value = normalAct.type;
+        
+        updateFechaInfo();
+        document.getElementById('activityModal').classList.add('show');
+        setTimeout(() => document.getElementById('editActivity').focus(), 100);
+        return;
+    }
+    
+    // No hay actividad: crear nueva
+    document.getElementById('modalTitle').textContent = '➕ Nueva Actividad';
+    document.getElementById('deleteBtn').style.display = 'none';
+    editingIndex = -1;
+    editingProject = null;
+    
+    document.getElementById('editGrade').value = grade;
+    document.getElementById('editMonth').value = month;
+    document.getElementById('editDay').value = day;
+    document.getElementById('editDuration').value = 1;
+    document.getElementById('editUnit').value = 'days';
+    document.getElementById('editActivity').value = '';
+    document.getElementById('editType').value = 'proyecto';
+    
+    updateFechaInfo();
+    document.getElementById('activityModal').classList.add('show');
+    setTimeout(() => document.getElementById('editActivity').focus(), 100);
+}
+
+function closeModal() {
+    document.getElementById('activityModal').classList.remove('show');
+    editingIndex = -1;
+    editingProject = null;
+    pendingOverwrite = false;
+}
+
+// ============================================================
+// GUARDAR ACTIVIDAD
+// ============================================================
+function saveActivity() {
+    const grade = document.getElementById('editGrade').value;
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const duration = parseInt(document.getElementById('editDuration').value);
+    const unit = document.getElementById('editUnit').value;
+    const activity = document.getElementById('editActivity').value.trim();
+    const type = document.getElementById('editType').value;
+
+    if (!activity) { showToast('⚠️ Escribe una actividad'); return; }
+    if (duration < 1) { showToast('⚠️ La duración debe ser al menos 1'); return; }
+
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    const grades = getGradesForActivity(grade);
+    
+    if (!pendingOverwrite) {
+        let conflict = false;
+        for (const g of grades) {
+            for (let i = 0; i < totalDays; i++) {
+                let tempMonth = month;
+                let tempDay = day + i;
+                let tempYear = getYear(tempMonth);
+                const daysInMonth = getDaysInMonth(tempMonth);
+                if (tempDay > daysInMonth) {
+                    tempDay -= daysInMonth;
+                    tempMonth++;
+                    if (tempMonth > 12) tempMonth = 1;
+                    tempYear = getYear(tempMonth);
+                }
+                if (!isWeekend(tempMonth, tempDay, tempYear)) {
+                    const exists = activities.some(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(g) && 
+                               a.month === tempMonth && 
+                               a.day === tempDay &&
+                               a.activity !== activity;
+                    });
+                    if (exists) {
+                        conflict = true;
+                        break;
+                    }
+                }
+            }
+            if (conflict) break;
+        }
+        
+        if (conflict) {
+            showToast('⚠️ Hay un conflicto en el rango seleccionado. Revisa las fechas.');
+            document.getElementById('modalConflictAlert').style.display = 'block';
+            document.getElementById('modalConflictAlert').innerHTML = '⚠️ ¡Conflicto! Ya existe una actividad en este rango. <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:8px;">Sobrescribir</button>';
+            return;
+        }
+    }
+    
+    if (editingProject !== null && isProject(type)) {
+        for (const g of grades) {
+            const toRemove = activities.filter(a => {
+                const gradesAct = getGradesForActivity(a.grade);
+                return gradesAct.includes(g) && 
+                       a.activity === editingProject && 
+                       isProject(a.type);
+            });
+            for (const r of toRemove) {
+                const idx = activities.indexOf(r);
+                if (idx >= 0) activities.splice(idx, 1);
+            }
+        }
+    } else if (editingIndex >= 0) {
+        const act = activities[editingIndex];
+        if (act) {
+            if (isProject(act.type)) {
+                for (const g of grades) {
+                    const toRemove = activities.filter(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(g) && 
+                               a.activity === act.activity && 
+                               isProject(a.type);
+                    });
+                    for (const r of toRemove) {
+                        const idx = activities.indexOf(r);
+                        if (idx >= 0) activities.splice(idx, 1);
+                    }
+                }
+            } else {
+                activities.splice(editingIndex, 1);
+            }
+        }
+    }
+    
+    let count = 0;
+    let currentMonth = month;
+    let currentDay = day;
+    let diasAsignados = 0;
+    let maxIteraciones = 200;
+    
+    while (diasAsignados < totalDays && maxIteraciones > 0) {
+        maxIteraciones--;
+        const yearForDate = getYear(currentMonth);
+        if (!isWeekend(currentMonth, currentDay, yearForDate)) {
+            for (const g of grades) {
+                const existingIdx = activities.findIndex(a => {
+                    const gradesAct = getGradesForActivity(a.grade);
+                    return gradesAct.includes(g) && 
+                           a.month === currentMonth && 
+                           a.day === currentDay;
+                });
+                
+                if (existingIdx >= 0) {
+                    activities[existingIdx] = { 
+                        grade: g, 
+                        month: currentMonth, 
+                        day: currentDay, 
+                        activity: activity, 
+                        type: type, 
+                        duration: duration, 
+                        unit: unit 
+                    };
+                } else {
+                    activities.push({ 
+                        grade: g, 
+                        month: currentMonth, 
+                        day: currentDay, 
+                        activity: activity, 
+                        type: type, 
+                        duration: duration, 
+                        unit: unit 
+                    });
+                }
+                count++;
+            }
+            diasAsignados++;
+        }
+        
+        currentDay++;
+        const daysInMonth = getDaysInMonth(currentMonth);
+        if (currentDay > daysInMonth) {
+            currentDay = 1;
+            currentMonth++;
+            if (currentMonth > 12) currentMonth = 1;
+        }
+    }
+
+    saveActivities();
+    renderCronograma();
+    closeModal();
+    pendingOverwrite = false;
+    showToast(`✅ "${activity}" asignado a ${count} celdas`);
+}
+
+function deleteActivity() {
+    const grade = document.getElementById('editGrade').value;
+    const activity = document.getElementById('editActivity').value.trim();
+    const type = document.getElementById('editType').value;
+    
+    if (!activity) { showToast('⚠️ No hay actividad para eliminar'); return; }
+    
+    if (!confirm(`¿Eliminar completamente el proyecto "${activity}"?\nSe eliminarán todas sus celdas.`)) return;
+    
+    const grades = getGradesForActivity(grade);
+    let count = 0;
+    
+    for (const g of grades) {
+        const toRemove = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.activity === activity && 
+                   a.type === type;
+        });
+        count += toRemove.length;
+        for (const r of toRemove) {
+            const idx = activities.indexOf(r);
+            if (idx >= 0) activities.splice(idx, 1);
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    closeModal();
+    showToast(`🗑️ Proyecto "${activity}" eliminado (${count} celdas)`);
+}
+
+// ============================================================
+// BULK MODAL
+// ============================================================
+function openBulkModal() {
+    if (selectedCells.length === 0) {
+        showToast('⚠️ Primero selecciona celdas');
+        return;
+    }
+    document.getElementById('bulkCount').textContent = selectedCells.length;
+    document.getElementById('bulkActivity').value = '';
+    document.getElementById('bulkType').value = 'proyecto';
+    document.getElementById('bulkModal').classList.add('show');
+}
+
+function closeBulkModal() {
+    document.getElementById('bulkModal').classList.remove('show');
+}
+
+function saveBulk() {
+    const activity = document.getElementById('bulkActivity').value.trim();
+    const type = document.getElementById('bulkType').value;
+
+    if (!activity) {
+        showToast('⚠️ Escribe un nombre');
+        return;
+    }
+
+    let count = 0;
+    for (const key of selectedCells) {
+        const [grade, month, day] = key.split('-').map(Number);
+        const year = getYear(month);
+        if (isWeekend(month, day, year)) continue;
+        const idx = activities.findIndex(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(grade) && a.month === month && a.day === day;
+        });
+        if (idx >= 0) {
+            activities[idx] = { grade, month, day, activity, type, duration: 1, unit: 'days' };
+        } else {
+            activities.push({ grade, month, day, activity, type, duration: 1, unit: 'days' });
+        }
+        count++;
+    }
+
+    saveActivities();
+    clearSelection();
+    renderCronograma();
+    closeBulkModal();
+    showToast(`✅ "${activity}" asignado a ${count} celdas`);
+}
+
+// ============================================================
+// EXPORTAR A EXCEL
+// ============================================================
+async function exportToExcel() {
+    try {
+        if (typeof ExcelJS === 'undefined') {
+            showToast('⚠️ No se pudo cargar la librería de Excel (revisa tu conexión a internet)');
+            return;
+        }
+
+        const filter = document.getElementById('gradeFilter').value;
+        const filterLabel = filter === 'all' ? 'Todos los grados' : `${filter}º Grado`;
+        const grades = filter === 'all' ? [1, 2, 3] : [parseInt(filter)];
+
+        const months = [
+            { num: 8, name: 'Agosto', year: 2026 },
+            { num: 9, name: 'Septiembre', year: 2026 },
+            { num: 10, name: 'Octubre', year: 2026 },
+            { num: 11, name: 'Noviembre', year: 2026 },
+            { num: 12, name: 'Diciembre', year: 2026 },
+            { num: 1, name: 'Enero', year: 2027 },
+            { num: 2, name: 'Febrero', year: 2027 },
+            { num: 3, name: 'Marzo', year: 2027 },
+            { num: 4, name: 'Abril', year: 2027 },
+            { num: 5, name: 'Mayo', year: 2027 },
+            { num: 6, name: 'Junio', year: 2027 },
+            { num: 7, name: 'Julio', year: 2027 }
+        ];
+
+        const trimestres = [
+            { name: 'TRIMESTRE I', months: [8, 9, 10, 11] },
+            { name: 'TRIMESTRE II', months: [12, 1, 2, 3] },
+            { name: 'TRIMESTRE III', months: [4, 5, 6, 7] }
+        ];
+
+        const TOTAL_COLS = 32;
+
+        const ACT_STYLES = {
+            'inicio-clases':      { bg: 'FF8C00' },
+            'receso-vacaciones':  { bg: 'FFD700' },
+            'festivo-suspension': { bg: 'DC3545' },
+            'cte-intensiva':      { bg: '1A3A5C' },
+            'cte-ordinaria':      { bg: 'E91E63' },
+            'fortalecimiento':    { bg: '28A745' },
+            'fin-ciclo':          { bg: '8B0000' },
+            'normal':             { bg: 'E8F0FE' },
+            'proyecto':           { bg: '6C5CE7', color: 'FFFFFF' }
+        };
+
+        const workbook = new ExcelJS.Workbook();
+        workbook.creator = config.schoolName || 'Cronograma SEP';
+        workbook.created = new Date();
+        const ws = workbook.addWorksheet('Cronograma', {
+            views: [{ state: 'frozen', ySplit: 3, showGridLines: true }]
+        });
+
+        ws.getColumn(1).width = 16;
+        for (let c = 2; c <= TOTAL_COLS; c++) ws.getColumn(c).width = 4.3;
+
+        const thinBorder = { style: 'thin', color: { argb: 'FF999999' } };
+        const borderAll = { top: thinBorder, left: thinBorder, bottom: thinBorder, right: thinBorder };
+
+        function styleCell(cell, { bg, color, bold, size, text } = {}) {
+            cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+            cell.border = borderAll;
+            if (text) {
+                cell.value = text;
+                cell.font = { bold: !!bold, size: size || 9, color: { argb: 'FF' + (color || '000000') } };
+            } else {
+                cell.font = { size: 1 };
+            }
+            if (bg) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF' + bg } };
+        }
+
+        function addFullWidthRow(text, bg, color, size) {
+            const row = ws.addRow([text]);
+            ws.mergeCells(row.number, 1, row.number, TOTAL_COLS);
+            styleCell(row.getCell(1), { bg, color, bold: true, size, text: text });
+            return row.number;
+        }
+
+        // --- Encabezado del documento ---
+        addFullWidthRow('📚 Cronograma Escolar 2026-2027', '00467F', 'FFFFFF', 14);
+        addFullWidthRow(`${config.schoolName || 'Escuela'} · ${config.schoolCycle || ''} · ${filterLabel}`, 'FFFFFF', '555555', 10);
+        addFullWidthRow(`Generado el ${new Date().toLocaleDateString()}`, 'FFFFFF', '666666', 9);
+
+        for (const grade of grades) {
+            addFullWidthRow(`${grade}º Grado`, '002C54', 'FFFFFF', 12);
+
+            for (const trim of trimestres) {
+                addFullWidthRow(trim.name, '00467F', 'FFFFFF', 11);
+
+                // Fila de encabezado de días (1-31)
+                const headerValues = ['Mes/Día'];
+                for (let d = 1; d <= 31; d++) headerValues.push(d);
+                const headerRow = ws.addRow(headerValues);
+                for (let c = 1; c <= TOTAL_COLS; c++) {
+                    styleCell(headerRow.getCell(c), { bg: 'E6F0FA', color: '00467F', bold: true, size: 8, text: headerValues[c-1] || '' });
+                }
+
+                for (const monthNum of trim.months) {
+                    const monthData = months.find(m => m.num === monthNum);
+                    if (!monthData) continue;
+                    const monthYear = monthData.year;
+
+                    const rowValues = [monthData.name];
+                    for (let d = 1; d <= 31; d++) rowValues.push('');
+                    const row = ws.addRow(rowValues);
+                    const rowNum = row.number;
+
+                    styleCell(row.getCell(1), { bg: '28A745', color: 'FFFFFF', bold: true, size: 8, text: monthData.name });
+
+                    // Fusiona celdas contiguas de un mismo proyecto
+                    let runStart = null;
+                    let runText = '';
+                    const flushRun = (endDay) => {
+                        if (runStart === null) return;
+                        const startCol = runStart + 1;
+                        const endCol = endDay + 1;
+                        if (endCol > startCol) ws.mergeCells(rowNum, startCol, rowNum, endCol);
+                        const cell = row.getCell(startCol);
+                        styleCell(cell, { bg: ACT_STYLES.proyecto.bg, color: ACT_STYLES.proyecto.color, bold: true, size: 8, text: runText });
+                        runStart = null;
+                        runText = '';
+                    };
+
+                    for (let day = 1; day <= 31; day++) {
+                        const col = day + 1;
+                        const weekend = isWeekend(monthNum, day, monthYear);
+                        const cell = row.getCell(col);
+
+                        const acts = activities.filter(a => {
+                            const gradesAct = getGradesForActivity(a.grade);
+                            return gradesAct.includes(grade) && a.month === monthNum && a.day === day;
+                        });
+
+                        let styleKey = null;
+                        let isProjectCell = false;
+
+                        if (acts.length > 0) {
+                            const projectAct = acts.find(a => isProject(a.type));
+                            if (projectAct) {
+                                styleKey = 'proyecto';
+                                isProjectCell = true;
+
+                                const prevDayAct = activities.find(a => {
+                                    const gradesAct = getGradesForActivity(a.grade);
+                                    return gradesAct.includes(grade) && a.month === monthNum &&
+                                           a.day === day - 1 && a.activity === projectAct.activity && a.type === projectAct.type;
+                                });
+                                const nextDayAct = activities.find(a => {
+                                    const gradesAct = getGradesForActivity(a.grade);
+                                    return gradesAct.includes(grade) && a.month === monthNum &&
+                                           a.day === day + 1 && a.activity === projectAct.activity && a.type === projectAct.type;
+                                });
+
+                                if (!prevDayAct) {
+                                    flushRun(day - 1);
+                                    runStart = day;
+                                    runText = projectAct.activity;
+                                }
+                                if (!nextDayAct) flushRun(day);
+                            } else {
+                                // Evento oficial - solo color, sin texto
+                                const act = acts[0];
+                                styleKey = act.type || 'normal';
+                                isProjectCell = false;
+                            }
+                        }
+
+                        if (isProjectCell) {
+                            // Ya se maneja en flushRun
+                            if (!runStart) {
+                                styleCell(cell, { bg: ACT_STYLES.proyecto.bg, size: 1 });
+                            }
+                        } else if (styleKey && ACT_STYLES[styleKey]) {
+                            // Evento oficial - solo color, sin texto
+                            styleCell(cell, { bg: ACT_STYLES[styleKey].bg, size: 1 });
+                        } else if (weekend) {
+                            styleCell(cell, { bg: 'F0F0F0', size: 1 });
+                        } else {
+                            styleCell(cell, { size: 1 });
+                        }
+                    }
+                    flushRun(31);
+                }
+            }
+        }
+
+        ws.getRow(1).height = 22;
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `cronograma_sep_${new Date().toISOString().slice(0,10)}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        showToast('📊 Excel (.xlsx) exportado correctamente');
+
+    } catch(e) {
+        showToast('⚠️ Error al exportar: ' + e.message);
+        console.error('Error en exportToExcel:', e);
+    }
+}
+
+// ============================================================
+// VISTA PREVIA E IMPRESIÓN
+// ============================================================
+function printPreview() {
+    const filter = document.getElementById('gradeFilter').value;
+    const filterLabel = filter === 'all' ? 'Todos los grados' : `${filter}º Grado`;
+    
+    if (!confirm(`¿Imprimir cronograma para ${filterLabel}?\nSe generará una vista previa.`)) return;
+    
+    const container = document.getElementById('cronogramaContainer');
+    const cronoHTML = container.innerHTML;
+    
+    const printWindow = window.open('', '_blank', 'width=1200,height=800');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Vista previa - Cronograma SEP 2026-2027</title>
+            <style>
+                body { font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; background: white; }
+                h1 { text-align: center; color: #00467F; font-size: 1.8rem; margin-bottom: 5px; }
+                h2 { text-align: center; color: #555; font-size: 1.2rem; font-weight: normal; margin-top: 0; }
+                .print-info { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+                .cronograma-wrapper { overflow: visible; }
+                .cronograma-grid {
+                    display: grid;
+                    grid-template-columns: 70px repeat(31, 1fr);
+                    gap: 1px;
+                    border: 1px solid #333;
+                    font-size: 0.6rem;
+                    width: 100%;
+                }
+                .grid-cell {
+                    background: white;
+                    padding: 2px 1px;
+                    text-align: center;
+                    min-height: 26px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                    font-size: 0.55rem;
+                    border: 1px solid #ddd;
+                }
+                .grid-cell.trimestre-header {
+                    background: #00467F !important;
+                    color: white !important;
+                    font-weight: 700;
+                    font-size: 0.75rem;
+                    grid-column: 1 / span 32;
+                    text-align: center;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+                .grid-cell.month-header {
+                    background: #28A745 !important;
+                    color: white !important;
+                    font-weight: 700;
+                    font-size: 0.65rem;
+                    grid-column: 1;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+                .grid-cell.day-number-header {
+                    font-weight: 600;
+                    background: #E6F0FA;
+                    color: #00467F;
+                    font-size: 0.5rem;
+                }
+                .grid-cell.weekend {
+                    background: #f0f0f0 !important;
+                }
+                .grid-cell .activity {
+                    padding: 1px 2px;
+                    border-radius: 3px;
+                    font-size: 0.5rem;
+                    line-height: 1.1;
+                    width: 100%;
+                    min-height: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-weight: 500;
+                }
+                .grid-cell .activity.inicio-clases { background: #FF8C00 !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.receso-vacaciones { background: #FFD700 !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.festivo-suspension { background: #DC3545 !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.cte-intensiva { background: #1A3A5C !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.cte-ordinaria { background: #E91E63 !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.fortalecimiento { background: #28A745 !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.fin-ciclo { background: #8B0000 !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell .activity.normal { background: #E8F0FE !important; color: transparent !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell.proyecto-cell { background: #6C5CE7 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                .grid-cell.proyecto-cell .proyecto-text {
+                    width: 100%;
+                    padding: 0 2px;
+                    text-align: center;
+                    font-size: inherit;
+                    color: white !important;
+                    white-space: normal;
+                    word-break: break-word;
+                }
+                .print-footer {
+                    text-align: center;
+                    font-size: 0.8rem;
+                    color: #666;
+                    margin-top: 20px;
+                    padding-top: 10px;
+                    border-top: 1px solid #ddd;
+                }
+                @media print {
+                    body { padding: 10px; }
+                    .no-print { display: none !important; }
+                    .cronograma-grid { border: 1px solid #333; }
+                    .grid-cell { border: 1px solid #ddd; }
+                    .grid-cell.trimestre-header { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                    .grid-cell.month-header { background: #28A745 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="no-print" style="text-align:center; margin-bottom:15px;">
+                <button onclick="window.print()" style="padding:10px 30px; font-size:1rem; cursor:pointer; background:#00467F; color:white; border:none; border-radius:8px;">🖨️ Imprimir</button>
+                <button onclick="window.close()" style="padding:10px 30px; font-size:1rem; cursor:pointer; background:#DC3545; color:white; border:none; border-radius:8px; margin-left:10px;">✖ Cerrar</button>
+            </div>
+            <h1>📚 Cronograma Escolar 2026-2027</h1>
+            <h2>${config.schoolName || 'Escuela'} · ${config.schoolCycle || ''}</h2>
+            <div class="print-info">${filterLabel} · Generado el ${new Date().toLocaleDateString()}</div>
+            <div class="cronograma-wrapper">${cronoHTML}</div>
+            <div class="print-footer">
+                ${config.schoolName || ''} · ${config.schoolCCT || ''} · ${config.teacherName || ''}<br>
+                Elaborado con Cronograma SEP 2026-2027
+            </div>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+// ============================================================
+// EXPORTAR JSON
+// ============================================================
+function exportJSON() {
+    const data = { 
+        activities: activities,
+        config: config,
+        exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `backup_sep_${new Date().toISOString().slice(0,10)}.json`;
+    link.click();
+    showToast('📋 Backup descargado');
+}
+
+function importJSONFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (data.activities && Array.isArray(data.activities)) {
+                activities = data.activities;
+                saveActivities();
+                if (data.config) {
+                    config = { ...config, ...data.config };
+                    saveConfig();
+                }
+                renderCronograma();
+                showToast('📂 Backup importado');
+            } else {
+                showToast('⚠️ Formato inválido');
+            }
+        } catch(err) {
+            showToast('⚠️ Error al leer el archivo');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+function clearAllActivities() {
+    if (confirm('¿Eliminar TODAS las actividades?')) {
+        activities = [];
+        saveActivities();
+        renderCronograma();
+        showToast('🗑️ Todas las actividades eliminadas');
+    }
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const tabId = this.dataset.tab;
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+        if (tabId === 'cronograma') renderCronograma();
+        if (tabId === 'config') {
+            document.getElementById('schoolName').value = config.schoolName || '';
+            document.getElementById('schoolCycle').value = config.schoolCycle || '';
+            document.getElementById('schoolCCT').value = config.schoolCCT || '';
+            document.getElementById('teacherName').value = config.teacherName || '';
+            document.getElementById('directorName').value = config.directorName || '';
+            document.getElementById('primaryColor').value = config.primaryColor || '#00467F';
+            document.getElementById('themeSelect').value = config.theme || 'light';
+        }
+    });
+});
+
+// ============================================================
+// THEME
+// ============================================================
+function applyTheme(theme) {
+    if (theme === 'system') {
+        document.documentElement.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '');
+    } else if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+}
+
+function toggleTheme() {
+    const current = document.getElementById('themeSelect').value;
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    document.getElementById('themeSelect').value = newTheme;
+    applyTheme(newTheme);
+    config.theme = newTheme;
+    localStorage.setItem('cronograma_config', JSON.stringify(config));
+    showToast(`🌓 Tema: ${newTheme === 'dark' ? 'Oscuro' : 'Claro'}`);
+}
+
+// ============================================================
+// UTILITY
+// ============================================================
+function adjustColor(hex, percent) {
+    let r = parseInt(hex.slice(1,3), 16);
+    let g = parseInt(hex.slice(3,5), 16);
+    let b = parseInt(hex.slice(5,7), 16);
+    r = Math.max(0, Math.min(255, r + percent));
+    g = Math.max(0, Math.min(255, g + percent));
+    b = Math.max(0, Math.min(255, b + percent));
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();
+renderCronograma();
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { 
+        closeModal(); 
+        closeBulkModal();
+        clearSelection();
+    }
+});
+
+document.getElementById('activityModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+document.getElementById('bulkModal').addEventListener('click', function(e) {
+    if (e.target === this) closeBulkModal();
+});
+
+document.getElementById('primaryColor').addEventListener('input', function() {
+    document.documentElement.style.setProperty('--primary', this.value);
+    document.documentElement.style.setProperty('--primary-dark', adjustColor(this.value, -20));
+});
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+    if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
+});
+
+console.log('📚 Cronograma SEP 2026-2027 cargado');
+console.log(`📊 ${activities.length} actividades cargadas`);
+</script>
+</body>
+</html>
