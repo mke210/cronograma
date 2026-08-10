@@ -173,162 +173,6 @@
         .card-title { font-size: 1.1rem; font-weight: 600; }
 
         /* ============================================================
-           ESTILOS PARA PLANEACIÓN SEMANAL
-           ============================================================ */
-        .planeacion-container {
-            overflow-x: auto;
-            padding: 4px 0;
-        }
-        .planeacion-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.75rem;
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .planeacion-table th,
-        .planeacion-table td {
-            border: 1px solid var(--border);
-            padding: 6px 8px;
-            text-align: left;
-            vertical-align: top;
-        }
-        .planeacion-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            text-align: center;
-        }
-        .planeacion-table .header-school {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-        .planeacion-table .grade-header {
-            background: var(--primary-dark);
-            color: white;
-            font-weight: 700;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        .planeacion-table .section-header {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-weight: 600;
-            text-align: center;
-        }
-        .planeacion-table .editable-input {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            padding: 2px 4px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            min-height: 24px;
-        }
-        .planeacion-table .editable-input:focus {
-            outline: none;
-            background: var(--primary-light);
-            box-shadow: 0 0 0 2px var(--primary);
-        }
-        .planeacion-table .editable-input:hover {
-            background: rgba(0,70,127,0.05);
-        }
-        .planeacion-table .editable-textarea {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            padding: 2px 4px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            resize: vertical;
-            min-height: 40px;
-            line-height: 1.4;
-        }
-        .planeacion-table .editable-textarea:focus {
-            outline: none;
-            background: var(--primary-light);
-            box-shadow: 0 0 0 2px var(--primary);
-        }
-        .planeacion-table .editable-textarea:hover {
-            background: rgba(0,70,127,0.05);
-        }
-        .planeacion-table .signature-cell {
-            padding: 12px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .planeacion-table .signature-cell strong {
-            display: block;
-            margin-bottom: 8px;
-        }
-        .planeacion-table .signature-cell .signature-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .planeacion-table .signature-cell .signature-title {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-        }
-        .planeacion-table .col-periodo { width: 12%; min-width: 100px; }
-        .planeacion-table .col-actividades { width: 28%; min-width: 180px; }
-        .planeacion-table .col-recursos { width: 20%; min-width: 120px; }
-        .planeacion-table .col-producto { width: 28%; min-width: 180px; }
-        .planeacion-table .col-acciones { width: 12%; min-width: 80px; text-align: center; }
-
-        .planeacion-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .planeacion-grade-selector {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .planeacion-grade-selector select {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-
-        @media print {
-            .planeacion-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .card-header .btn-group, .selection-info { display: none !important; }
-            .planeacion-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .planeacion-table td { background: white !important; }
-            .editable-input, .editable-textarea {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                pointer-events: none;
-            }
-            .card { box-shadow: none; border: none; padding: 0; }
-            .planeacion-container { padding: 0; }
-        }
-
-        @media (max-width: 768px) {
-            .planeacion-table { font-size: 0.6rem; }
-            .planeacion-table th, .planeacion-table td { padding: 3px 4px; }
-            .col-periodo { min-width: 60px; }
-            .col-actividades { min-width: 100px; }
-            .col-recursos { min-width: 80px; }
-            .col-producto { min-width: 100px; }
-            .col-acciones { min-width: 50px; }
-        }
-
-        /* ============================================================
            ESTILOS PARA PLAN ANUAL
            ============================================================ */
         .plan-container {
@@ -641,7 +485,7 @@
         }
 
         /* ============================================================
-           ESTILOS PARA DOSIFICACIÓN
+           ESTILOS PARA DOSIFICACIÓN - COLUMNA TRIMESTRE REDUCIDA 60%
            ============================================================ */
         .dosificacion-container {
             overflow-x: auto;
@@ -673,29 +517,37 @@
             color: var(--primary-dark);
             font-weight: 600;
         }
+        /* COLUMNA TRIMESTRE REDUCIDA 60% (de 4% a 1.6%, de 50px a 20px) */
         .dosificacion-table .trimestre-cell {
             font-weight: 700;
             text-align: center;
             background: var(--primary-light);
             color: var(--primary-dark);
             vertical-align: middle;
-            width: 4%;
-            min-width: 50px;
-            max-width: 60px;
-            font-size: 0.6rem;
-            padding: 4px 2px;
+            width: 1.6%;
+            min-width: 20px;
+            max-width: 30px;
+            font-size: 0.5rem;
+            padding: 2px 1px;
         }
         .dosificacion-table .trimestre-cell .trim-label {
-            font-size: 0.85rem;
+            font-size: 0.6rem;
             font-weight: 700;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0px;
+            line-height: 1.1;
         }
         .dosificacion-table .trimestre-cell .meses-label {
-            font-size: 0.5rem;
+            font-size: 0.35rem;
             font-weight: 400;
             color: var(--text-secondary);
             display: block;
-            margin-top: 2px;
-            line-height: 1.2;
+            margin-top: 1px;
+            line-height: 1.1;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0px;
         }
         .dosificacion-table .proyecto-cell {
             font-weight: 600;
@@ -774,11 +626,15 @@
             margin: 0 auto;
         }
 
-        .dosificacion-table .col-trimestre { width: 4%; min-width: 50px; max-width: 60px; }
-        .dosificacion-table .col-proyecto { width: 24%; min-width: 150px; }
-        .dosificacion-table .col-contenido { width: 20%; min-width: 120px; }
-        .dosificacion-table .col-pda { width: 40%; min-width: 200px; }
-        .dosificacion-table .col-sesiones { width: 7%; min-width: 50px; }
+        .dosificacion-table .col-trimestre { 
+            width: 1.6%; 
+            min-width: 20px; 
+            max-width: 30px; 
+        }
+        .dosificacion-table .col-proyecto { width: 26%; min-width: 150px; }
+        .dosificacion-table .col-contenido { width: 22%; min-width: 120px; }
+        .dosificacion-table .col-pda { width: 42%; min-width: 200px; }
+        .dosificacion-table .col-sesiones { width: 8%; min-width: 50px; }
 
         .dosificacion-grade-selector {
             display: flex;
@@ -1286,6 +1142,138 @@
             padding: 6px 10px;
         }
 
+        /* ============================================================
+           ESTILOS PARA PLANEACIÓN SEMANAL
+           ============================================================ */
+        .planeacion-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+        .planeacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .planeacion-table th,
+        .planeacion-table td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .planeacion-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        .planeacion-table .header-school {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        .planeacion-table .grade-header {
+            background: var(--primary-dark);
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .planeacion-table .section-header {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-align: center;
+        }
+        .planeacion-table .editable-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            min-height: 24px;
+        }
+        .planeacion-table .editable-input:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .planeacion-table .editable-input:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .planeacion-table .editable-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            resize: vertical;
+            min-height: 40px;
+            line-height: 1.4;
+        }
+        .planeacion-table .editable-textarea:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .planeacion-table .editable-textarea:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .planeacion-table .signature-cell {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .planeacion-table .signature-cell strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .planeacion-table .signature-cell .signature-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .planeacion-table .signature-cell .signature-title {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+        .planeacion-table .col-periodo { width: 12%; min-width: 100px; }
+        .planeacion-table .col-actividades { width: 28%; min-width: 180px; }
+        .planeacion-table .col-recursos { width: 20%; min-width: 120px; }
+        .planeacion-table .col-producto { width: 28%; min-width: 180px; }
+        .planeacion-table .col-acciones { width: 12%; min-width: 80px; text-align: center; }
+
+        .planeacion-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .planeacion-grade-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .planeacion-grade-selector select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             body { padding: 8px; }
             .header { flex-direction: column; align-items: stretch; }
@@ -1306,7 +1294,16 @@
             .dosificacion-table { font-size: 0.55rem; }
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 4px; }
-            .dosificacion-table .col-trimestre { min-width: 35px; }
+            .dosificacion-table .col-trimestre { 
+                min-width: 14px; 
+                max-width: 20px;
+            }
+            .dosificacion-table .trimestre-cell .trim-label {
+                font-size: 0.5rem;
+            }
+            .dosificacion-table .trimestre-cell .meses-label {
+                font-size: 0.3rem;
+            }
             .calendario-sep-table { font-size: 0.55rem; }
             .calendario-sep-table th,
             .calendario-sep-table td { padding: 2px 4px; }
@@ -1325,7 +1322,16 @@
             .dosificacion-table { font-size: 0.5rem; }
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 3px; }
-            .dosificacion-table .col-trimestre { min-width: 30px; }
+            .dosificacion-table .col-trimestre { 
+                min-width: 12px; 
+                max-width: 16px;
+            }
+            .dosificacion-table .trimestre-cell .trim-label {
+                font-size: 0.4rem;
+            }
+            .dosificacion-table .trimestre-cell .meses-label {
+                font-size: 0.25rem;
+            }
             .calendario-sep-table { font-size: 0.5rem; }
             .calendario-sep-table th,
             .calendario-sep-table td { padding: 1px 2px; }
@@ -1339,12 +1345,42 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* ============================================================
+           ESTILOS PARA IMPRESIÓN
+           ============================================================ */
+        @media print {
+            .planeacion-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .card-header .btn-group, .selection-info { display: none !important; }
+            .planeacion-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .planeacion-table td { background: white !important; }
+            .editable-input, .editable-textarea {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                pointer-events: none;
+            }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .planeacion-container { padding: 0; }
+            .dosificacion-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .dosificacion-table td { background: white !important; }
+            .dosificacion-table .trimestre-cell {
+                background: var(--primary-light) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
     </style>
 </head>
 <body>
 
+<!-- ============================================================
+TOAST
+============================================================ -->
 <div class="toast" id="toast"></div>
 
+<!-- ============================================================
+HEADER
+============================================================ -->
 <div class="app-container">
     <header class="header">
         <div class="header-title">
@@ -1357,6 +1393,9 @@
         </div>
     </header>
 
+    <!-- ============================================================
+    TABS
+    ============================================================ -->
     <nav class="tabs" id="tabNav">
         <button class="tab-btn active" data-tab="cronograma">📅 Cronograma</button>
         <button class="tab-btn" data-tab="plan">📋 Plan Anual</button>
@@ -1690,6 +1729,9 @@
     <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
 </div>
 
+<!-- ============================================================
+MODALES
+============================================================ -->
 <!-- Modal Edición -->
 <div class="modal-overlay" id="activityModal">
     <div class="modal">
@@ -5073,9 +5115,9 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado con Plan Anual y Planeación Semanal');
+console.log('📚 Cronograma SEP 2026-2027 cargado');
 console.log(`📊 ${activities.length} actividades cargadas`);
-console.log(`📝 Planeación cargada para ${Object.keys(planeacionData).length} grados`);
+console.log('📝 Columna TRIMESTRE reducida en 60%');
 </script>
 </body>
 </html>
