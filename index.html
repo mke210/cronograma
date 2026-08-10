@@ -173,6 +173,162 @@
         .card-title { font-size: 1.1rem; font-weight: 600; }
 
         /* ============================================================
+           ESTILOS PARA PLANEACIÓN SEMANAL
+           ============================================================ */
+        .planeacion-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+        .planeacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .planeacion-table th,
+        .planeacion-table td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .planeacion-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        .planeacion-table .header-school {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        .planeacion-table .grade-header {
+            background: var(--primary-dark);
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .planeacion-table .section-header {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-align: center;
+        }
+        .planeacion-table .editable-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            min-height: 24px;
+        }
+        .planeacion-table .editable-input:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .planeacion-table .editable-input:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .planeacion-table .editable-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            resize: vertical;
+            min-height: 40px;
+            line-height: 1.4;
+        }
+        .planeacion-table .editable-textarea:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .planeacion-table .editable-textarea:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .planeacion-table .signature-cell {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .planeacion-table .signature-cell strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .planeacion-table .signature-cell .signature-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .planeacion-table .signature-cell .signature-title {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+        .planeacion-table .col-periodo { width: 12%; min-width: 100px; }
+        .planeacion-table .col-actividades { width: 28%; min-width: 180px; }
+        .planeacion-table .col-recursos { width: 20%; min-width: 120px; }
+        .planeacion-table .col-producto { width: 28%; min-width: 180px; }
+        .planeacion-table .col-acciones { width: 12%; min-width: 80px; text-align: center; }
+
+        .planeacion-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .planeacion-grade-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .planeacion-grade-selector select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        @media print {
+            .planeacion-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .card-header .btn-group, .selection-info { display: none !important; }
+            .planeacion-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .planeacion-table td { background: white !important; }
+            .editable-input, .editable-textarea {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                pointer-events: none;
+            }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .planeacion-container { padding: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .planeacion-table { font-size: 0.6rem; }
+            .planeacion-table th, .planeacion-table td { padding: 3px 4px; }
+            .col-periodo { min-width: 60px; }
+            .col-actividades { min-width: 100px; }
+            .col-recursos { min-width: 80px; }
+            .col-producto { min-width: 100px; }
+            .col-acciones { min-width: 50px; }
+        }
+
+        /* ============================================================
            ESTILOS PARA PLAN ANUAL
            ============================================================ */
         .plan-container {
@@ -349,29 +505,6 @@
             gap: 8px;
             flex-wrap: wrap;
             align-items: center;
-        }
-
-        @media print {
-            .plan-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .legend, .card-header .btn-group, .selection-info { display: none !important; }
-            .plan-container { border: none; padding: 10px; background: white; }
-            .plan-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .plan-table td { background: white !important; }
-            .editable-text, .editable-textarea, .editable-input, .editable-title {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                pointer-events: none;
-            }
-            .plan-container .dimension-title { color: #00467F !important; border-bottom-color: #00467F !important; }
-            .card { box-shadow: none; border: none; padding: 0; }
-        }
-
-        @media (max-width: 768px) {
-            .plan-container { padding: 10px; }
-            .plan-table { font-size: 0.65rem; }
-            .plan-table th, .plan-table td { padding: 3px 4px; }
-            .plan-container h1 { font-size: 1.2rem; }
-            .plan-footer { flex-direction: column; }
         }
 
         /* ============================================================
@@ -1182,6 +1315,8 @@
             .plan-table { font-size: 0.6rem; }
             .plan-table th, .plan-table td { padding: 2px 3px; }
             .plan-container h1 { font-size: 1rem; }
+            .planeacion-table { font-size: 0.55rem; }
+            .planeacion-table th, .planeacion-table td { padding: 3px 4px; }
         }
         @media (max-width: 480px) {
             .header-title h1 { font-size: 1rem; }
@@ -1197,6 +1332,8 @@
             .plan-table { font-size: 0.5rem; }
             .plan-table th, .plan-table td { padding: 1px 2px; }
             .plan-container h1 { font-size: 0.9rem; }
+            .planeacion-table { font-size: 0.5rem; }
+            .planeacion-table th, .planeacion-table td { padding: 2px 3px; }
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1225,6 +1362,7 @@
         <button class="tab-btn" data-tab="plan">📋 Plan Anual</button>
         <button class="tab-btn" data-tab="calendario">📆 Calendario SEP</button>
         <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
+        <button class="tab-btn" data-tab="planeacion">📝 Planeación Semanal</button>
         <button class="tab-btn" data-tab="editor">✏️ Editor</button>
         <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
@@ -1367,6 +1505,35 @@
                 </div>
             </div>
             <div id="dosificacionContainer" class="dosificacion-container"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    PESTAÑA PLANEACIÓN SEMANAL
+    ============================================================ -->
+    <div class="tab-content" id="tab-planeacion">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📝 Planeación Semanal - Informática</span>
+                <div class="planeacion-actions">
+                    <div class="planeacion-grade-selector">
+                        <label style="font-size:0.85rem; color:var(--text-secondary);">Grado:</label>
+                        <select id="planeacionGrade" onchange="renderPlaneacion()">
+                            <option value="1">1º Secundaria</option>
+                            <option value="2">2º Secundaria</option>
+                            <option value="3">3º Secundaria</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success btn-sm" onclick="savePlaneacion()">💾 Guardar</button>
+                    <button class="btn btn-print btn-sm" onclick="printPlaneacion()">🖨️ Imprimir</button>
+                    <button class="btn btn-primary btn-sm" onclick="addPlaneacionSemana()">➕ Agregar Semana</button>
+                </div>
+            </div>
+            <div id="planeacionContainer" class="planeacion-container"></div>
+            <div style="margin-top:12px; padding:10px; background:var(--primary-light); border-radius:6px; font-size:0.8rem; color:var(--text-secondary);">
+                <strong>💡 Instrucciones:</strong> Edita todos los campos directamente. Los cambios se guardan automáticamente al hacer clic en "Guardar". 
+                Usa "Agregar Semana" para añadir una nueva fila de planeación.
+            </div>
         </div>
     </div>
 
@@ -2117,12 +2284,97 @@ const DEFAULT_CONFIG = {
 };
 
 // ============================================================
+// DATOS DE PLANEACIÓN SEMANAL
+// ============================================================
+const PLANEACION_INICIAL = {
+    1: [
+        {
+            periodo: 'Lunes 31',
+            actividades: 'Presentación del docente, encuadre de la asignatura de Informática, reglas de convivencia en el laboratorio de cómputo y criterios de evaluación.',
+            recursos: 'Cuaderno, lapicero, reglamento del taller.',
+            producto: 'Encuadre firmado y reglamento del taller de cómputo.'
+        },
+        {
+            periodo: 'Martes 01',
+            actividades: 'Aplicación del Examen de Diagnóstico: identificación del equipo, encendido y apagado correcto, uso del mouse/teclado y nociones de manejo de archivos.',
+            recursos: 'Impresión de examen de diagnóstico de Informática 1º.',
+            producto: 'Examen de diagnóstico contestado.'
+        },
+        {
+            periodo: 'Miércoles 02',
+            actividades: 'Retroalimentación y solución guiada del examen de diagnóstico. Discusión sobre los cuidados básicos del equipo de cómputo y ergonomía.',
+            recursos: 'Cuaderno, pizarrón, plumones.',
+            producto: 'Corrección del examen de diagnóstico en el cuaderno.'
+        },
+        {
+            periodo: 'Jueves 03 y Viernes 04',
+            actividades: 'Sesión de nivelación: Práctica guiada en el laboratorio sobre encendido/apagado correcto, reconocimiento del sistema operativo y navegación inicial.',
+            recursos: 'Computadoras del laboratorio, pizarrón, plumones.',
+            producto: 'Lista de cotejo de práctica diagnóstica (uso del equipo).'
+        }
+    ],
+    2: [
+        {
+            periodo: 'Lunes 31',
+            actividades: 'Presentación de la asignatura, revisión del encuadre, acuerdos de aula y laboratorio, y organización de portafolio de evidencias digital.',
+            recursos: 'Cuaderno, lapicero, programa de estudio.',
+            producto: 'Encuadre de la asignatura y compromisos del curso.'
+        },
+        {
+            periodo: 'Martes 01',
+            actividades: 'Aplicación del Examen de Diagnóstico: uso funcional de herramientas de Word, Excel y PowerPoint, y organización de carpetas.',
+            recursos: 'Examen de diagnóstico de Informática 2º.',
+            producto: 'Diagnóstico del grupo sobre herramientas de oficina.'
+        },
+        {
+            periodo: 'Miércoles 02',
+            actividades: 'Revisión colectiva y solución del examen de diagnóstico. Identificación de áreas de oportunidad en el uso de software de oficina.',
+            recursos: 'Pizarrón, plumones, cuaderno.',
+            producto: 'Corrección del examen de diagnóstico.'
+        },
+        {
+            periodo: 'Jueves 03 y Viernes 04',
+            actividades: 'Nivelación práctica: Ejercicio guiado de procesamiento de textos y edición de formato básico en la computadora.',
+            recursos: 'Equipo de cómputo, paquetería de oficina.',
+            producto: 'Práctica de nivelación en procesador de textos.'
+        }
+    ],
+    3: [
+        {
+            periodo: 'Lunes 31',
+            actividades: 'Presentación del curso, criterios de evaluación, normatividad de laboratorio de cómputo y metodología de proyectos tecnológicos.',
+            recursos: 'Cuaderno, lapicero, criterios de evaluación.',
+            producto: 'Encuadre firmado y carpeta de evidencias.'
+        },
+        {
+            periodo: 'Martes 01',
+            actividades: 'Aplicación del Examen de Diagnóstico: conceptos de sistemas de información, lógica de algoritmos, búsquedas avanzadas e internet seguro.',
+            recursos: 'Examen de diagnóstico de Informática 3º.',
+            producto: 'Examen de diagnóstico resuelto.'
+        },
+        {
+            periodo: 'Miércoles 02',
+            actividades: 'Solución y análisis grupal del examen de diagnóstico. Clasificación de conocimientos previos y diseño del plan de trabajo técnico.',
+            recursos: 'Pizarrón, plumones, cuaderno de trabajo.',
+            producto: 'Corrección del examen y plan de nivelación.'
+        },
+        {
+            periodo: 'Jueves 03 y Viernes 04',
+            actividades: 'Práctica de nivelación: Estructuración de archivos, gestión de almacenamiento y repaso de herramientas digitales avanzadas.',
+            recursos: 'Laboratorio de cómputo, guías de práctica.',
+            producto: 'Evidencia de práctica diagnóstica avanzada.'
+        }
+    ]
+};
+
+// ============================================================
 // GESTIÓN DE DATOS
 // ============================================================
 let activities = [];
 let config = {};
 let calendarioData = [];
 let planData = {};
+let planeacionData = {};
 let editingIndex = -1;
 let selectedCells = [];
 let editingProject = null;
@@ -2171,6 +2423,15 @@ function loadData() {
         catch(e) { dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA)); }
     }
 
+    // Cargar planeación
+    const savedPlaneacion = localStorage.getItem('cronograma_planeacion');
+    if (savedPlaneacion) {
+        try { planeacionData = JSON.parse(savedPlaneacion); } 
+        catch(e) { planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL)); }
+    } else {
+        planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
+    }
+
     applyTheme(config.theme || 'light');
     document.documentElement.style.setProperty('--primary', config.primaryColor || '#00467F');
     document.documentElement.style.setProperty('--primary-dark', adjustColor(config.primaryColor || '#00467F', -20));
@@ -2209,6 +2470,53 @@ function saveConfig() {
     showToast('✅ Configuración guardada');
 }
 
+function savePlaneacion() {
+    const grade = document.getElementById('planeacionGrade').value;
+    const container = document.getElementById('planeacionContainer');
+    const rows = container.querySelectorAll('.planeacion-row');
+    const data = [];
+    
+    rows.forEach(row => {
+        const periodo = row.querySelector('.editable-periodo')?.value || '';
+        const actividades = row.querySelector('.editable-actividades')?.value || '';
+        const recursos = row.querySelector('.editable-recursos')?.value || '';
+        const producto = row.querySelector('.editable-producto')?.value || '';
+        data.push({ periodo, actividades, recursos, producto });
+    });
+    
+    planeacionData[grade] = data;
+    localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+    showToast('✅ Planeación guardada');
+}
+
+function addPlaneacionSemana() {
+    const grade = document.getElementById('planeacionGrade').value;
+    if (!planeacionData[grade]) planeacionData[grade] = [];
+    planeacionData[grade].push({
+        periodo: 'Nueva semana',
+        actividades: 'Descripción de actividades...',
+        recursos: 'Recursos necesarios...',
+        producto: 'Producto esperado...'
+    });
+    localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+    renderPlaneacion();
+    showToast('➕ Nueva semana agregada');
+}
+
+function deletePlaneacionRow(btn) {
+    const row = btn.closest('.planeacion-row');
+    if (!row) return;
+    if (!confirm('¿Eliminar esta semana de planeación?')) return;
+    const grade = document.getElementById('planeacionGrade').value;
+    const index = parseInt(row.dataset.index);
+    if (!isNaN(index) && planeacionData[grade] && planeacionData[grade].length > index) {
+        planeacionData[grade].splice(index, 1);
+        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+        renderPlaneacion();
+        showToast('🗑️ Semana eliminada');
+    }
+}
+
 function resetData() {
     if (confirm('¿Restaurar datos de fábrica?')) {
         planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
@@ -2216,15 +2524,18 @@ function resetData() {
         activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
+        planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
         localStorage.setItem('cronograma_plan', JSON.stringify(planData));
         saveCalendario();
         saveActivities();
         saveConfig();
         localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
         renderPlan();
         renderCalendario();
         renderCronograma();
         renderDosificacion();
+        renderPlaneacion();
         showToast('🔄 Datos restaurados');
     }
 }
@@ -4110,6 +4421,184 @@ function clearAllActivities() {
 }
 
 // ============================================================
+// RENDERIZADO DE PLANEACIÓN SEMANAL
+// ============================================================
+function renderPlaneacion() {
+    const container = document.getElementById('planeacionContainer');
+    const grade = document.getElementById('planeacionGrade').value;
+    const data = planeacionData[grade] || [];
+    
+    if (data.length === 0) {
+        container.innerHTML = `
+            <div style="padding:20px; text-align:center; color:var(--text-secondary);">
+                No hay planeación para este grado. 
+                <button class="btn btn-primary" onclick="addPlaneacionSemana()" style="margin-left:10px;">➕ Agregar primera semana</button>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = `
+    <table class="planeacion-table">
+        <thead>
+            <tr>
+                <th style="width:12%;">PERIODO</th>
+                <th style="width:28%;">ACTIVIDADES</th>
+                <th style="width:20%;">RECURSOS</th>
+                <th style="width:28%;">PRODUCTO ESPERADO</th>
+                <th style="width:12%;">ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+    
+    data.forEach((item, index) => {
+        html += `
+        <tr class="planeacion-row" data-index="${index}">
+            <td>
+                <input type="text" class="editable-input editable-periodo" value="${item.periodo || ''}" 
+                       placeholder="Ej. Lunes 31" style="width:100%; min-height:30px;">
+            </td>
+            <td>
+                <textarea class="editable-textarea editable-actividades" 
+                          placeholder="Descripción de las actividades..." 
+                          style="width:100%; min-height:50px;">${item.actividades || ''}</textarea>
+            </td>
+            <td>
+                <textarea class="editable-textarea editable-recursos" 
+                          placeholder="Recursos necesarios..." 
+                          style="width:100%; min-height:40px;">${item.recursos || ''}</textarea>
+            </td>
+            <td>
+                <textarea class="editable-textarea editable-producto" 
+                          placeholder="Producto esperado..." 
+                          style="width:100%; min-height:40px;">${item.producto || ''}</textarea>
+            </td>
+            <td style="text-align:center; vertical-align:middle;">
+                <button class="btn btn-danger btn-sm" onclick="deletePlaneacionRow(this)" title="Eliminar semana">🗑️</button>
+            </td>
+        </tr>
+        `;
+    });
+    
+    html += `
+        </tbody>
+    </table>
+    `;
+    
+    // Agregar fila de firmas
+    html += `
+    <div style="margin-top:20px; text-align:center; font-size:0.9rem; font-weight:500;">
+        Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026
+    </div>
+    <div style="display:flex; justify-content:space-around; margin-top:20px; flex-wrap:wrap; gap:20px;">
+        <div style="text-align:center; flex:1; min-width:150px;">
+            <strong>Elaboró</strong>
+            <div style="font-weight:600; font-size:0.85rem;">${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</div>
+            <div style="font-size:0.7rem; color:var(--text-secondary);">Titular de Informática</div>
+        </div>
+        <div style="text-align:center; flex:1; min-width:150px;">
+            <strong>Revisó</strong>
+            <div style="font-weight:600; font-size:0.85rem;">Subdirector Turno Mixto</div>
+        </div>
+        <div style="text-align:center; flex:1; min-width:150px;">
+            <strong>Vo. Bo.</strong>
+            <div style="font-weight:600; font-size:0.85rem;">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
+            <div style="font-size:0.7rem; color:var(--text-secondary);">Subdirector encargado de la dirección</div>
+        </div>
+    </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    // Agregar eventos para guardado automático en los campos editables
+    container.querySelectorAll('.editable-periodo, .editable-actividades, .editable-recursos, .editable-producto').forEach(el => {
+        el.addEventListener('change', function() {
+            savePlaneacion();
+        });
+        el.addEventListener('blur', function() {
+            savePlaneacion();
+        });
+    });
+}
+
+function printPlaneacion() {
+    const grade = document.getElementById('planeacionGrade').value;
+    const container = document.getElementById('planeacionContainer');
+    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
+    
+    const printWindow = window.open('', '_blank', 'width=1100,height=800');
+    if (!printWindow) {
+        showToast('⚠️ Permite ventanas emergentes para imprimir');
+        return;
+    }
+    
+    // Obtener los estilos de la página
+    const styles = document.querySelector('style').innerHTML;
+    
+    // Construir HTML para impresión
+    let printHTML = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Planeación Semanal - Informática ${gradeLabel} Grado</title>
+        <meta charset="UTF-8">
+        <style>
+            ${styles}
+            body { padding: 20px; background: white; }
+            .planeacion-container { padding: 0; }
+            .planeacion-table { font-size: 0.7rem; }
+            .planeacion-table td, .planeacion-table th { padding: 4px 6px; }
+            .planeacion-actions, .planeacion-grade-selector, .card-header .btn-group, .no-print { display: none !important; }
+            .editable-input, .editable-textarea {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                pointer-events: none;
+                resize: none !important;
+                overflow: hidden !important;
+                min-height: auto !important;
+                height: auto !important;
+            }
+            .editable-textarea {
+                height: auto !important;
+                min-height: 30px !important;
+            }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .header, .tabs, .tab-btn, .theme-toggle, .toast { display: none !important; }
+            .planeacion-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            @media print {
+                body { padding: 10px; }
+                .planeacion-table { font-size: 0.65rem; }
+                .planeacion-table td, .planeacion-table th { padding: 3px 4px; }
+            }
+        </style>
+    </head>
+    <body>
+        <div style="text-align:center; margin-bottom:15px; font-family:'Times New Roman', Times, serif;">
+            <h1 style="font-size:1.4rem; margin-bottom:5px;">PLANEACIÓN SEMANAL - INFORMÁTICA ${gradeLabel} GRADO</h1>
+            <div style="font-size:0.9rem; color:#555;">
+                ${config.schoolName || 'Escuela Secundaria General'} · ${config.schoolCycle || '2026-2027'}
+            </div>
+            <div style="font-size:0.8rem; color:#666; margin-top:5px;">
+                Docente: ${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}
+            </div>
+        </div>
+        <div class="planeacion-container">
+            ${container.innerHTML}
+        </div>
+        <script>
+            window.print();
+        <\/script>
+    </body>
+    </html>
+    `;
+    
+    printWindow.document.write(printHTML);
+    printWindow.document.close();
+}
+
+// ============================================================
 // EXPORTAR A EXCEL
 // ============================================================
 async function exportToExcel() {
@@ -4452,6 +4941,7 @@ function exportJSON() {
         calendario: calendarioData,
         plan: planData,
         dosificacion: dosificacionData,
+        planeacion: planeacionData,
         exportedAt: new Date().toISOString()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -4474,6 +4964,7 @@ function importJSONFile(event) {
             if (data.plan) { planData = data.plan; localStorage.setItem('cronograma_plan', JSON.stringify(planData)); renderPlan(); }
             if (data.config) { config = { ...config, ...data.config }; saveConfig(); }
             if (data.dosificacion) { dosificacionData = data.dosificacion; localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData)); renderDosificacion(); }
+            if (data.planeacion) { planeacionData = data.planeacion; localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData)); renderPlaneacion(); }
             renderCronograma();
             showToast('📂 Backup importado');
         } catch(err) {
@@ -4539,6 +5030,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (tabId === 'plan') renderPlan();
         if (tabId === 'calendario') renderCalendario();
         if (tabId === 'dosificacion') renderDosificacion();
+        if (tabId === 'planeacion') renderPlaneacion();
         if (tabId === 'config') {
             document.getElementById('schoolName').value = config.schoolName || '';
             document.getElementById('schoolCycle').value = config.schoolCycle || '';
@@ -4559,6 +5051,7 @@ renderCronograma();
 renderPlan();
 renderCalendario();
 renderDosificacion();
+renderPlaneacion();
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeModal(); closeBulkModal(); clearSelection(); }
@@ -4580,8 +5073,9 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado con Plan Anual');
+console.log('📚 Cronograma SEP 2026-2027 cargado con Plan Anual y Planeación Semanal');
 console.log(`📊 ${activities.length} actividades cargadas`);
+console.log(`📝 Planeación cargada para ${Object.keys(planeacionData).length} grados`);
 </script>
 </body>
 </html>
