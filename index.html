@@ -643,6 +643,57 @@
             padding: 6px 10px;
         }
 
+        /* Estilos para la pestaña Dosificación */
+        .dosificacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .dosificacion-table th,
+        .dosificacion-table td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .dosificacion-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        .dosificacion-table .header-school {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        .dosificacion-table .trimestre-cell {
+            font-weight: 700;
+            text-align: center;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+        .dosificacion-table .proyecto-cell {
+            font-weight: 600;
+            color: var(--color-proyecto);
+        }
+        .dosificacion-table .sesiones-cell {
+            text-align: center;
+            font-weight: 600;
+        }
+        .dosificacion-table .meses-cell {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        .dosificacion-table .footer-cell {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
         @media print {
             body { padding: 0; background: white; }
             .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .legend, .card-header .btn-group, .selection-info { display: none !important; }
@@ -681,6 +732,9 @@
                 padding-top: 10px;
                 border-top: 1px solid #ddd;
             }
+            .dosificacion-table { font-size: 0.7rem; }
+            .dosificacion-table th,
+            .dosificacion-table td { padding: 4px 6px; }
         }
 
         @media (max-width: 768px) {
@@ -699,11 +753,17 @@
             .form-row-3 { grid-template-columns: 1fr; }
             .move-options { grid-template-columns: 1fr; }
             .search-result-item { flex-direction: column; align-items: flex-start; }
+            .dosificacion-table { font-size: 0.65rem; }
+            .dosificacion-table th,
+            .dosificacion-table td { padding: 4px 6px; }
         }
         @media (max-width: 480px) {
             .header-title h1 { font-size: 1rem; }
             .cronograma-grid { min-width: 700px; grid-template-columns: 35px repeat(31, 1fr); }
             .modal { padding: 16px; }
+            .dosificacion-table { font-size: 0.55rem; }
+            .dosificacion-table th,
+            .dosificacion-table td { padding: 2px 4px; }
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -729,6 +789,7 @@
 
     <nav class="tabs" id="tabNav">
         <button class="tab-btn active" data-tab="cronograma">📅 Cronograma</button>
+        <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
         <button class="tab-btn" data-tab="editor">✏️ Editor</button>
         <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
@@ -771,6 +832,19 @@
             </div>
 
             <div class="cronograma-wrapper" id="cronogramaContainer"></div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA DOSIFICACIÓN -->
+    <div class="tab-content" id="tab-dosificacion">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">📋 Dosificación y Jerarquización Anual - Matemáticas II</span>
+                <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
+            </div>
+            <div id="dosificacionContainer">
+                <!-- Generado por JavaScript -->
+            </div>
         </div>
     </div>
 
@@ -996,7 +1070,7 @@
                 <option value="receso-vacaciones">🟡 Receso / Vacaciones</option>
                 <option value="festivo-suspension">🔴 Festivo / Suspensión laboral</option>
                 <option value="cte-intensiva">🔵 CTE Fase Intensiva</option>
-                <option value="cte-ordinaria">🔵 CTE Sesión Ordinaria</option>
+                <option value="cte-ordinaria">🩷 CTE Sesión Ordinaria</option>
                 <option value="fortalecimiento">🟢 Fortalecimiento</option>
                 <option value="fin-ciclo">🏁 Fin de ciclo</option>
             </select>
@@ -1028,7 +1102,7 @@
                 <option value="receso-vacaciones">🟡 Receso / Vacaciones</option>
                 <option value="festivo-suspension">🔴 Festivo</option>
                 <option value="cte-intensiva">🔵 CTE Fase Intensiva</option>
-                <option value="cte-ordinaria">🔵 CTE Ordinaria</option>
+                <option value="cte-ordinaria">🩷 CTE Ordinaria</option>
                 <option value="fortalecimiento">🟢 Fortalecimiento</option>
                 <option value="fin-ciclo">🏁 Fin de ciclo</option>
             </select>
@@ -1043,6 +1117,139 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js">
 </script>
 <script>
+// ============================================================
+// DATOS DE DOSIFICACIÓN - MATEMÁTICAS II
+// ============================================================
+const DOSIFICACION_DATA = {
+    schoolName: 'Esc. Sec. Gral. "21 DE NOVIEMBRE"',
+    teacherName: 'Mtra. Ishelt González Pineda',
+    grade: '2° "H", "I"',
+    cycle: '2025 - 2026',
+    trimestres: [
+        {
+            nombre: 'I',
+            meses: 'SEPTIEMBRE - OCTUBRE - NOVIEMBRE',
+            proyectos: [
+                {
+                    nombre: '1. Descifrando los Secretos de los Números.',
+                    contenido: 'Extensión del significado de las operaciones y sus relaciones inversas.',
+                    procesos: [
+                        'Usa criterios de divisibilidad y números primos al resolver problemas que implican calcular el máximo común divisor y mínimo común múltiplo.',
+                        'Calcula potencias con exponente entero y la raíz cuadrada. Usa la notación científica al realizar cálculos con cantidades muy grandes o muy pequeñas.'
+                    ],
+                    sesiones: 13
+                },
+                {
+                    nombre: '2. Patrones Cuadráticos: Descubriendo la Magia de las Secuencias',
+                    contenido: 'Regularidades y Patrones',
+                    procesos: [
+                        'Representa algebraicamente una sucesión con progresión cuadrática de figuras y números'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '3. Álgebra en Acción: Descifrando Áreas y Potencias',
+                    contenido: 'Introducción al álgebra',
+                    procesos: [
+                        'Representa algebraicamente áreas que generan una expresión cuadrática.',
+                        'Identifica y usa las propiedades de los exponentes al resolver distintas operaciones algebraicas.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '4. Ecuaciones en Equilibrio: Resolviendo Desigualdades y Sistemas',
+                    contenido: 'Ecuaciones lineales y cuadráticas',
+                    procesos: [
+                        'Resuelve desigualdades con expresiones algebraicas. Modela y soluciona sistemas de dos ecuaciones lineales con dos incógnitas por algún método para dar respuesta a un problema.'
+                    ],
+                    sesiones: 12
+                }
+            ]
+        },
+        {
+            nombre: 'II',
+            meses: 'DICIEMBRE - ENERO - FEBRERO - MARZO',
+            proyectos: [
+                {
+                    nombre: '5. Proporciones en Movimiento: Explorando la Proporcionalidad Inversa',
+                    contenido: 'Funciones',
+                    procesos: [
+                        'Relaciona e interpreta la proporcionalidad inversa de dos magnitudes o cantidades, además usa una tabla, gráfica o representación algebraica en diversos contextos.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '6. Ángulos en Acción: Construyendo el Mundo a Escala',
+                    contenido: 'Rectas y ángulos',
+                    procesos: [
+                        'Identifica y usa las relaciones entre los ángulos, lados y diagonales para construir a escala triángulos, cuadriláteros y polígonos regulares o irregulares.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '7. Teselados y Polígonos: El Arte de la Geometría',
+                    contenido: 'Construcción y propiedades de las figuras planas y cuerpos',
+                    procesos: [
+                        'Construye con regla y compás polígonos regulares con distinta información.',
+                        'Identifica y usa las relaciones entre figuras en la construcción de teselados.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '8. Círculos Heroicos: Geometría en el Mundo de los Superhéroes',
+                    contenido: 'Circunferencia, círculo y esfera.',
+                    procesos: [
+                        'Determina la medida de ángulos inscritos y centrales, así como de arcos de circunferencia.',
+                        'Explora las intersecciones entre círculos y figuras al calcular perímetros y áreas.'
+                    ],
+                    sesiones: 12
+                }
+            ]
+        },
+        {
+            nombre: 'III',
+            meses: 'MARZO - ABRIL - MAYO - JUNIO - JULIO',
+            proyectos: [
+                {
+                    nombre: '9. Arquitectos del Futuro: Diseñando la Ciudad Sostenible',
+                    contenido: 'Medición y cálculo en diferentes contextos',
+                    procesos: [
+                        'Resuelve problemas que implican conversiones en múltiplos y submúltiplos del metro, litro, kilogramo y de unidades del sistema inglés (yarda, pulgada, galón, onza y libra).',
+                        'Utiliza estrategias diversas para determinar el perímetro y el área de figuras compuestas.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '10. Analistas del Clima: Descifrando Patrones Meteorológicos',
+                    contenido: 'Obtención y representación de información',
+                    procesos: [
+                        'Recolecta, registra, lee y comunica información mediante histogramas, gráficas poligonales y de línea.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '11. Detectives de Datos: Revelando Patrones en Nuestra Comunidad',
+                    contenido: 'Interpretación de la información a través de medidas de tendencia central y de dispersión',
+                    procesos: [
+                        'Usa e interpreta las medidas de tendencia central (moda, media aritmética y mediana) y de dispersión (rango y la desviación media) de un conjunto de datos, y justifica con base en ellas sus decisiones.',
+                        'Identifica tendencias en los datos centrándose en sus valores representativos y sus variaciones.'
+                    ],
+                    sesiones: 12
+                },
+                {
+                    nombre: '12. Desafiando al Azar: Exploradores de la Probabilidad',
+                    contenido: 'Azar y probabilidad',
+                    procesos: [
+                        'Realiza experimentos aleatorios y registra los resultados en una tabla de frecuencia como la transición de la probabilidad frecuencial a la clásica.',
+                        'Analiza las características de la medición de probabilidad y su equivalencia y representación en números decimales, fraccionarios y porcentajes.'
+                    ],
+                    sesiones: 12
+                }
+            ]
+        }
+    ]
+};
+
 // ============================================================
 // DATOS OFICIALES SEP 2026-2027
 // ============================================================
@@ -1215,6 +1422,140 @@ function getTrimestreMonths(trimestre) {
 }
 
 // ============================================================
+// RENDERIZADO DE DOSIFICACIÓN
+// ============================================================
+function renderDosificacion() {
+    const container = document.getElementById('dosificacionContainer');
+    const data = DOSIFICACION_DATA;
+    
+    let html = `
+    <div style="overflow-x:auto;">
+        <table class="dosificacion-table">
+            <tr>
+                <td colspan="6" style="text-align:center; font-size:1.2rem; font-weight:700; background:var(--primary); color:white; padding:12px;">
+                    DOSIFICACIÓN Y JERARQUIZACIÓN ANUAL - MATEMÁTICAS II
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="background:var(--primary-light); padding:10px;">
+                    <strong>Nombre de la Escuela:</strong> ${data.schoolName}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="background:var(--primary-light); padding:10px;">
+                    <strong>Nombre del Docente:</strong> ${data.teacherName}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="background:var(--primary-light); padding:10px;">
+                    <strong>Grado y grupo:</strong> ${data.grade}
+                </td>
+                <td colspan="3" style="background:var(--primary-light); padding:10px;">
+                    <strong>Ciclo Escolar:</strong> ${data.cycle}
+                </td>
+            </tr>
+            <tr>
+                <th style="width:8%;">TRIMESTRE</th>
+                <th style="width:25%;">PROYECTO</th>
+                <th style="width:20%;">CONTENIDO</th>
+                <th style="width:35%;">PROCESOS DE DESARROLLO DE APRENDIZAJE</th>
+                <th style="width:7%;">SESIONES</th>
+            </tr>`;
+    
+    let totalSesiones = 0;
+    
+    for (const trim of data.trimestres) {
+        let firstRow = true;
+        for (const proyecto of trim.proyectos) {
+            totalSesiones += proyecto.sesiones;
+            const procesosHTML = proyecto.procesos.map(p => `• ${p}`).join('<br>');
+            const mesColSpan = firstRow ? `rowspan="${trim.proyectos.length}"` : '';
+            const trimLabel = firstRow ? `${trim.nombre}<br><span style="font-size:0.65rem; font-weight:normal;">${trim.meses}</span>` : '';
+            
+            html += `<tr>
+                ${firstRow ? `<td class="trimestre-cell" ${mesColSpan} style="vertical-align:middle;">${trimLabel}</td>` : ''}
+                <td class="proyecto-cell">${proyecto.nombre}</td>
+                <td>${proyecto.contenido}</td>
+                <td style="font-size:0.75rem;">${procesosHTML}</td>
+                <td class="sesiones-cell">${proyecto.sesiones}</td>
+            </tr>`;
+            firstRow = false;
+        }
+    }
+    
+    html += `
+        <tr>
+            <td colspan="5" style="text-align:right; font-weight:700; padding:10px; background:var(--primary-light);">
+                TOTAL DE SESIONES:
+            </td>
+            <td class="sesiones-cell" style="font-weight:700; font-size:1rem; background:var(--primary-light);">
+                ${totalSesiones}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="footer-cell" style="padding:12px;">
+                Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:12px; text-align:center;">
+                <strong>Elaboró</strong><br><br>
+                <span style="font-size:0.85rem;">${data.teacherName}</span><br>
+                <span style="font-size:0.7rem; color:var(--text-secondary);">Titular de Matemáticas ${data.grade}</span>
+            </td>
+            <td colspan="2" style="padding:12px; text-align:center;">
+                <strong>Revisó</strong><br><br>
+                <span style="font-size:0.85rem;">Subdirector Turno Mixto</span>
+            </td>
+            <td colspan="2" style="padding:12px; text-align:center;">
+                <strong>Vo. Bo.</strong><br><br>
+                <span style="font-size:0.85rem;">Profr. Melchor Sánchez Monjaraz</span><br>
+                <span style="font-size:0.7rem; color:var(--text-secondary);">Subdirector encargado de la dirección</span>
+            </td>
+        </tr>
+    </table>
+    </div>`;
+    
+    container.innerHTML = html;
+}
+
+function printDosificacion() {
+    const content = document.getElementById('dosificacionContainer');
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) {
+        showToast('⚠️ Permite ventanas emergentes para imprimir');
+        return;
+    }
+    const styles = document.querySelector('style').innerHTML;
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dosificación - Matemáticas II</title>
+            <style>
+                ${styles}
+                body { padding: 20px; background: white; }
+                .dosificacion-table { font-size: 0.75rem; }
+                .dosificacion-table td, .dosificacion-table th { padding: 6px 8px; }
+                .no-print { display: none !important; }
+                @media print {
+                    body { padding: 10px; }
+                    .dosificacion-table { font-size: 0.7rem; }
+                }
+            </style>
+        </head>
+        <body>
+            ${content.innerHTML}
+            <script>
+                window.print();
+            <\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+// ============================================================
 // ACTUALIZACIÓN DE INFORMACIÓN EN EL MODAL
 // ============================================================
 function updateFechaInfo() {
@@ -1322,7 +1663,7 @@ function confirmOverwrite() {
 }
 
 // ============================================================
-// RENDERIZADO DEL CRONOGRAMA - TEXTO EN TODAS LAS CELDAS
+// RENDERIZADO DEL CRONOGRAMA
 // ============================================================
 function renderCronograma() {
     const container = document.getElementById('cronogramaContainer');
@@ -1398,7 +1739,6 @@ function renderCronograma() {
                     let projectDaysArray = [];
                     
                     if (acts.length > 0) {
-                        // Verificar si es proyecto (tiene texto) o evento oficial (solo color)
                         const projectAct = acts.find(a => isProject(a.type));
                         if (projectAct) {
                             isProjectCell = true;
@@ -1406,7 +1746,6 @@ function renderCronograma() {
                             projectName = projectAct.activity;
                             typeClass = 'proyecto';
                             
-                            // Obtener todas las celdas del proyecto
                             projectDaysArray = activities.filter(a => {
                                 const gradesAct = getGradesForActivity(a.grade);
                                 return gradesAct.includes(grade) && 
@@ -1417,7 +1756,6 @@ function renderCronograma() {
                             
                             totalProjectDays = projectDaysArray.length;
                             
-                            // Encontrar la posición del día actual en el proyecto
                             const dayIndex = projectDaysArray.findIndex(a => a.day === day);
                             const isFirst = dayIndex === 0;
                             const isLast = dayIndex === totalProjectDays - 1;
@@ -1426,8 +1764,6 @@ function renderCronograma() {
                             isEnd = isLast;
                             isMiddle = !isFirst && !isLast;
                             
-                            // El texto se muestra en TODAS las celdas del proyecto
-                            // con tamaño de fuente ajustado según la duración
                             if (totalProjectDays === 1) {
                                 typeClass = 'proyecto proyecto-single';
                                 projectText = projectName;
@@ -1444,16 +1780,14 @@ function renderCronograma() {
                             
                             content = projectText;
                         } else {
-                            // Evento oficial - solo color, sin texto
                             const act = acts[0];
                             isOfficial = true;
                             isProjectCell = false;
                             typeClass = act.type || 'normal';
-                            content = ''; // No mostrar texto para eventos oficiales
+                            content = '';
                         }
                     }
                     
-                    // Determinar clases CSS
                     let proyectoClass = '';
                     let colorOnlyClass = '';
                     let displayContent = '';
@@ -1470,7 +1804,6 @@ function renderCronograma() {
                             <div class="proyecto-text ${typeClass}">${displayContent}</div>
                         </div>`;
                     } else if (isOfficial) {
-                        // Evento oficial - solo color, sin texto
                         colorOnlyClass = 'color-only';
                         const selectClass = isSelected ? 'selected' : '';
                         const weekendClass = weekend ? 'weekend' : '';
@@ -1480,7 +1813,6 @@ function renderCronograma() {
                             <div class="activity ${typeClass} filled"></div>
                         </div>`;
                     } else {
-                        // Celda vacía o fin de semana
                         const selectClass = isSelected ? 'selected' : '';
                         const weekendClass = weekend ? 'weekend' : '';
                         const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
@@ -2603,6 +2935,7 @@ function exportJSON() {
     const data = { 
         activities: activities,
         config: config,
+        dosificacion: DOSIFICACION_DATA,
         exportedAt: new Date().toISOString()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2660,6 +2993,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
         document.getElementById(`tab-${tabId}`).classList.add('active');
         if (tabId === 'cronograma') renderCronograma();
+        if (tabId === 'dosificacion') renderDosificacion();
         if (tabId === 'config') {
             document.getElementById('schoolName').value = config.schoolName || '';
             document.getElementById('schoolCycle').value = config.schoolCycle || '';
@@ -2721,6 +3055,7 @@ function showToast(message) {
 // ============================================================
 loadData();
 renderCronograma();
+renderDosificacion();
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { 
