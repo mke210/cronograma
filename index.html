@@ -208,7 +208,6 @@
             background: rgba(255, 107, 107, 0.15);
         }
         
-        /* Celdas de proyectos con texto distribuido en TODAS las celdas */
         .grid-cell.proyecto-cell {
             background: var(--color-proyecto);
             color: white;
@@ -231,7 +230,6 @@
             line-height: 1.2;
             color: white;
         }
-        /* Texto más grande para proyectos de una sola celda */
         .grid-cell.proyecto-cell.proyecto-single .proyecto-text {
             font-size: 0.8rem;
         }
@@ -257,7 +255,6 @@
             border-radius: 3px;
         }
 
-        /* Celdas con solo color - relleno completo */
         .grid-cell.color-only {
             cursor: pointer;
             min-height: 26px;
@@ -364,7 +361,6 @@
             z-index: 10;
         }
 
-        /* Colores para eventos oficiales - con relleno completo */
         .grid-cell .activity.inicio-clases { background: var(--color-inicio); color: transparent; }
         .grid-cell .activity.receso-vacaciones { background: var(--color-vacacion); color: transparent; }
         .grid-cell .activity.festivo-suspension { background: var(--color-festivo); color: transparent; }
@@ -643,11 +639,17 @@
             padding: 6px 10px;
         }
 
-        /* Estilos para la pestaña Dosificación */
+        /* ============================================================
+           ESTILOS PARA DOSIFICACIÓN EDITABLE
+           ============================================================ */
+        .dosificacion-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
         .dosificacion-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             background: var(--card-bg);
             border-radius: 8px;
             overflow: hidden;
@@ -655,7 +657,7 @@
         .dosificacion-table th,
         .dosificacion-table td {
             border: 1px solid var(--border);
-            padding: 8px 10px;
+            padding: 6px 8px;
             text-align: left;
             vertical-align: top;
         }
@@ -675,6 +677,7 @@
             text-align: center;
             background: var(--primary-light);
             color: var(--primary-dark);
+            vertical-align: middle;
         }
         .dosificacion-table .proyecto-cell {
             font-weight: 600;
@@ -685,13 +688,104 @@
             font-weight: 600;
         }
         .dosificacion-table .meses-cell {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
         }
         .dosificacion-table .footer-cell {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
+        }
+        .dosificacion-table .total-cell {
+            text-align: right;
+            font-weight: 700;
+            padding: 10px;
+            background: var(--primary-light);
+        }
+        .dosificacion-table .total-sesiones-cell {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            background: var(--primary-light);
+        }
+        .dosificacion-table .signature-cell {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .dosificacion-table .signature-cell strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .dosificacion-table .signature-cell .signature-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .dosificacion-table .signature-cell .signature-title {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        /* Campos editables dentro de la tabla */
+        .dosificacion-table .editable-input,
+        .dosificacion-table .editable-textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            resize: vertical;
+            min-height: 24px;
+        }
+        .dosificacion-table .editable-input:focus,
+        .dosificacion-table .editable-textarea:focus {
+            outline: none;
+            background: var(--primary-light);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .dosificacion-table .editable-input:hover,
+        .dosificacion-table .editable-textarea:hover {
+            background: rgba(0,70,127,0.05);
+        }
+        .dosificacion-table .editable-textarea {
+            line-height: 1.4;
+            min-height: 40px;
+        }
+        .dosificacion-table .editable-input.proyecto-input {
+            font-weight: 600;
+            color: var(--color-proyecto);
+        }
+        .dosificacion-table .editable-input.sesiones-input {
+            text-align: center;
+            font-weight: 600;
+            width: 50px;
+            margin: 0 auto;
+        }
+
+        /* Selector de grado en dosificación */
+        .dosificacion-grade-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .dosificacion-grade-selector select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        .dosificacion-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         @media print {
@@ -732,9 +826,17 @@
                 padding-top: 10px;
                 border-top: 1px solid #ddd;
             }
-            .dosificacion-table { font-size: 0.7rem; }
+            .dosificacion-table { font-size: 0.65rem; }
             .dosificacion-table th,
             .dosificacion-table td { padding: 4px 6px; }
+            .dosificacion-table .editable-input,
+            .dosificacion-table .editable-textarea {
+                background: transparent !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .dosificacion-grade-selector { display: none !important; }
+            .dosificacion-actions .btn { display: none !important; }
         }
 
         @media (max-width: 768px) {
@@ -753,17 +855,17 @@
             .form-row-3 { grid-template-columns: 1fr; }
             .move-options { grid-template-columns: 1fr; }
             .search-result-item { flex-direction: column; align-items: flex-start; }
-            .dosificacion-table { font-size: 0.65rem; }
+            .dosificacion-table { font-size: 0.6rem; }
             .dosificacion-table th,
-            .dosificacion-table td { padding: 4px 6px; }
+            .dosificacion-table td { padding: 3px 4px; }
         }
         @media (max-width: 480px) {
             .header-title h1 { font-size: 1rem; }
             .cronograma-grid { min-width: 700px; grid-template-columns: 35px repeat(31, 1fr); }
             .modal { padding: 16px; }
-            .dosificacion-table { font-size: 0.55rem; }
+            .dosificacion-table { font-size: 0.5rem; }
             .dosificacion-table th,
-            .dosificacion-table td { padding: 2px 4px; }
+            .dosificacion-table td { padding: 2px 3px; }
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -795,6 +897,9 @@
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
     </nav>
 
+    <!-- ============================================================
+    PESTAÑA CRONOGRAMA
+    ============================================================ -->
     <div class="tab-content active" id="tab-cronograma">
         <div class="card">
             <div class="card-header">
@@ -835,19 +940,35 @@
         </div>
     </div>
 
-    <!-- PESTAÑA DOSIFICACIÓN -->
+    <!-- ============================================================
+    PESTAÑA DOSIFICACIÓN - COMPLETAMENTE EDITABLE
+    ============================================================ -->
     <div class="tab-content" id="tab-dosificacion">
         <div class="card">
             <div class="card-header">
-                <span class="card-title">📋 Dosificación y Jerarquización Anual - Matemáticas II</span>
-                <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
+                <span class="card-title">📋 Dosificación y Jerarquización Anual - Informática</span>
+                <div class="dosificacion-actions">
+                    <div class="dosificacion-grade-selector">
+                        <label style="font-size:0.85rem; color:var(--text-secondary);">Grado:</label>
+                        <select id="dosificacionGrade" onchange="renderDosificacion()">
+                            <option value="1">1º Secundaria</option>
+                            <option value="2">2º Secundaria</option>
+                            <option value="3">3º Secundaria</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success btn-sm" onclick="saveDosificacion()">💾 Guardar</button>
+                    <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
+                </div>
             </div>
-            <div id="dosificacionContainer">
+            <div id="dosificacionContainer" class="dosificacion-container">
                 <!-- Generado por JavaScript -->
             </div>
         </div>
     </div>
 
+    <!-- ============================================================
+    PESTAÑA EDITOR
+    ============================================================ -->
     <div class="tab-content" id="tab-editor">
         <div class="card">
             <div class="card-header">
@@ -929,6 +1050,9 @@
         </div>
     </div>
 
+    <!-- ============================================================
+    PESTAÑA CONFIGURACIÓN
+    ============================================================ -->
     <div class="tab-content" id="tab-config">
         <div class="card">
             <div class="card-header">
@@ -974,6 +1098,9 @@
         </div>
     </div>
 
+    <!-- ============================================================
+    PESTAÑA EXPORTAR
+    ============================================================ -->
     <div class="tab-content" id="tab-export">
         <div class="card">
             <div class="card-header">
@@ -1118,136 +1245,126 @@
 </script>
 <script>
 // ============================================================
-// DATOS DE DOSIFICACIÓN - MATEMÁTICAS II
+// DATOS DE DOSIFICACIÓN - INFORMÁTICA (COMPLETOS)
 // ============================================================
 const DOSIFICACION_DATA = {
-    schoolName: 'Esc. Sec. Gral. "21 DE NOVIEMBRE"',
-    teacherName: 'Mtra. Ishelt González Pineda',
-    grade: '2° "H", "I"',
-    cycle: '2025 - 2026',
-    trimestres: [
-        {
-            nombre: 'I',
-            meses: 'SEPTIEMBRE - OCTUBRE - NOVIEMBRE',
-            proyectos: [
-                {
-                    nombre: '1. Descifrando los Secretos de los Números.',
-                    contenido: 'Extensión del significado de las operaciones y sus relaciones inversas.',
-                    procesos: [
-                        'Usa criterios de divisibilidad y números primos al resolver problemas que implican calcular el máximo común divisor y mínimo común múltiplo.',
-                        'Calcula potencias con exponente entero y la raíz cuadrada. Usa la notación científica al realizar cálculos con cantidades muy grandes o muy pequeñas.'
-                    ],
-                    sesiones: 13
-                },
-                {
-                    nombre: '2. Patrones Cuadráticos: Descubriendo la Magia de las Secuencias',
-                    contenido: 'Regularidades y Patrones',
-                    procesos: [
-                        'Representa algebraicamente una sucesión con progresión cuadrática de figuras y números'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '3. Álgebra en Acción: Descifrando Áreas y Potencias',
-                    contenido: 'Introducción al álgebra',
-                    procesos: [
-                        'Representa algebraicamente áreas que generan una expresión cuadrática.',
-                        'Identifica y usa las propiedades de los exponentes al resolver distintas operaciones algebraicas.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '4. Ecuaciones en Equilibrio: Resolviendo Desigualdades y Sistemas',
-                    contenido: 'Ecuaciones lineales y cuadráticas',
-                    procesos: [
-                        'Resuelve desigualdades con expresiones algebraicas. Modela y soluciona sistemas de dos ecuaciones lineales con dos incógnitas por algún método para dar respuesta a un problema.'
-                    ],
-                    sesiones: 12
-                }
-            ]
-        },
-        {
-            nombre: 'II',
-            meses: 'DICIEMBRE - ENERO - FEBRERO - MARZO',
-            proyectos: [
-                {
-                    nombre: '5. Proporciones en Movimiento: Explorando la Proporcionalidad Inversa',
-                    contenido: 'Funciones',
-                    procesos: [
-                        'Relaciona e interpreta la proporcionalidad inversa de dos magnitudes o cantidades, además usa una tabla, gráfica o representación algebraica en diversos contextos.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '6. Ángulos en Acción: Construyendo el Mundo a Escala',
-                    contenido: 'Rectas y ángulos',
-                    procesos: [
-                        'Identifica y usa las relaciones entre los ángulos, lados y diagonales para construir a escala triángulos, cuadriláteros y polígonos regulares o irregulares.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '7. Teselados y Polígonos: El Arte de la Geometría',
-                    contenido: 'Construcción y propiedades de las figuras planas y cuerpos',
-                    procesos: [
-                        'Construye con regla y compás polígonos regulares con distinta información.',
-                        'Identifica y usa las relaciones entre figuras en la construcción de teselados.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '8. Círculos Heroicos: Geometría en el Mundo de los Superhéroes',
-                    contenido: 'Circunferencia, círculo y esfera.',
-                    procesos: [
-                        'Determina la medida de ángulos inscritos y centrales, así como de arcos de circunferencia.',
-                        'Explora las intersecciones entre círculos y figuras al calcular perímetros y áreas.'
-                    ],
-                    sesiones: 12
-                }
-            ]
-        },
-        {
-            nombre: 'III',
-            meses: 'MARZO - ABRIL - MAYO - JUNIO - JULIO',
-            proyectos: [
-                {
-                    nombre: '9. Arquitectos del Futuro: Diseñando la Ciudad Sostenible',
-                    contenido: 'Medición y cálculo en diferentes contextos',
-                    procesos: [
-                        'Resuelve problemas que implican conversiones en múltiplos y submúltiplos del metro, litro, kilogramo y de unidades del sistema inglés (yarda, pulgada, galón, onza y libra).',
-                        'Utiliza estrategias diversas para determinar el perímetro y el área de figuras compuestas.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '10. Analistas del Clima: Descifrando Patrones Meteorológicos',
-                    contenido: 'Obtención y representación de información',
-                    procesos: [
-                        'Recolecta, registra, lee y comunica información mediante histogramas, gráficas poligonales y de línea.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '11. Detectives de Datos: Revelando Patrones en Nuestra Comunidad',
-                    contenido: 'Interpretación de la información a través de medidas de tendencia central y de dispersión',
-                    procesos: [
-                        'Usa e interpreta las medidas de tendencia central (moda, media aritmética y mediana) y de dispersión (rango y la desviación media) de un conjunto de datos, y justifica con base en ellas sus decisiones.',
-                        'Identifica tendencias en los datos centrándose en sus valores representativos y sus variaciones.'
-                    ],
-                    sesiones: 12
-                },
-                {
-                    nombre: '12. Desafiando al Azar: Exploradores de la Probabilidad',
-                    contenido: 'Azar y probabilidad',
-                    procesos: [
-                        'Realiza experimentos aleatorios y registra los resultados en una tabla de frecuencia como la transición de la probabilidad frecuencial a la clásica.',
-                        'Analiza las características de la medición de probabilidad y su equivalencia y representación en números decimales, fraccionarios y porcentajes.'
-                    ],
-                    sesiones: 12
-                }
-            ]
-        }
-    ]
+    1: {
+        titulo: 'DOSIFICACIÓN Y JERARQUIZACIÓN ANUAL DE INFORMÁTICA I (1.º GRADO)',
+        escuela: 'Esc. Sec. Gral. "21 DE NOVIEMBRE"',
+        docente: 'Profr. José Emmanuel Chan Ibáñez',
+        grado: '1.º Año',
+        ciclo: '2025 – 2026',
+        trimestres: [
+            {
+                nombre: 'I',
+                meses: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
+                proyectos: [
+                    { nombre: '1. Primeros Pasos Digitales: Encendido, Hardware y Sistema Operativo', contenido: 'Herramientas, máquinas e instrumentos como extensión corporal.', pda: 'Explora las partes fundamentales del equipo de cómputo (hardware/software), aprende las técnicas adecuadas de encendido, apagado y cuidado de los dispositivos informáticos, e interactúa con la interfaz del sistema operativo.', sesiones: 13 },
+                    { nombre: '2. Mi Primer Documento Digital: Formato de Texto en Word', contenido: 'Comunicación y representación técnica.', pda: 'Utiliza procesadores de texto para redactar, dar formato (fuente, alineación, interlineado) y organizar documentos básicos que expresen ideas o proyectos escolares de manera clara y estructurada.', sesiones: 12 },
+                    { nombre: '3. Diseñando con Algoritmos: Diagramas de Flujo y Lógica', contenido: 'Pensamiento estratégico y creativo en la resolución de problemas.', pda: 'Comprende el concepto de algoritmo y representa procesos lógicos sencillos a través de diagramas de flujo para resolver problemas cotidianos e informáticos.', sesiones: 12 },
+                    { nombre: '4. Ciudadanía Digital Responsable: Navegación Segura en Internet', contenido: 'Factores que inciden en los procesos técnicos y el uso de la tecnología.', pda: 'Investiga y analiza las normas de seguridad digital, navegación ética en la red, protección de datos personales y prevención de riesgos en entornos virtuales.', sesiones: 12 }
+                ]
+            },
+            {
+                nombre: 'II',
+                meses: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
+                proyectos: [
+                    { nombre: '5. Organizadores Visuales: Creación de Presentaciones Electrónicas', contenido: 'Comunicación y representación técnica para la divulgación de saberes.', pda: 'Diseña presentaciones diapositiva por diapositiva integrando texto, imágenes y tablas para exponer temas escolares, seleccionando recursos tipográficos y visuales pertinentes.', sesiones: 12 },
+                    { nombre: '6. Mi Primera Hoja de Cálculo: Tablas y Operaciones Básicas', contenido: 'Herramientas y tecnologías de la información para el cálculo y organización.', pda: 'Emplea hojas de cálculo para ingresar, ordenar y dar formato a datos, aplicando fórmulas matemáticas básicas (suma, promedio, resta) en situaciones cotidianas.', sesiones: 12 },
+                    { nombre: '7. Introducción al Dibujo y Diseño Vectorial Técnico', contenido: 'Materiales, procesos técnicos y representación gráfica digital.', pda: 'Utiliza software informático de diseño y edición de imágenes básicas para elaborar representaciones gráficas, logotipos e esquemas técnicos simples.', sesiones: 12 },
+                    { nombre: '8. Automatización Sencilla: Mi Primer Algoritmo en Bloques', contenido: 'Pensamiento computacional y lógica de programación.', pda: 'Construye secuencias de instrucciones empleando plataformas de programación por bloques (como Scratch) para animar personajes o resolver retos estructurados.', sesiones: 12 }
+                ]
+            },
+            {
+                nombre: 'III',
+                meses: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO',
+                proyectos: [
+                    { nombre: '9. Explorando el Ciberespacio: Búsqueda y Evaluación de Información', contenido: 'Evaluación de sistemas informáticos y fuentes de información.', pda: 'Aplica criterios éticos y técnicos para buscar, seleccionar, filtrar y citar información verídica en buscadores web académicos y bases de datos.', sesiones: 12 },
+                    { nombre: '10. Edición Multimedia: Creación de Banners y Gráficos Visuales', contenido: 'Procesos técnicos de comunicación visual y diseño.', pda: 'Produce material gráfico digital publicitario o informativo (banners, carteles) aplicando principios de diseño, combinación de colores y edición de imágenes.', sesiones: 12 },
+                    { nombre: '11. Mantenimiento Preventivo Básico del Equipo de Cómputo', contenido: 'Mantenimiento, cuidado y conservación de sistemas técnicos.', pda: 'Reconoce la importancia del cuidado físico y lógico de las computadoras, aplicando normas de higiene, limpieza de periféricos y uso seguro de memorias de almacenamiento.', sesiones: 12 },
+                    { nombre: '12. Proyecto Integrador: Mi Bitácora Escolar Digital', contenido: 'Usos e implicaciones de la tecnología en la comunidad.', pda: 'Consolida las herramientas del ciclo escolar (procesador de texto, imágenes y hoja de cálculo) para crear una bitácora o reporte digital con solución a un problema comunitario.', sesiones: 12 }
+                ]
+            }
+        ]
+    },
+    2: {
+        titulo: 'DOSIFICACIÓN Y JERARQUIZACIÓN ANUAL DE INFORMÁTICA II (2.º GRADO)',
+        escuela: 'Esc. Sec. Gral. "21 DE NOVIEMBRE"',
+        docente: 'Profr. José Emmanuel Chan Ibáñez',
+        grado: '2.º Año',
+        ciclo: '2025 – 2026',
+        trimestres: [
+            {
+                nombre: 'I',
+                meses: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
+                proyectos: [
+                    { nombre: '1. Procesamiento Avanzado de Documentos e Informes Técnicos', contenido: 'Comunicación y representación técnica en documentos complejos.', pda: 'Integra tablas avanzadas, combinaciones de correspondencia, estilos, índices automáticos y encabezados organizados en procesadores de texto para la elaboración de reportes técnicos.', sesiones: 13 },
+                    { nombre: '2. Gestión de Datos y Funciones Condicionales en Excel', contenido: 'Procesamiento informático y análisis de información cuantitativa.', pda: 'Utiliza funciones lógicas y matemáticas en hojas de cálculo (SI, BUSCARV, promedios ponderados) y genera gráficos estadísticos para analizar datos del entorno escolar o social.', sesiones: 12 },
+                    { nombre: '3. Programación Estructurada y Variables con Bloques', contenido: 'Pensamiento computacional y desarrollo de algoritmos informáticos.', pda: 'Desarrolla programas empleando variables, condicionales (si... entonces) y bucles para resolver problemas matemáticos y simulaciones informáticas interactivas.', sesiones: 12 },
+                    { nombre: '4. Estructura Física e Interna de la Computadora (Hardware Interno)', contenido: 'Componentes, estructura y funcionamiento de los sistemas informáticos.', pda: 'Identifica el funcionamiento de los componentes internos (tarjeta madre, procesador, memoria RAM, disco duro) y comprende la arquitectura básica de un equipo de cómputo.', sesiones: 12 }
+                ]
+            },
+            {
+                nombre: 'II',
+                meses: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
+                proyectos: [
+                    { nombre: '5. Redes de Computadoras y Comunicación Digital', contenido: 'Infraestructura de redes, conectividad y transmisión de datos.', pda: 'Explora la topología de redes de computadoras (LAN, WAN, Wi-Fi), los protocolos de comunicación e identifica los elementos necesarios para compartir recursos e información.', sesiones: 12 },
+                    { nombre: '6. Edición Digital de Fotografía y Diseño Institucional', contenido: 'Representación técnica y uso de software de diseño vectorial y bitmap.', pda: 'Aplica herramientas avanzadas de edición gráfica digital para retocar fotos, diseñar credenciales, banners y logotipos informativos con estándares de precisión técnica.', sesiones: 12 },
+                    { nombre: '7. Construcción de Páginas Web Estáticas (Fundamentos HTML)', contenido: 'Lenguajes de marcación y herramientas de desarrollo web.', pda: 'Comprende la estructura básica de una página web utilizando etiquetas HTML para organizar textos, imágenes, enlaces y listas en un sitio informativo simple.', sesiones: 12 },
+                    { nombre: '8. Edición de Audio y Locución: Proyecto de Podcast Escolar', contenido: 'Tecnologías de audio digital y medios interactivos de comunicación.', pda: 'Captura, edita y procesa archivos de audio digital (eliminación de ruido, cortes, mezcla de pistas) para la producción y publicación de un podcast educativo.', sesiones: 12 }
+                ]
+            },
+            {
+                nombre: 'III',
+                meses: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO',
+                proyectos: [
+                    { nombre: '9. Mantenimiento Preventivo y Correctivo Sólido del Sistema', contenido: 'Evaluación y mantenimiento de sistemas tecnológicos.', pda: 'Ejecuta tareas de optimización de sistemas operativos (desfragmentación, limpieza de archivos temporales, instalación de programas y antivirus) para mantener los equipos eficientes.', sesiones: 12 },
+                    { nombre: '10. Principios de Electrónica Digital y Circuitos Básicos', contenido: 'Procesos informáticos, energía y control en sistemas tecnológicos.', pda: 'Conoce los principios fundamentales de la electrónica (voltaje, corriente, resistencia, leds) y simula circuitos digitales sencillos para la automatización de procesos.', sesiones: 12 },
+                    { nombre: '11. Herramientas de Inteligencia Artificial para la Investigación', contenido: 'Uso ético y práctico de la Inteligencia Artificial en la sociedad.', pda: 'Explora herramientas de IA para la búsqueda de información, síntesis de textos y generación de ideas, evaluando sus aportes, limitaciones y dilemas éticos.', sesiones: 12 },
+                    { nombre: '12. Proyecto Comunitario: Desarrollo de un Portal Web Escolar', contenido: 'Innovación técnica y desarrollo de proyectos comunitarios.', pda: 'Colabora en el diseño y publicación de un sitio web integrador que solucione una necesidad de difusión o gestión de datos dentro del contexto escolar.', sesiones: 12 }
+                ]
+            }
+        ]
+    },
+    3: {
+        titulo: 'DOSIFICACIÓN Y JERARQUIZACIÓN ANUAL DE INFORMÁTICA III (3.º GRADO)',
+        escuela: 'Esc. Sec. Gral. "21 DE NOVIEMBRE"',
+        docente: 'Profr. José Emmanuel Chan Ibáñez',
+        grado: '3.º Año',
+        ciclo: '2025 – 2026',
+        trimestres: [
+            {
+                nombre: 'I',
+                meses: 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE',
+                proyectos: [
+                    { nombre: '1. Lógica de Programación e Introducción a Lenguajes de Código', contenido: 'Lenguajes de programación y pensamiento computacional avanzado.', pda: 'Traduce diagramas de flujo a código en lenguajes de programación (como Python o JavaScript), utilizando sintaxis formal, funciones y estructuras de control.', sesiones: 13 },
+                    { nombre: '2. Diseño Web Interactivo: Maquetación con HTML5 y CSS3', contenido: 'Desarrollo web responsive e interfaces de usuario.', pda: 'Diseña y personaliza sitios web adaptativos empleando CSS para dar estilos, colores, tipografías y maquetación profesional a la estructura HTML5.', sesiones: 12 },
+                    { nombre: '3. Bases de Datos: Estructuración y Consultas Básicas', contenido: 'Sistemas de gestión de bases de datos e información masiva.', pda: 'Diseña tablas, define campos y claves primarias, y realiza consultas sencillas para organizar, buscar y gestionar información en bases de datos relacionales.', sesiones: 12 },
+                    { nombre: '4. Diagnóstico de Fallas Físicas y Reparación de Laptops', contenido: 'Mantenimiento correctivo y diagnóstico en hardware informático.', pda: 'Diagnostica problemas comunes en laptops y computadoras de escritorio (pantalla, almacenamiento, sobrecalentamiento) y aplica procedimientos de ensamblado e higienización técnica.', sesiones: 12 }
+                ]
+            },
+            {
+                nombre: 'II',
+                meses: 'DICIEMBRE<br>ENERO<br>FEBRERO<br>MARZO',
+                proyectos: [
+                    { nombre: '5. Programación Web Dinámica e Interacción con el Usuario', contenido: 'Desarrollo de aplicaciones web cliente-servidor.', pda: 'Incorpora scripts interactivos que respondan a eventos del usuario (botones, formularios, validación de datos) para crear aplicaciones web funcionales.', sesiones: 12 },
+                    { nombre: '6. Robótica Educativa y Microcontroladores (Arduino)', contenido: 'Integración de programación, electrónica y robótica.', pda: 'Programa microcontroladores para interactuar con sensores (luz, temperatura, distancia) y actuadores (motores, leds), automatizando un prototipo físico.', sesiones: 12 },
+                    { nombre: '7. Seguridad Informática, Criptografía y Protección de Redes', contenido: 'Ciberseguridad, encriptación y mitigación de vulnerabilidades.', pda: 'Analiza los tipos de malware, ataques informáticos comunes y aplica técnicas de encriptación, contraseñas seguras y configuración de cortafuegos para proteger sistemas.', sesiones: 12 },
+                    { nombre: '8. Edición de Video y Producción Audiovisual Digital', contenido: 'Lenguaje audiovisual, edición digital y difusión multimedia.', pda: 'Produce, edita y exporta videos educativos con efectos, transiciones y pistas de audio, optimizando los formatos para plataformas de difusión en internet.', sesiones: 12 }
+                ]
+            },
+            {
+                nombre: 'III',
+                meses: 'MARZO<br>ABRIL<br>MAYO<br>JUNIO<br>JULIO',
+                proyectos: [
+                    { nombre: '9. Modelado 3D e Impresión Digital para Proyectos', contenido: 'Sistemas CAD (Diseño Asistido por Computadora) y manufactura digital.', pda: 'Diseña objetos y piezas tridimensionales mediante software de modelado 3D, preparando los archivos para simulación o fabricación digital.', sesiones: 12 },
+                    { nombre: '10. Aplicación de Inteligencia Artificial y Automatización', contenido: 'Automatización de procesos e Inteligencia Artificial en proyectos.', pda: 'Integra modelos de IA (procesamiento de lenguaje o visión por computadora) e instrumentos de automatización para resolver tareas repetitivas o analizar datos.', sesiones: 12 },
+                    { nombre: '11. Diagnóstico, Mantenimiento y Liberación de Telefónica Celular', contenido: 'Sistemas operativos móviles, arquitectura y soporte técnico.', pda: 'Reconoce los componentes de la tecnología móvil, métodos de respaldo de software, restauración del sistema operativo y mantenimiento preventivo en dispositivos móviles.', sesiones: 12 },
+                    { nombre: '12. Proyecto Integrador de Innovación Tecnológica Escolar', contenido: 'Innovación técnica, desarrollo sustentable y evaluación de proyectos.', pda: 'Desarrolla un sistema o prototipo tecnológico integral (sitio web, app, o sistema automatizado) que dé respuesta a un problema social, productivo o educativo de la comunidad.', sesiones: 12 }
+                ]
+            }
+        ]
+    }
 };
 
 // ============================================================
@@ -1298,6 +1415,7 @@ let editingIndex = -1;
 let selectedCells = [];
 let editingProject = null;
 let selectedSearchActivity = null;
+let dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
 
 function loadData() {
     const saved = localStorage.getItem('cronograma_activities');
@@ -1314,6 +1432,12 @@ function loadData() {
         catch(e) { config = JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
     } else {
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    }
+
+    const savedDosificacion = localStorage.getItem('cronograma_dosificacion');
+    if (savedDosificacion) {
+        try { dosificacionData = JSON.parse(savedDosificacion); } 
+        catch(e) { dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA)); }
     }
 
     applyTheme(config.theme || 'light');
@@ -1353,9 +1477,12 @@ function resetData() {
     if (confirm('¿Restaurar datos de fábrica?')) {
         activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS));
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
         saveActivities();
         saveConfig();
+        localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
         renderCronograma();
+        renderDosificacion();
         showToast('🔄 Datos restaurados');
     }
 }
@@ -1422,62 +1549,106 @@ function getTrimestreMonths(trimestre) {
 }
 
 // ============================================================
-// RENDERIZADO DE DOSIFICACIÓN
+// RENDERIZADO DE DOSIFICACIÓN - COMPLETAMENTE EDITABLE
 // ============================================================
 function renderDosificacion() {
     const container = document.getElementById('dosificacionContainer');
-    const data = DOSIFICACION_DATA;
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
+    
+    if (!data) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-secondary);">No hay datos para este grado</div>';
+        return;
+    }
     
     let html = `
-    <div style="overflow-x:auto;">
-        <table class="dosificacion-table">
-            <tr>
-                <td colspan="6" style="text-align:center; font-size:1.2rem; font-weight:700; background:var(--primary); color:white; padding:12px;">
-                    DOSIFICACIÓN Y JERARQUIZACIÓN ANUAL - MATEMÁTICAS II
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6" style="background:var(--primary-light); padding:10px;">
-                    <strong>Nombre de la Escuela:</strong> ${data.schoolName}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6" style="background:var(--primary-light); padding:10px;">
-                    <strong>Nombre del Docente:</strong> ${data.teacherName}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" style="background:var(--primary-light); padding:10px;">
-                    <strong>Grado y grupo:</strong> ${data.grade}
-                </td>
-                <td colspan="3" style="background:var(--primary-light); padding:10px;">
-                    <strong>Ciclo Escolar:</strong> ${data.cycle}
-                </td>
-            </tr>
-            <tr>
-                <th style="width:8%;">TRIMESTRE</th>
-                <th style="width:25%;">PROYECTO</th>
-                <th style="width:20%;">CONTENIDO</th>
-                <th style="width:35%;">PROCESOS DE DESARROLLO DE APRENDIZAJE</th>
-                <th style="width:7%;">SESIONES</th>
-            </tr>`;
+    <table class="dosificacion-table">
+        <tr>
+            <td colspan="6" style="text-align:center; font-size:1.1rem; font-weight:700; background:var(--primary); color:white; padding:12px;">
+                ${data.titulo}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" style="background:var(--primary-light); padding:8px 10px;">
+                <strong>Nombre de la Escuela:</strong>
+                <input type="text" class="editable-input" value="${data.escuela}" 
+                       onchange="updateDosificacionField(${grade}, 'escuela', this.value)" 
+                       style="width:60%; font-weight:normal;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" style="background:var(--primary-light); padding:8px 10px;">
+                <strong>Nombre del Docente:</strong>
+                <input type="text" class="editable-input" value="${data.docente}" 
+                       onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
+                       style="width:60%; font-weight:normal;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="background:var(--primary-light); padding:8px 10px;">
+                <strong>Grado y Grupo:</strong>
+                <input type="text" class="editable-input" value="${data.grado}" 
+                       onchange="updateDosificacionField(${grade}, 'grado', this.value)" 
+                       style="width:50%; font-weight:normal;">
+            </td>
+            <td colspan="3" style="background:var(--primary-light); padding:8px 10px;">
+                <strong>Ciclo Escolar:</strong>
+                <input type="text" class="editable-input" value="${data.ciclo}" 
+                       onchange="updateDosificacionField(${grade}, 'ciclo', this.value)" 
+                       style="width:40%; font-weight:normal;">
+            </td>
+        </tr>
+        <tr>
+            <th style="width:8%;">TRIMESTRE</th>
+            <th style="width:10%;">MESES</th>
+            <th style="width:22%;">PROYECTO</th>
+            <th style="width:18%;">CONTENIDO</th>
+            <th style="width:32%;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
+            <th style="width:7%;">SESIONES</th>
+        </tr>`;
     
     let totalSesiones = 0;
+    let trimCount = 0;
     
     for (const trim of data.trimestres) {
+        trimCount++;
         let firstRow = true;
+        const mesesValue = trim.meses || 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE';
+        
         for (const proyecto of trim.proyectos) {
             totalSesiones += proyecto.sesiones;
-            const procesosHTML = proyecto.procesos.map(p => `• ${p}`).join('<br>');
-            const mesColSpan = firstRow ? `rowspan="${trim.proyectos.length}"` : '';
-            const trimLabel = firstRow ? `${trim.nombre}<br><span style="font-size:0.65rem; font-weight:normal;">${trim.meses}</span>` : '';
+            const rowspan = firstRow ? trim.proyectos.length : 1;
             
             html += `<tr>
-                ${firstRow ? `<td class="trimestre-cell" ${mesColSpan} style="vertical-align:middle;">${trimLabel}</td>` : ''}
-                <td class="proyecto-cell">${proyecto.nombre}</td>
-                <td>${proyecto.contenido}</td>
-                <td style="font-size:0.75rem;">${procesosHTML}</td>
-                <td class="sesiones-cell">${proyecto.sesiones}</td>
+                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
+                    ${trim.nombre}
+                    <div style="font-size:0.65rem; font-weight:normal; margin-top:4px;">
+                        <textarea class="editable-textarea" 
+                                  onchange="updateDosificacionTrimestre(${grade}, ${trimCount-1}, 'meses', this.value)" 
+                                  style="width:100%; min-height:60px; font-size:0.6rem; text-align:center;">${mesesValue.replace(/<br>/g, '\n')}</textarea>
+                    </div>
+                </td>` : ''}
+                <td>
+                    <textarea class="editable-textarea" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'nombre', this.value)" 
+                              style="width:100%; min-height:40px; font-weight:600; color:var(--color-proyecto);">${proyecto.nombre}</textarea>
+                </td>
+                <td>
+                    <textarea class="editable-textarea" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'contenido', this.value)" 
+                              style="width:100%; min-height:40px;">${proyecto.contenido}</textarea>
+                </td>
+                <td>
+                    <textarea class="editable-textarea" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'pda', this.value)" 
+                              style="width:100%; min-height:60px;">${proyecto.pda}</textarea>
+                </td>
+                <td class="sesiones-cell">
+                    <input type="number" class="editable-input sesiones-input" 
+                           value="${proyecto.sesiones}" 
+                           onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'sesiones', parseInt(this.value) || 0)"
+                           style="width:50px; text-align:center; font-weight:600;">
+                </td>
             </tr>`;
             firstRow = false;
         }
@@ -1485,12 +1656,10 @@ function renderDosificacion() {
     
     html += `
         <tr>
-            <td colspan="5" style="text-align:right; font-weight:700; padding:10px; background:var(--primary-light);">
-                TOTAL DE SESIONES:
+            <td colspan="5" class="total-cell">
+                TOTAL DE SESIONES ANUALES
             </td>
-            <td class="sesiones-cell" style="font-weight:700; font-size:1rem; background:var(--primary-light);">
-                ${totalSesiones}
-            </td>
+            <td class="total-sesiones-cell" id="totalSesionesDisplay">${totalSesiones}</td>
         </tr>
         <tr>
             <td colspan="6" class="footer-cell" style="padding:12px;">
@@ -1498,49 +1667,108 @@ function renderDosificacion() {
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="padding:12px; text-align:center;">
-                <strong>Elaboró</strong><br><br>
-                <span style="font-size:0.85rem;">${data.teacherName}</span><br>
-                <span style="font-size:0.7rem; color:var(--text-secondary);">Titular de Matemáticas ${data.grade}</span>
+            <td colspan="2" class="signature-cell">
+                <strong>Elaboró</strong>
+                <div class="signature-name">
+                    <input type="text" class="editable-input" value="${data.docente}" 
+                           onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
+                           style="width:100%; text-align:center; font-weight:600; font-size:0.8rem;">
+                </div>
+                <div class="signature-title">Titular de Informática</div>
             </td>
-            <td colspan="2" style="padding:12px; text-align:center;">
-                <strong>Revisó</strong><br><br>
-                <span style="font-size:0.85rem;">Subdirector Turno Mixto</span>
+            <td colspan="2" class="signature-cell">
+                <strong>Revisó</strong>
+                <div class="signature-name">Subdirector Turno Mixto</div>
             </td>
-            <td colspan="2" style="padding:12px; text-align:center;">
-                <strong>Vo. Bo.</strong><br><br>
-                <span style="font-size:0.85rem;">Profr. Melchor Sánchez Monjaraz</span><br>
-                <span style="font-size:0.7rem; color:var(--text-secondary);">Subdirector encargado de la dirección</span>
+            <td colspan="2" class="signature-cell">
+                <strong>Vo. Bo.</strong>
+                <div class="signature-name">Profr. Melchor Sánchez Monjaraz</div>
+                <div class="signature-title">Subdirector encargado de la dirección</div>
             </td>
         </tr>
-    </table>
-    </div>`;
+    </table>`;
     
     container.innerHTML = html;
+    
+    // Actualizar total de sesiones automáticamente
+    document.getElementById('totalSesionesDisplay').textContent = totalSesiones;
+}
+
+// ============================================================
+// FUNCIONES PARA ACTUALIZAR DOSIFICACIÓN
+// ============================================================
+function updateDosificacionField(grade, field, value) {
+    dosificacionData[grade][field] = value;
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+    // No re-renderizar para mantener el foco
+}
+
+function updateDosificacionTrimestre(grade, trimIndex, field, value) {
+    dosificacionData[grade].trimestres[trimIndex][field] = value;
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+    // Actualizar el total si se modifican sesiones
+    recalcTotalSesiones(grade);
+}
+
+function updateDosificacionProyecto(grade, trimIndex, projIndex, field, value) {
+    dosificacionData[grade].trimestres[trimIndex].proyectos[projIndex][field] = value;
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+    // Actualizar el total si se modifican sesiones
+    if (field === 'sesiones') {
+        recalcTotalSesiones(grade);
+    }
+}
+
+function recalcTotalSesiones(grade) {
+    let total = 0;
+    for (const trim of dosificacionData[grade].trimestres) {
+        for (const proj of trim.proyectos) {
+            total += parseInt(proj.sesiones) || 0;
+        }
+    }
+    const display = document.getElementById('totalSesionesDisplay');
+    if (display) display.textContent = total;
+}
+
+function saveDosificacion() {
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+    showToast('✅ Dosificación guardada correctamente');
 }
 
 function printDosificacion() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
     const content = document.getElementById('dosificacionContainer');
-    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    
+    const printWindow = window.open('', '_blank', 'width=1100,height=700');
     if (!printWindow) {
         showToast('⚠️ Permite ventanas emergentes para imprimir');
         return;
     }
+    
     const styles = document.querySelector('style').innerHTML;
     printWindow.document.write(`
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Dosificación - Matemáticas II</title>
+            <title>Dosificación - Informática ${grade}º</title>
             <style>
                 ${styles}
                 body { padding: 20px; background: white; }
-                .dosificacion-table { font-size: 0.75rem; }
-                .dosificacion-table td, .dosificacion-table th { padding: 6px 8px; }
+                .dosificacion-table { font-size: 0.7rem; }
+                .dosificacion-table td, .dosificacion-table th { padding: 4px 6px; }
+                .dosificacion-grade-selector, .dosificacion-actions .btn { display: none !important; }
+                .editable-input, .editable-textarea {
+                    background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    pointer-events: none;
+                }
+                .editable-input.sesiones-input { pointer-events: none; }
                 .no-print { display: none !important; }
                 @media print {
                     body { padding: 10px; }
-                    .dosificacion-table { font-size: 0.7rem; }
+                    .dosificacion-table { font-size: 0.65rem; }
                 }
             </style>
         </head>
@@ -2935,7 +3163,7 @@ function exportJSON() {
     const data = { 
         activities: activities,
         config: config,
-        dosificacion: DOSIFICACION_DATA,
+        dosificacion: dosificacionData,
         exportedAt: new Date().toISOString()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2959,6 +3187,11 @@ function importJSONFile(event) {
                 if (data.config) {
                     config = { ...config, ...data.config };
                     saveConfig();
+                }
+                if (data.dosificacion) {
+                    dosificacionData = data.dosificacion;
+                    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+                    renderDosificacion();
                 }
                 renderCronograma();
                 showToast('📂 Backup importado');
