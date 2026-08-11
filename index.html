@@ -1154,6 +1154,89 @@
             font-size: 0.8rem;
         }
 
+        /* ============================================================
+           ESTILOS PARA GESTIÓN DE FECHAS
+           ============================================================ */
+        .fechas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .fechas-grid .card-mini {
+            background: var(--bg);
+            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid var(--border);
+        }
+        .fechas-grid .card-mini h4 {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        .fechas-grid .card-mini .form-group {
+            margin-bottom: 6px;
+        }
+        .fechas-grid .card-mini .form-group label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .fechas-grid .card-mini .form-group input,
+        .fechas-grid .card-mini .form-group select {
+            font-size: 0.75rem;
+            padding: 4px 6px;
+        }
+        .fechas-grid .card-mini .btn {
+            font-size: 0.65rem;
+            padding: 3px 10px;
+        }
+        .fechas-grid .fecha-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.7rem;
+        }
+        .fechas-grid .fecha-item .fecha-label {
+            font-weight: 600;
+        }
+        .fechas-grid .fecha-item .btn {
+            font-size: 0.55rem;
+            padding: 2px 6px;
+        }
+        .fechas-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .fechas-actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .fechas-selector-grado {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+        .fechas-selector-grado select {
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.75rem;
+        }
+        .fechas-selector-grado label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
         @media (max-width: 768px) {
             body { padding: 6px; }
             .header { padding: 8px 12px; flex-direction: column; align-items: stretch; }
@@ -1191,6 +1274,7 @@
             .plan-container h1 { font-size: 0.85rem; }
             .planeacion-table { font-size: 0.45rem; }
             .planeacion-table th, .planeacion-table td { padding: 2px 3px; }
+            .fechas-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .header-title h1 { font-size: 0.85rem; }
@@ -1214,6 +1298,7 @@
             .plan-container h1 { font-size: 0.75rem; }
             .planeacion-table { font-size: 0.4rem; }
             .planeacion-table th, .planeacion-table td { padding: 2px 2px; }
+            .fechas-grid { grid-template-columns: 1fr; }
         }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1276,6 +1361,7 @@ HEADER
         <button class="tab-btn" data-tab="plan">📋 Plan Anual</button>
         <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
         <button class="tab-btn" data-tab="planeacion">📝 Planeación Semanal</button>
+        <button class="tab-btn" data-tab="fechas">⚙️ Gestión de Fechas</button>
         <button class="tab-btn" data-tab="editor">✏️ Editor</button>
         <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
@@ -1298,6 +1384,7 @@ HEADER
                     <button class="btn btn-excel btn-sm" onclick="exportToExcel()">📊 Exportar a Excel</button>
                     <button class="btn btn-print btn-sm" onclick="printPreview()">🖨️ Vista previa</button>
                     <button class="btn btn-primary btn-sm" onclick="clearSelection()">✖ Limpiar selección</button>
+                    <button class="btn btn-warning btn-sm" onclick="copyGrade1ToAll()">📋 Copiar 1º a 2º y 3º</button>
                 </div>
             </div>
             
@@ -1394,6 +1481,134 @@ HEADER
             <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
                 <strong>💡 Instrucciones:</strong> Edita todos los campos directamente. Los cambios se guardan automáticamente al hacer clic en "Guardar". 
                 Usa "Agregar Semana" para añadir una nueva fila de planeación.
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    PESTAÑA GESTIÓN DE FECHAS
+    ============================================================ -->
+    <div class="tab-content" id="tab-fechas">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">⚙️ Gestión de Fechas y Eventos</span>
+                <button class="btn btn-success btn-sm" onclick="guardarFechas()">💾 Guardar cambios</button>
+            </div>
+            
+            <div style="margin-bottom:10px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
+                <strong>📌 Instrucciones:</strong> Administra fechas clave, días festivos, vacaciones y colores de manera gráfica.
+                Los cambios se aplican al cronograma seleccionando el grado deseado.
+            </div>
+
+            <!-- Selector de grado -->
+            <div class="fechas-selector-grado">
+                <label>Aplicar cambios a:</label>
+                <select id="fechasGradoTarget">
+                    <option value="1">1º Grado</option>
+                    <option value="2">2º Grado</option>
+                    <option value="3">3º Grado</option>
+                    <option value="all">🌐 Todos los grados</option>
+                </select>
+                <button class="btn btn-primary btn-sm" onclick="aplicarFechasSeleccionadas()">📌 Aplicar</button>
+            </div>
+
+            <div class="fechas-grid">
+                <!-- Fechas de Inicio y Fin -->
+                <div class="card-mini">
+                    <h4>📅 Inicio y Fin de Curso</h4>
+                    <div class="form-group">
+                        <label>Fecha de Inicio</label>
+                        <input type="date" id="fechaInicioCurso" value="2026-08-31">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Fin</label>
+                        <input type="date" id="fechaFinCurso" value="2027-07-16">
+                    </div>
+                    <div class="form-group">
+                        <label>Reanudación de clases (Enero)</label>
+                        <input type="date" id="fechaReanudacion" value="2027-01-11">
+                    </div>
+                    <div class="form-group">
+                        <label>Reanudación de clases (Abril)</label>
+                        <input type="date" id="fechaReanudacionAbril" value="2027-04-05">
+                    </div>
+                </div>
+
+                <!-- Días Festivos -->
+                <div class="card-mini">
+                    <h4>🔴 Días Festivos / Suspensión</h4>
+                    <div class="form-group" style="display:flex; gap:4px; flex-wrap:wrap;">
+                        <input type="date" id="festivoNuevo" value="2026-09-16">
+                        <button class="btn btn-success btn-sm" onclick="agregarFestivo()">➕ Agregar</button>
+                    </div>
+                    <div class="fechas-list" id="listaFestivos">
+                        <!-- Generado por JS -->
+                    </div>
+                    <div class="fechas-actions">
+                        <button class="btn btn-danger btn-sm" onclick="limpiarFestivos()">🗑️ Limpiar todos</button>
+                    </div>
+                </div>
+
+                <!-- Vacaciones -->
+                <div class="card-mini">
+                    <h4>🟡 Vacaciones / Recesos</h4>
+                    <div class="form-group" style="display:flex; gap:4px; flex-wrap:wrap;">
+                        <input type="date" id="vacacionNuevo" value="2026-12-21">
+                        <button class="btn btn-success btn-sm" onclick="agregarVacacion()">➕ Agregar</button>
+                    </div>
+                    <div class="fechas-list" id="listaVacaciones">
+                        <!-- Generado por JS -->
+                    </div>
+                    <div class="fechas-actions">
+                        <button class="btn btn-danger btn-sm" onclick="limpiarVacaciones()">🗑️ Limpiar todas</button>
+                    </div>
+                </div>
+
+                <!-- Colores de Proyectos -->
+                <div class="card-mini">
+                    <h4>🎨 Colores de Proyectos</h4>
+                    <div class="form-group">
+                        <label>Color de proyectos</label>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <input type="color" id="colorProyecto" value="#6C5CE7">
+                            <input type="text" id="colorProyectoHex" value="#6C5CE7" style="width:80px; font-size:0.7rem;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Color de CTE</label>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <input type="color" id="colorCTE" value="#E91E63">
+                            <input type="text" id="colorCTEHex" value="#E91E63" style="width:80px; font-size:0.7rem;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Color de Festivos</label>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <input type="color" id="colorFestivo" value="#DC3545">
+                            <input type="text" id="colorFestivoHex" value="#DC3545" style="width:80px; font-size:0.7rem;">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="aplicarColores()" style="margin-top:4px;">🎨 Aplicar colores</button>
+                </div>
+
+                <!-- Eventos adicionales -->
+                <div class="card-mini">
+                    <h4>📝 Eventos Adicionales</h4>
+                    <div class="form-group">
+                        <label>Agregar evento personalizado</label>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                            <input type="date" id="eventoFecha" style="flex:1; min-width:100px;">
+                            <input type="text" id="eventoNombre" placeholder="Nombre del evento" style="flex:2; min-width:120px;">
+                            <button class="btn btn-success btn-sm" onclick="agregarEventoPersonalizado()">➕ Agregar</button>
+                        </div>
+                    </div>
+                    <div class="fechas-list" id="listaEventos">
+                        <!-- Generado por JS -->
+                    </div>
+                    <div class="fechas-actions">
+                        <button class="btn btn-danger btn-sm" onclick="limpiarEventos()">🗑️ Limpiar todos</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2145,12 +2360,24 @@ let selectedSearchActivity = null;
 let dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
 let pendingOverwrite = false;
 
+// Listas para gestión de fechas
+let fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
+let fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
+let eventosPersonalizados = [];
+
 // ============================================================
 // FUNCIÓN PARA VERIFICAR SI UN DÍA ES HÁBIL
 // ============================================================
 function isDiaHabil(month, day, year) {
-    // Si es fin de semana, no es hábil
     if (isWeekend(month, day, year)) return false;
+    
+    // Verificar si es festivo
+    const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    if (fechasFestivos.includes(fechaStr)) return false;
+    
+    // Verificar si es vacación
+    if (fechasVacaciones.includes(fechaStr)) return false;
+    
     return true;
 }
 
@@ -2158,6 +2385,16 @@ function isDiaHabil(month, day, year) {
 // FUNCIONES DE CARGA Y GUARDADO
 // ============================================================
 function loadData() {
+    // Cargar fechas desde localStorage
+    const savedFestivos = localStorage.getItem('cronograma_festivos');
+    if (savedFestivos) try { fechasFestivos = JSON.parse(savedFestivos); } catch(e) {}
+    
+    const savedVacaciones = localStorage.getItem('cronograma_vacaciones');
+    if (savedVacaciones) try { fechasVacaciones = JSON.parse(savedVacaciones); } catch(e) {}
+    
+    const savedEventos = localStorage.getItem('cronograma_eventos');
+    if (savedEventos) try { eventosPersonalizados = JSON.parse(savedEventos); } catch(e) {}
+
     const savedPlan = localStorage.getItem('cronograma_plan');
     if (savedPlan) {
         try { planData = JSON.parse(savedPlan); } 
@@ -2209,6 +2446,15 @@ function loadData() {
     document.getElementById('themeSelect').value = config.theme || 'light';
 
     document.getElementById('schoolBadge').textContent = config.schoolName ? `${config.schoolName} · ${config.schoolCycle || ''}` : 'Configurar escuela ⚙️';
+    
+    // Cargar fechas en la interfaz
+    renderFechasUI();
+}
+
+function saveFechas() {
+    localStorage.setItem('cronograma_festivos', JSON.stringify(fechasFestivos));
+    localStorage.setItem('cronograma_vacaciones', JSON.stringify(fechasVacaciones));
+    localStorage.setItem('cronograma_eventos', JSON.stringify(eventosPersonalizados));
 }
 
 function saveActivities() { localStorage.setItem('cronograma_activities', JSON.stringify(activities)); }
@@ -2288,6 +2534,10 @@ function resetData() {
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
         planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
+        fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
+        fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
+        eventosPersonalizados = [];
+        saveFechas();
         localStorage.setItem('cronograma_plan', JSON.stringify(planData));
         saveActivities();
         saveConfig();
@@ -2297,6 +2547,7 @@ function resetData() {
         renderCronograma();
         renderDosificacion();
         renderPlaneacion();
+        renderFechasUI();
         showToast('🔄 Datos restaurados');
     }
 }
@@ -3109,7 +3360,7 @@ function renderCronograma() {
 }
 
 // ============================================================
-// FUNCIONES DEL MODAL
+// FUNCIONES DEL MODAL - CORREGIDAS
 // ============================================================
 function openEditModal(grade, month, day) {
     const year = getYear(month);
@@ -3596,6 +3847,211 @@ function updateSelectionInfo() {
 }
 
 // ============================================================
+// COPIAR DATOS DE 1º A 2º Y 3º
+// ============================================================
+function copyGrade1ToAll() {
+    if (!confirm('¿Copiar todas las actividades de 1º Grado a 2º y 3º Grado? Se sobrescribirán las existentes.')) return;
+    
+    const grade1Activities = activities.filter(a => {
+        const grades = getGradesForActivity(a.grade);
+        return grades.includes(1);
+    });
+    
+    if (grade1Activities.length === 0) {
+        showToast('⚠️ No hay actividades en 1º Grado para copiar');
+        return;
+    }
+    
+    // Eliminar actividades de 2º y 3º grado
+    const toRemove = activities.filter(a => {
+        const grades = getGradesForActivity(a.grade);
+        return grades.includes(2) || grades.includes(3);
+    });
+    for (const r of toRemove) {
+        const idx = activities.indexOf(r);
+        if (idx >= 0) activities.splice(idx, 1);
+    }
+    
+    // Copiar actividades de 1º a 2º y 3º
+    for (const act of grade1Activities) {
+        // Para 2º grado
+        const act2 = { ...act, grade: 2 };
+        activities.push(act2);
+        // Para 3º grado
+        const act3 = { ...act, grade: 3 };
+        activities.push(act3);
+    }
+    
+    saveActivities();
+    renderCronograma();
+    showToast(`✅ Copiadas ${grade1Activities.length} actividades de 1º a 2º y 3º grado`);
+}
+
+// ============================================================
+// FUNCIONES DE GESTIÓN DE FECHAS (UI)
+// ============================================================
+function renderFechasUI() {
+    // Renderizar festivos
+    const listaFestivos = document.getElementById('listaFestivos');
+    listaFestivos.innerHTML = '';
+    fechasFestivos.sort().forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        const fecha = new Date(f + 'T00:00:00');
+        div.innerHTML = `
+            <span class="fecha-label">🔴 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarFestivo('${f}')">✖</button>
+        `;
+        listaFestivos.appendChild(div);
+    });
+    
+    // Renderizar vacaciones
+    const listaVacaciones = document.getElementById('listaVacaciones');
+    listaVacaciones.innerHTML = '';
+    fechasVacaciones.sort().forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        const fecha = new Date(f + 'T00:00:00');
+        div.innerHTML = `
+            <span class="fecha-label">🟡 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarVacacion('${f}')">✖</button>
+        `;
+        listaVacaciones.appendChild(div);
+    });
+    
+    // Renderizar eventos personalizados
+    const listaEventos = document.getElementById('listaEventos');
+    listaEventos.innerHTML = '';
+    eventosPersonalizados.forEach((e, i) => {
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        const fecha = new Date(e.fecha + 'T00:00:00');
+        div.innerHTML = `
+            <span class="fecha-label">📝 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}: ${e.nombre}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarEvento(${i})">✖</button>
+        `;
+        listaEventos.appendChild(div);
+    });
+}
+
+function agregarFestivo() {
+    const input = document.getElementById('festivoNuevo');
+    const fecha = input.value;
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    if (fechasFestivos.includes(fecha)) { showToast('⚠️ Ya está en la lista'); return; }
+    fechasFestivos.push(fecha);
+    saveFechas();
+    renderFechasUI();
+    showToast('✅ Festivo agregado');
+}
+
+function eliminarFestivo(fecha) {
+    const idx = fechasFestivos.indexOf(fecha);
+    if (idx >= 0) fechasFestivos.splice(idx, 1);
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Festivo eliminado');
+}
+
+function limpiarFestivos() {
+    if (!confirm('¿Eliminar todos los días festivos?')) return;
+    fechasFestivos = [];
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Festivos eliminados');
+}
+
+function agregarVacacion() {
+    const input = document.getElementById('vacacionNuevo');
+    const fecha = input.value;
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    if (fechasVacaciones.includes(fecha)) { showToast('⚠️ Ya está en la lista'); return; }
+    fechasVacaciones.push(fecha);
+    saveFechas();
+    renderFechasUI();
+    showToast('✅ Vacación agregada');
+}
+
+function eliminarVacacion(fecha) {
+    const idx = fechasVacaciones.indexOf(fecha);
+    if (idx >= 0) fechasVacaciones.splice(idx, 1);
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Vacación eliminada');
+}
+
+function limpiarVacaciones() {
+    if (!confirm('¿Eliminar todos los días de vacaciones?')) return;
+    fechasVacaciones = [];
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Vacaciones eliminadas');
+}
+
+function agregarEventoPersonalizado() {
+    const fechaInput = document.getElementById('eventoFecha');
+    const nombreInput = document.getElementById('eventoNombre');
+    const fecha = fechaInput.value;
+    const nombre = nombreInput.value.trim();
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    if (!nombre) { showToast('⚠️ Escribe un nombre para el evento'); return; }
+    eventosPersonalizados.push({ fecha, nombre });
+    saveFechas();
+    renderFechasUI();
+    fechaInput.value = '';
+    nombreInput.value = '';
+    showToast('✅ Evento agregado');
+}
+
+function eliminarEvento(index) {
+    eventosPersonalizados.splice(index, 1);
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Evento eliminado');
+}
+
+function limpiarEventos() {
+    if (!confirm('¿Eliminar todos los eventos personalizados?')) return;
+    eventosPersonalizados = [];
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Eventos eliminados');
+}
+
+function guardarFechas() {
+    saveFechas();
+    renderCronograma();
+    showToast('✅ Fechas guardadas y aplicadas al cronograma');
+}
+
+function aplicarFechasSeleccionadas() {
+    const target = document.getElementById('fechasGradoTarget').value;
+    // Solo se aplica al cronograma, no modifica las fechas guardadas
+    renderCronograma();
+    showToast(`📌 Cambios aplicados a ${target === 'all' ? 'todos los grados' : target + 'º Grado'}`);
+}
+
+function aplicarColores() {
+    const colorProyecto = document.getElementById('colorProyecto').value;
+    const colorCTE = document.getElementById('colorCTE').value;
+    const colorFestivo = document.getElementById('colorFestivo').value;
+    
+    document.documentElement.style.setProperty('--color-proyecto', colorProyecto);
+    document.documentElement.style.setProperty('--color-cte-ordinaria', colorCTE);
+    document.documentElement.style.setProperty('--color-festivo', colorFestivo);
+    
+    // Guardar en localStorage
+    localStorage.setItem('cronograma_colores', JSON.stringify({
+        proyecto: colorProyecto,
+        cte: colorCTE,
+        festivo: colorFestivo
+    }));
+    
+    renderCronograma();
+    showToast('🎨 Colores aplicados');
+}
+
+// ============================================================
 // BULK MODAL
 // ============================================================
 function openBulkModal() {
@@ -3969,7 +4425,7 @@ function printPlaneacion() {
 }
 
 // ============================================================
-// EXPORTAR A EXCEL (simplificado)
+// EXPORTAR A EXCEL
 // ============================================================
 async function exportToExcel() {
     showToast('📊 Exportando a Excel...');
@@ -3989,6 +4445,9 @@ function exportJSON() {
         plan: planData,
         dosificacion: dosificacionData,
         planeacion: planeacionData,
+        fechasFestivos: fechasFestivos,
+        fechasVacaciones: fechasVacaciones,
+        eventosPersonalizados: eventosPersonalizados,
         exportedAt: new Date().toISOString()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -4011,6 +4470,10 @@ function importJSONFile(event) {
             if (data.config) { config = { ...config, ...data.config }; saveConfig(); }
             if (data.dosificacion) { dosificacionData = data.dosificacion; localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData)); renderDosificacion(); }
             if (data.planeacion) { planeacionData = data.planeacion; localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData)); renderPlaneacion(); }
+            if (data.fechasFestivos) { fechasFestivos = data.fechasFestivos; saveFechas(); }
+            if (data.fechasVacaciones) { fechasVacaciones = data.fechasVacaciones; saveFechas(); }
+            if (data.eventosPersonalizados) { eventosPersonalizados = data.eventosPersonalizados; saveFechas(); }
+            renderFechasUI();
             renderCronograma();
             showToast('📂 Backup importado');
         } catch(err) {
@@ -4076,6 +4539,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (tabId === 'plan') renderPlan();
         if (tabId === 'dosificacion') renderDosificacion();
         if (tabId === 'planeacion') renderPlaneacion();
+        if (tabId === 'fechas') renderFechasUI();
         if (tabId === 'config') {
             document.getElementById('schoolName').value = config.schoolName || '';
             document.getElementById('schoolCycle').value = config.schoolCycle || '';
@@ -4096,6 +4560,7 @@ renderCronograma();
 renderPlan();
 renderDosificacion();
 renderPlaneacion();
+renderFechasUI();
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeModal(); closeBulkModal(); clearSelection(); }
@@ -4113,12 +4578,51 @@ document.getElementById('primaryColor').addEventListener('input', function() {
     document.documentElement.style.setProperty('--primary-dark', adjustColor(this.value, -20));
 });
 
+// Sincronizar colores con los campos hex
+document.getElementById('colorProyecto').addEventListener('input', function() {
+    document.getElementById('colorProyectoHex').value = this.value;
+});
+document.getElementById('colorProyectoHex').addEventListener('input', function() {
+    document.getElementById('colorProyecto').value = this.value;
+});
+document.getElementById('colorCTE').addEventListener('input', function() {
+    document.getElementById('colorCTEHex').value = this.value;
+});
+document.getElementById('colorCTEHex').addEventListener('input', function() {
+    document.getElementById('colorCTE').value = this.value;
+});
+document.getElementById('colorFestivo').addEventListener('input', function() {
+    document.getElementById('colorFestivoHex').value = this.value;
+});
+document.getElementById('colorFestivoHex').addEventListener('input', function() {
+    document.getElementById('colorFestivo').value = this.value;
+});
+
+// Cargar colores guardados
+const savedColors = localStorage.getItem('cronograma_colores');
+if (savedColors) {
+    try {
+        const colors = JSON.parse(savedColors);
+        document.getElementById('colorProyecto').value = colors.proyecto || '#6C5CE7';
+        document.getElementById('colorProyectoHex').value = colors.proyecto || '#6C5CE7';
+        document.getElementById('colorCTE').value = colors.cte || '#E91E63';
+        document.getElementById('colorCTEHex').value = colors.cte || '#E91E63';
+        document.getElementById('colorFestivo').value = colors.festivo || '#DC3545';
+        document.getElementById('colorFestivoHex').value = colors.festivo || '#DC3545';
+        document.documentElement.style.setProperty('--color-proyecto', colors.proyecto || '#6C5CE7');
+        document.documentElement.style.setProperty('--color-cte-ordinaria', colors.cte || '#E91E63');
+        document.documentElement.style.setProperty('--color-festivo', colors.festivo || '#DC3545');
+    } catch(e) {}
+}
+
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado (sin calendario SEP)');
+console.log('📚 Cronograma SEP 2026-2027 cargado con Gestión de Fechas');
 console.log(`📊 ${activities.length} actividades cargadas`);
+console.log(`🔴 ${fechasFestivos.length} días festivos`);
+console.log(`🟡 ${fechasVacaciones.length} días de vacaciones`);
 </script>
 </body>
 </html>
