@@ -485,7 +485,7 @@
         }
 
         /* ============================================================
-           ESTILOS PARA DOSIFICACIÓN - COLUMNA TRIMESTRE REDUCIDA 60%
+           ESTILOS PARA DOSIFICACIÓN - COLUMNA TRIMESTRE MUY REDUCIDA
            ============================================================ */
         .dosificacion-container {
             overflow-x: auto;
@@ -502,7 +502,7 @@
         .dosificacion-table th,
         .dosificacion-table td {
             border: 1px solid var(--border);
-            padding: 6px 8px;
+            padding: 4px 6px;
             text-align: left;
             vertical-align: top;
         }
@@ -517,34 +517,37 @@
             color: var(--primary-dark);
             font-weight: 600;
         }
-        /* COLUMNA TRIMESTRE REDUCIDA 60% (de 4% a 1.6%, de 50px a 20px) */
+        /* COLUMNA TRIMESTRE - MUY REDUCIDA (ocupa ~1cm) */
         .dosificacion-table .trimestre-cell {
             font-weight: 700;
             text-align: center;
             background: var(--primary-light);
             color: var(--primary-dark);
             vertical-align: middle;
-            width: 1.6%;
-            min-width: 20px;
-            max-width: 30px;
-            font-size: 0.5rem;
-            padding: 2px 1px;
+            width: 1.2%;
+            min-width: 8px;
+            max-width: 14px;
+            font-size: 0.45rem;
+            padding: 1px 0px;
+            line-height: 1;
         }
         .dosificacion-table .trimestre-cell .trim-label {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 700;
             writing-mode: vertical-rl;
             text-orientation: mixed;
             letter-spacing: 0px;
-            line-height: 1.1;
+            line-height: 1;
+            display: block;
+            padding: 1px 0;
         }
         .dosificacion-table .trimestre-cell .meses-label {
-            font-size: 0.35rem;
+            font-size: 0.3rem;
             font-weight: 400;
             color: var(--text-secondary);
             display: block;
             margin-top: 1px;
-            line-height: 1.1;
+            line-height: 1;
             writing-mode: vertical-rl;
             text-orientation: mixed;
             letter-spacing: 0px;
@@ -627,14 +630,14 @@
         }
 
         .dosificacion-table .col-trimestre { 
-            width: 1.6%; 
-            min-width: 20px; 
-            max-width: 30px; 
+            width: 1.2%; 
+            min-width: 8px; 
+            max-width: 14px; 
         }
         .dosificacion-table .col-proyecto { width: 26%; min-width: 150px; }
         .dosificacion-table .col-contenido { width: 22%; min-width: 120px; }
         .dosificacion-table .col-pda { width: 42%; min-width: 200px; }
-        .dosificacion-table .col-sesiones { width: 8%; min-width: 50px; }
+        .dosificacion-table .col-sesiones { width: 8.8%; min-width: 50px; }
 
         .dosificacion-grade-selector {
             display: flex;
@@ -1295,14 +1298,14 @@
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 4px; }
             .dosificacion-table .col-trimestre { 
-                min-width: 14px; 
-                max-width: 20px;
+                min-width: 6px; 
+                max-width: 10px;
             }
             .dosificacion-table .trimestre-cell .trim-label {
-                font-size: 0.5rem;
+                font-size: 0.45rem;
             }
             .dosificacion-table .trimestre-cell .meses-label {
-                font-size: 0.3rem;
+                font-size: 0.25rem;
             }
             .calendario-sep-table { font-size: 0.55rem; }
             .calendario-sep-table th,
@@ -1323,14 +1326,14 @@
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 3px; }
             .dosificacion-table .col-trimestre { 
-                min-width: 12px; 
-                max-width: 16px;
+                min-width: 5px; 
+                max-width: 8px;
             }
             .dosificacion-table .trimestre-cell .trim-label {
-                font-size: 0.4rem;
+                font-size: 0.35rem;
             }
             .dosificacion-table .trimestre-cell .meses-label {
-                font-size: 0.25rem;
+                font-size: 0.2rem;
             }
             .calendario-sep-table { font-size: 0.5rem; }
             .calendario-sep-table th,
@@ -5117,7 +5120,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 
 console.log('📚 Cronograma SEP 2026-2027 cargado');
 console.log(`📊 ${activities.length} actividades cargadas`);
-console.log('📝 Columna TRIMESTRE reducida en 60%');
+console.log('📝 Columna TRIMESTRE reducida al mínimo (~1cm)');
 </script>
 </body>
 </html>
