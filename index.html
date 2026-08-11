@@ -61,51 +61,50 @@
             background: var(--bg);
             color: var(--text);
             transition: all 0.3s ease;
-            padding: 16px;
+            padding: 12px;
             min-height: 100vh;
             user-select: none;
         }
         .app-container { max-width: 100%; margin: 0 auto; }
 
-        /* HEADER FIJO EN LA PARTE SUPERIOR */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 12px 20px;
-            margin-bottom: 16px;
+            padding: 10px 16px;
+            margin-bottom: 12px;
             box-shadow: var(--shadow);
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 8px;
             border-left: 4px solid var(--primary);
         }
-        .header-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .header-title h1 { font-size: 1.2rem; font-weight: 600; }
+        .header-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .header-title h1 { font-size: 1.1rem; font-weight: 600; }
         .header-title .school-badge {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
             background: var(--primary-light);
-            padding: 3px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
         }
-        .header-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .header-actions { display: flex; gap: 4px; flex-wrap: wrap; }
 
         .btn {
-            padding: 6px 14px;
+            padding: 5px 12px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             background: var(--border);
             color: var(--text);
         }
@@ -115,7 +114,7 @@
         .btn-danger { background: #DC3545; color: white; }
         .btn-danger:hover { background: #B02A37; transform: translateY(-1px); }
         .btn-outline { background: transparent; border: 1px solid var(--border); }
-        .btn-sm { padding: 3px 8px; font-size: 0.7rem; }
+        .btn-sm { padding: 3px 8px; font-size: 0.65rem; }
         .btn-warning { background: #FF8C00; color: white; }
         .btn-warning:hover { background: #E67A00; transform: translateY(-1px); }
         .btn-print { background: #6C5CE7; color: white; }
@@ -127,32 +126,31 @@
         .btn-word { background: #2B5797; color: white; }
         .btn-word:hover { background: #1A3D6E; transform: translateY(-1px); }
 
-        /* TABS FIJOS */
         .tabs {
             position: sticky;
-            top: 72px;
+            top: 60px;
             z-index: 99;
             display: flex;
             gap: 3px;
             background: var(--card-bg);
             border-radius: var(--radius);
             padding: 4px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             box-shadow: var(--shadow);
             flex-wrap: wrap;
         }
         .tab-btn {
-            padding: 8px 16px;
+            padding: 6px 14px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
             background: transparent;
             color: var(--text-secondary);
             flex: 1;
-            min-width: 70px;
+            min-width: 60px;
             text-align: center;
         }
         .tab-btn.active { background: var(--primary); color: white; }
@@ -169,26 +167,26 @@
         .card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
             box-shadow: var(--shadow);
         }
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
-        .card-title { font-size: 1rem; font-weight: 600; }
+        .card-title { font-size: 0.95rem; font-weight: 600; }
 
         /* ============================================================
            ESTILOS PARA PLAN ANUAL
            ============================================================ */
         .plan-container {
             font-family: 'Times New Roman', Times, serif;
-            padding: 16px;
+            padding: 14px;
             background: var(--card-bg);
             border-radius: var(--radius);
             border: 1px solid var(--border);
@@ -197,36 +195,36 @@
         }
         .plan-container h1 {
             text-align: center;
-            font-size: 1.3rem;
-            margin-bottom: 8px;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
             font-weight: 700;
         }
         .plan-container .subtitle {
             text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 16px;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
             font-weight: 500;
         }
         .plan-container .dimension-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
-            margin: 20px 0 8px 0;
+            margin: 16px 0 6px 0;
             color: var(--primary);
             border-bottom: 2px solid var(--primary);
             padding-bottom: 4px;
         }
         .plan-container .dimension-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
             color: var(--text-secondary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-style: italic;
         }
         .plan-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
-            margin-bottom: 16px;
+            font-size: 0.7rem;
+            margin-bottom: 14px;
             border: 1px solid var(--border);
         }
         .plan-table th,
@@ -254,7 +252,7 @@
             color: inherit;
             padding: 2px 4px;
             border-radius: 3px;
-            min-height: 24px;
+            min-height: 22px;
             transition: all 0.2s ease;
             resize: vertical;
         }
@@ -275,10 +273,10 @@
             color: inherit;
             padding: 2px 4px;
             border-radius: 3px;
-            min-height: 36px;
+            min-height: 34px;
             transition: all 0.2s ease;
             resize: vertical;
-            line-height: 1.4;
+            line-height: 1.3;
         }
         .plan-table .editable-textarea:focus {
             outline: none;
@@ -289,29 +287,29 @@
             background: rgba(0,70,127,0.05);
         }
         .plan-footer {
-            margin-top: 16px;
-            padding-top: 12px;
+            margin-top: 14px;
+            padding-top: 10px;
             border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
         }
         .plan-footer .signature-block {
             text-align: center;
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
         }
         .plan-footer .signature-block strong {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .plan-footer .signature-block .signature-name {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .plan-footer .signature-block .signature-title {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
         }
         .plan-footer .signature-block .editable-input {
@@ -340,7 +338,7 @@
             border: none;
             background: transparent;
             font-family: inherit;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
             padding: 2px 4px;
             border-radius: 3px;
@@ -357,7 +355,7 @@
         }
         .plan-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -372,7 +370,7 @@
         .calendario-sep-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             background: var(--card-bg);
             border-radius: 6px;
             overflow: hidden;
@@ -393,17 +391,17 @@
             background: #28A745;
             color: white;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         .calendario-sep-table .weekday-header {
             background: var(--primary-light);
             color: var(--primary-dark);
             font-weight: 600;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
         }
         .calendario-sep-table .day-cell {
-            min-width: 26px;
-            height: 24px;
+            min-width: 24px;
+            height: 22px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -416,7 +414,7 @@
         }
         .calendario-sep-table .day-cell .event-badge {
             display: block;
-            font-size: 0.4rem;
+            font-size: 0.35rem;
             padding: 1px 2px;
             border-radius: 2px;
             margin-top: 1px;
@@ -446,24 +444,24 @@
         }
         .calendario-sep-table .day-cell .day-number {
             font-weight: 600;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
         }
 
         .calendario-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
-            margin: 6px 0;
+            margin: 4px 0;
         }
         .calendario-actions .form-group {
             margin-bottom: 0;
-            min-width: 100px;
+            min-width: 80px;
         }
         .calendario-actions .form-group select,
         .calendario-actions .form-group input {
             padding: 3px 6px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             border-radius: 4px;
             border: 1px solid var(--border);
             background: var(--bg);
@@ -472,7 +470,7 @@
         .calendario-actions .form-group-inline {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .calendario-sep-table .event-editor {
@@ -484,7 +482,7 @@
         .calendario-sep-table .event-editor select,
         .calendario-sep-table .event-editor input {
             padding: 2px 4px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             border-radius: 3px;
             border: 1px solid var(--border);
             background: var(--bg);
@@ -492,21 +490,21 @@
         }
         .calendario-sep-table .event-editor .btn-sm {
             padding: 2px 5px;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
         }
         .calendario-sep-table .event-editor .tema-input {
-            width: 110px;
-            flex: 1 1 110px;
+            width: 100px;
+            flex: 1 1 100px;
         }
         .calendario-sep-table .tema-cell-text {
             display: block;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--text-secondary);
             margin-top: 2px;
             font-style: italic;
         }
         .calendario-actions .calEditTema-input {
-            width: 140px;
+            width: 120px;
         }
 
         /* ============================================================
@@ -519,7 +517,7 @@
         .dosificacion-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             background: var(--card-bg);
             border-radius: 6px;
             overflow: hidden;
@@ -536,14 +534,13 @@
             color: white;
             font-weight: 600;
             text-align: center;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
         }
         .dosificacion-table .header-school {
             background: var(--primary-light);
             color: var(--primary-dark);
             font-weight: 600;
         }
-        /* COLUMNA TRIMESTRE - proporcionada y legible */
         .dosificacion-table .trimestre-cell {
             font-weight: 700;
             text-align: center;
@@ -551,14 +548,14 @@
             color: var(--primary-dark);
             vertical-align: middle;
             width: 6%;
-            min-width: 50px;
-            max-width: 70px;
-            font-size: 0.65rem;
+            min-width: 48px;
+            max-width: 68px;
+            font-size: 0.6rem;
             padding: 3px 2px;
             line-height: 1.2;
         }
         .dosificacion-table .trimestre-cell .trim-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
             writing-mode: horizontal-tb;
             text-orientation: mixed;
@@ -568,7 +565,7 @@
             padding: 0;
         }
         .dosificacion-table .trimestre-cell .meses-label {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 400;
             color: var(--text-secondary);
             display: block;
@@ -589,30 +586,30 @@
         .dosificacion-table .total-cell {
             text-align: right;
             font-weight: 700;
-            padding: 8px;
+            padding: 6px;
             background: var(--primary-light);
         }
         .dosificacion-table .total-sesiones-cell {
             text-align: center;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: var(--primary-light);
         }
         .dosificacion-table .signature-cell {
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             vertical-align: middle;
         }
         .dosificacion-table .signature-cell strong {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .dosificacion-table .signature-cell .signature-name {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
         }
         .dosificacion-table .signature-cell .signature-title {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--text-secondary);
         }
 
@@ -628,7 +625,7 @@
             border-radius: 3px;
             transition: all 0.2s ease;
             resize: vertical;
-            min-height: 22px;
+            min-height: 20px;
         }
         .dosificacion-table .editable-input:focus,
         .dosificacion-table .editable-textarea:focus {
@@ -642,7 +639,7 @@
         }
         .dosificacion-table .editable-textarea {
             line-height: 1.3;
-            min-height: 36px;
+            min-height: 34px;
         }
         .dosificacion-table .editable-input.proyecto-input {
             font-weight: 600;
@@ -651,66 +648,36 @@
         .dosificacion-table .editable-input.sesiones-input {
             text-align: center;
             font-weight: 600;
-            width: 44px;
+            width: 40px;
             margin: 0 auto;
-        }
-        .dosificacion-table .fecha-sesion-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px dashed var(--border);
-        }
-        .dosificacion-table .fecha-sesion-box label {
-            font-size: 0.5rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-        .dosificacion-table .fecha-inicio-input {
-            width: 100%;
-            font-size: 0.55rem;
-            padding: 2px;
-            border: 1px solid var(--border);
-            border-radius: 3px;
-            background: var(--bg);
-            color: var(--text);
-        }
-        .dosificacion-table .fecha-fin-label {
-            font-size: 0.52rem;
-            color: var(--color-proyecto);
-            font-weight: 600;
-            min-height: 12px;
-            text-align: center;
         }
         .dosificacion-table .col-trimestre { 
             width: 6%; 
-            min-width: 50px; 
-            max-width: 70px; 
+            min-width: 48px; 
+            max-width: 68px; 
         }
-        .dosificacion-table .col-proyecto { width: 25%; min-width: 130px; }
+        .dosificacion-table .col-proyecto { width: 25%; min-width: 120px; }
         .dosificacion-table .col-contenido { width: 20%; min-width: 100px; }
-        .dosificacion-table .col-pda { width: 40%; min-width: 180px; }
-        .dosificacion-table .col-sesiones { width: 9%; min-width: 80px; }
+        .dosificacion-table .col-pda { width: 40%; min-width: 160px; }
+        .dosificacion-table .col-sesiones { width: 9%; min-width: 70px; }
 
         .dosificacion-grade-selector {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
         }
         .dosificacion-grade-selector select {
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
             border: 1px solid var(--border);
             background: var(--bg);
             color: var(--text);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .dosificacion-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -725,27 +692,27 @@
         }
         .cronograma-grid {
             display: grid;
-            grid-template-columns: 60px repeat(31, 1fr);
+            grid-template-columns: 55px repeat(31, 1fr);
             gap: 1px;
             background: var(--border);
             border-radius: 6px;
             overflow: hidden;
-            min-width: 950px;
-            font-size: 0.55rem;
+            min-width: 850px;
+            font-size: 0.5rem;
         }
 
         .grid-cell {
             background: var(--card-bg);
             padding: 2px 1px;
             text-align: center;
-            min-height: 22px;
+            min-height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.15s ease;
             position: relative;
             overflow: hidden;
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             cursor: pointer;
         }
         .grid-cell:hover:not(.weekend):not(.header-cell):not(.month-header):not(.trimestre-header):not(.proyecto-cell):not(.color-only) {
@@ -764,7 +731,7 @@
             font-weight: 600;
             cursor: pointer;
             position: relative;
-            min-height: 24px;
+            min-height: 22px;
         }
         .grid-cell.proyecto-cell:hover {
             transform: scale(1.02);
@@ -774,7 +741,7 @@
             width: 100%;
             padding: 0 2px;
             text-align: center;
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             white-space: normal;
             word-break: break-word;
             line-height: 1.1;
@@ -787,21 +754,21 @@
         }
         .grid-cell.proyecto-cell .proyecto-text .word {
             display: inline-block;
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             line-height: 1.1;
             margin: 0 1px;
         }
         .grid-cell.proyecto-cell.proyecto-single .proyecto-text .word {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
         }
         .grid-cell.proyecto-cell.proyecto-start .proyecto-text .word {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
         }
         .grid-cell.proyecto-cell.proyecto-middle .proyecto-text .word {
-            font-size: 0.45rem;
+            font-size: 0.4rem;
         }
         .grid-cell.proyecto-cell.proyecto-end .proyecto-text .word {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
         }
         .grid-cell.proyecto-cell.proyecto-start {
             border-radius: 3px 0 0 3px;
@@ -818,7 +785,7 @@
 
         .grid-cell.color-only {
             cursor: pointer;
-            min-height: 22px;
+            min-height: 20px;
             padding: 2px 1px;
         }
         .grid-cell.color-only:hover {
@@ -826,8 +793,8 @@
             z-index: 10;
         }
         .grid-cell.color-only .activity {
-            font-size: 0.35rem;
-            min-height: 14px;
+            font-size: 0.3rem;
+            min-height: 12px;
             padding: 0;
             width: 100%;
             height: 100%;
@@ -841,7 +808,7 @@
             font-weight: 700;
             background: var(--primary);
             color: white;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             cursor: default;
         }
         .grid-cell.header-cell:hover {
@@ -852,7 +819,7 @@
             background: var(--primary);
             color: white;
             padding: 3px 2px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             grid-column: 1 / span 32;
             text-align: center;
             cursor: default;
@@ -865,7 +832,7 @@
             background: #28A745;
             color: white;
             padding: 3px 2px;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             cursor: default;
             grid-column: 1;
         }
@@ -876,7 +843,7 @@
             font-weight: 600;
             background: var(--primary-light);
             color: var(--primary-dark);
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             cursor: default;
         }
         .grid-cell.day-number-header:hover {
@@ -902,10 +869,10 @@
         .grid-cell .activity {
             padding: 1px 2px;
             border-radius: 3px;
-            font-size: 0.45rem;
+            font-size: 0.4rem;
             line-height: 1.1;
             width: 100%;
-            min-height: 14px;
+            min-height: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -942,25 +909,25 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            padding: 20px;
+            padding: 16px;
         }
         .modal-overlay.show { display: flex; }
         .modal {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 20px;
-            max-width: 560px;
+            padding: 18px;
+            max-width: 520px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             animation: fadeIn 0.3s ease;
         }
-        .modal h3 { margin-bottom: 10px; font-size: 1.1rem; }
-        .modal .form-group { margin-bottom: 10px; }
+        .modal h3 { margin-bottom: 8px; font-size: 1rem; }
+        .modal .form-group { margin-bottom: 8px; }
         .modal .info-text {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             padding: 6px 10px;
             background: var(--bg);
             border-radius: 5px;
@@ -968,7 +935,7 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
         .modal .info-text .weekday-badge {
             font-weight: 600;
@@ -976,7 +943,7 @@
             background: var(--primary-light);
             padding: 2px 8px;
             border-radius: 10px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         .modal .info-text .range-info {
             font-weight: 500;
@@ -985,10 +952,10 @@
         .modal .alert-conflict {
             background: #f8d7da;
             color: #721c24;
-            padding: 8px 10px;
+            padding: 6px 10px;
             border-radius: 5px;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
             border-left: 4px solid #DC3545;
         }
 
@@ -999,16 +966,16 @@
         }
         .form-group label {
             font-weight: 500;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
         }
         .form-group input,
         .form-group textarea,
         .form-group select {
-            padding: 6px 10px;
+            padding: 5px 8px;
             border: 1px solid var(--border);
             border-radius: 5px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             background: var(--bg);
             color: var(--text);
             transition: all 0.3s ease;
@@ -1023,27 +990,27 @@
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
         }
         .form-row-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
         }
         .modal-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             justify-content: flex-end;
-            margin-top: 12px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
 
         .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 12px;
-            margin: 10px 0;
-            padding: 10px;
+            gap: 4px 10px;
+            margin: 8px 0;
+            padding: 8px;
             background: var(--bg);
             border-radius: 6px;
             border: 1px solid var(--border);
@@ -1052,45 +1019,45 @@
             display: flex;
             align-items: center;
             gap: 3px;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--text-secondary);
         }
         .legend-color {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 3px;
             border: 1px solid var(--border);
         }
 
         .toast {
             position: fixed;
-            bottom: 70px;
-            right: 16px;
+            bottom: 60px;
+            right: 14px;
             background: var(--card-bg);
             color: var(--text);
-            padding: 10px 16px;
+            padding: 8px 14px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             border-left: 4px solid var(--primary);
             transform: translateX(120%);
             transition: transform 0.3s ease;
             z-index: 2000;
-            max-width: 320px;
-            font-size: 0.85rem;
+            max-width: 280px;
+            font-size: 0.8rem;
         }
         .toast.show { transform: translateX(0); }
 
         .theme-toggle {
             position: fixed;
-            bottom: 16px;
-            right: 16px;
-            width: 42px;
-            height: 42px;
+            bottom: 14px;
+            right: 14px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             border: none;
             background: var(--primary);
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
@@ -1100,33 +1067,33 @@
 
         .selection-info {
             background: var(--primary-light);
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 6px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border-left: 3px solid var(--color-selected);
         }
         .selection-info .count { font-weight: 700; color: var(--color-selected); }
 
         .config-form {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
         }
         .color-picker-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             align-items: center;
         }
         .color-picker-group input[type="color"] {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border: 2px solid var(--border);
             border-radius: 6px;
             cursor: pointer;
@@ -1135,20 +1102,20 @@
         }
         .btn-group {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             flex-wrap: wrap;
         }
 
         .search-results-list {
             margin-top: 6px;
-            max-height: 260px;
+            max-height: 240px;
             overflow-y: auto;
             border: 1px solid var(--border);
             border-radius: 5px;
             background: var(--card-bg);
         }
         .search-result-item {
-            padding: 8px 12px;
+            padding: 6px 10px;
             cursor: pointer;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -1170,14 +1137,14 @@
         }
         .search-result-item .result-name {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .search-result-item .result-detail {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
         }
         .search-result-item .result-badge {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             padding: 2px 6px;
             border-radius: 10px;
             background: var(--primary-light);
@@ -1187,9 +1154,9 @@
         .move-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 6px 0 10px 0;
-            padding: 8px;
+            gap: 6px;
+            margin: 6px 0 8px 0;
+            padding: 6px;
             background: var(--bg);
             border-radius: 5px;
         }
@@ -1197,8 +1164,8 @@
             margin-bottom: 0;
         }
         .move-options select {
-            font-size: 0.75rem;
-            padding: 4px 8px;
+            font-size: 0.7rem;
+            padding: 4px 6px;
         }
 
         /* ============================================================
@@ -1211,7 +1178,7 @@
         .planeacion-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             background: var(--card-bg);
             border-radius: 6px;
             overflow: hidden;
@@ -1228,7 +1195,7 @@
             color: white;
             font-weight: 600;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         .planeacion-table .header-school {
             background: var(--primary-light);
@@ -1240,7 +1207,7 @@
             color: white;
             font-weight: 700;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .planeacion-table .section-header {
             background: var(--primary-light);
@@ -1258,7 +1225,7 @@
             padding: 2px 4px;
             border-radius: 3px;
             transition: all 0.2s ease;
-            min-height: 22px;
+            min-height: 20px;
         }
         .planeacion-table .editable-input:focus {
             outline: none;
@@ -1279,7 +1246,7 @@
             border-radius: 3px;
             transition: all 0.2s ease;
             resize: vertical;
-            min-height: 36px;
+            min-height: 34px;
             line-height: 1.3;
         }
         .planeacion-table .editable-textarea:focus {
@@ -1291,125 +1258,122 @@
             background: rgba(0,70,127,0.05);
         }
         .planeacion-table .signature-cell {
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             vertical-align: middle;
         }
         .planeacion-table .signature-cell strong {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .planeacion-table .signature-cell .signature-name {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
         }
         .planeacion-table .signature-cell .signature-title {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--text-secondary);
         }
-        .planeacion-table .col-periodo { width: 12%; min-width: 90px; }
-        .planeacion-table .col-actividades { width: 28%; min-width: 160px; }
-        .planeacion-table .col-recursos { width: 20%; min-width: 100px; }
-        .planeacion-table .col-producto { width: 28%; min-width: 160px; }
-        .planeacion-table .col-acciones { width: 12%; min-width: 70px; text-align: center; }
+        .planeacion-table .col-periodo { width: 12%; min-width: 80px; }
+        .planeacion-table .col-actividades { width: 28%; min-width: 140px; }
+        .planeacion-table .col-recursos { width: 20%; min-width: 90px; }
+        .planeacion-table .col-producto { width: 28%; min-width: 140px; }
+        .planeacion-table .col-acciones { width: 12%; min-width: 60px; text-align: center; }
 
         .planeacion-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
         }
         .planeacion-grade-selector {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             align-items: center;
         }
         .planeacion-grade-selector select {
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
             border: 1px solid var(--border);
             background: var(--bg);
             color: var(--text);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         @media (max-width: 768px) {
             body { padding: 6px; }
-            .header { padding: 10px 14px; flex-direction: column; align-items: stretch; }
+            .header { padding: 8px 12px; flex-direction: column; align-items: stretch; }
             .header-actions { justify-content: center; }
-            .tabs { top: 95px; }
-            .tab-btn { padding: 6px 10px; font-size: 0.7rem; min-width: 55px; }
+            .tabs { top: 85px; }
+            .tab-btn { padding: 5px 8px; font-size: 0.65rem; min-width: 50px; }
             .config-form { grid-template-columns: 1fr; }
-            .cronograma-grid { font-size: 0.4rem; min-width: 750px; grid-template-columns: 40px repeat(31, 1fr); }
-            .grid-cell { min-height: 18px; padding: 1px; }
-            .grid-cell .activity { font-size: 0.35rem; min-height: 10px; }
-            .grid-cell.proyecto-cell .proyecto-text { font-size: 0.35rem; }
-            .grid-cell.proyecto-cell .proyecto-text .word { font-size: 0.35rem; }
-            .grid-cell.proyecto-cell.proyecto-single .proyecto-text .word { font-size: 0.5rem; }
-            .theme-toggle { bottom: 8px; right: 8px; width: 36px; height: 36px; font-size: 0.9rem; }
+            .cronograma-grid { font-size: 0.35rem; min-width: 650px; grid-template-columns: 35px repeat(31, 1fr); }
+            .grid-cell { min-height: 16px; padding: 1px; }
+            .grid-cell .activity { font-size: 0.3rem; min-height: 10px; }
+            .grid-cell.proyecto-cell .proyecto-text { font-size: 0.3rem; }
+            .grid-cell.proyecto-cell .proyecto-text .word { font-size: 0.3rem; }
+            .grid-cell.proyecto-cell.proyecto-single .proyecto-text .word { font-size: 0.45rem; }
+            .theme-toggle { bottom: 8px; right: 8px; width: 34px; height: 34px; font-size: 0.85rem; }
             .form-row { grid-template-columns: 1fr; }
             .form-row-3 { grid-template-columns: 1fr; }
             .move-options { grid-template-columns: 1fr; }
             .search-result-item { flex-direction: column; align-items: flex-start; }
-            .dosificacion-table { font-size: 0.5rem; }
+            .dosificacion-table { font-size: 0.45rem; }
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 3px; }
             .dosificacion-table .col-trimestre { 
-                min-width: 40px; 
-                max-width: 55px;
+                min-width: 38px; 
+                max-width: 50px;
             }
             .dosificacion-table .trimestre-cell .trim-label {
-                font-size: 0.55rem;
-            }
-            .dosificacion-table .trimestre-cell .meses-label {
-                font-size: 0.42rem;
-            }
-            .calendario-sep-table { font-size: 0.5rem; }
-            .calendario-sep-table th,
-            .calendario-sep-table td { padding: 2px 3px; }
-            .calendario-actions .form-group { min-width: 70px; }
-            .plan-container { padding: 8px; }
-            .plan-table { font-size: 0.55rem; }
-            .plan-table th, .plan-table td { padding: 2px 3px; }
-            .plan-container h1 { font-size: 0.9rem; }
-            .planeacion-table { font-size: 0.5rem; }
-            .planeacion-table th, .planeacion-table td { padding: 2px 3px; }
-        }
-        @media (max-width: 480px) {
-            .header-title h1 { font-size: 0.9rem; }
-            .cronograma-grid { min-width: 600px; grid-template-columns: 30px repeat(31, 1fr); }
-            .modal { padding: 14px; }
-            .dosificacion-table { font-size: 0.45rem; }
-            .dosificacion-table th,
-            .dosificacion-table td { padding: 2px 2px; }
-            .dosificacion-table .col-trimestre { 
-                min-width: 34px; 
-                max-width: 45px;
-            }
-            .dosificacion-table .trimestre-cell .trim-label {
-                font-size: 0.48rem;
+                font-size: 0.5rem;
             }
             .dosificacion-table .trimestre-cell .meses-label {
                 font-size: 0.38rem;
             }
             .calendario-sep-table { font-size: 0.45rem; }
             .calendario-sep-table th,
-            .calendario-sep-table td { padding: 1px 2px; }
-            .plan-table { font-size: 0.45rem; }
-            .plan-table th, .plan-table td { padding: 1px 2px; }
-            .plan-container h1 { font-size: 0.8rem; }
+            .calendario-sep-table td { padding: 2px 3px; }
+            .calendario-actions .form-group { min-width: 60px; }
+            .plan-container { padding: 8px; }
+            .plan-table { font-size: 0.5rem; }
+            .plan-table th, .plan-table td { padding: 2px 3px; }
+            .plan-container h1 { font-size: 0.85rem; }
             .planeacion-table { font-size: 0.45rem; }
+            .planeacion-table th, .planeacion-table td { padding: 2px 3px; }
+        }
+        @media (max-width: 480px) {
+            .header-title h1 { font-size: 0.85rem; }
+            .cronograma-grid { min-width: 550px; grid-template-columns: 28px repeat(31, 1fr); }
+            .modal { padding: 12px; }
+            .dosificacion-table { font-size: 0.4rem; }
+            .dosificacion-table th,
+            .dosificacion-table td { padding: 2px 2px; }
+            .dosificacion-table .col-trimestre { 
+                min-width: 32px; 
+                max-width: 42px;
+            }
+            .dosificacion-table .trimestre-cell .trim-label {
+                font-size: 0.42rem;
+            }
+            .dosificacion-table .trimestre-cell .meses-label {
+                font-size: 0.32rem;
+            }
+            .calendario-sep-table { font-size: 0.4rem; }
+            .calendario-sep-table th,
+            .calendario-sep-table td { padding: 1px 2px; }
+            .plan-table { font-size: 0.4rem; }
+            .plan-table th, .plan-table td { padding: 1px 2px; }
+            .plan-container h1 { font-size: 0.75rem; }
+            .planeacion-table { font-size: 0.4rem; }
             .planeacion-table th, .planeacion-table td { padding: 2px 2px; }
         }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-        /* ============================================================
-           ESTILOS PARA IMPRESIÓN
-           ============================================================ */
         @media print {
             .planeacion-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .card-header .btn-group, .selection-info { display: none !important; }
             .planeacion-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -1480,7 +1444,7 @@ HEADER
             <div class="card-header">
                 <span class="card-title">📅 Cronograma SEP 2026-2027</span>
                 <div class="btn-group">
-                    <select id="gradeFilter" onchange="renderCronograma()" style="padding:3px 6px; border-radius:5px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.8rem;">
+                    <select id="gradeFilter" onchange="renderCronograma()" style="padding:3px 6px; border-radius:5px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.75rem;">
                         <option value="all">Todos los grados</option>
                         <option value="1">1º Grado</option>
                         <option value="2">2º Grado</option>
@@ -1544,8 +1508,8 @@ HEADER
                 <span class="card-title">📆 Calendario Escolar SEP 2026-2027</span>
                 <div class="calendario-actions">
                     <div class="form-group form-group-inline">
-                        <label style="font-size:0.75rem; color:var(--text-secondary);">Editar:</label>
-                        <select id="calEditMonth" style="width:90px;">
+                        <label style="font-size:0.7rem; color:var(--text-secondary);">Editar:</label>
+                        <select id="calEditMonth" style="width:80px;">
                             <option value="8">Agosto</option>
                             <option value="9">Septiembre</option>
                             <option value="10">Octubre</option>
@@ -1559,8 +1523,8 @@ HEADER
                             <option value="6">Junio</option>
                             <option value="7">Julio</option>
                         </select>
-                        <input type="number" id="calEditDay" min="1" max="31" value="1" style="width:45px;">
-                        <select id="calEditType" style="width:130px;">
+                        <input type="number" id="calEditDay" min="1" max="31" value="1" style="width:40px;">
+                        <select id="calEditType" style="width:120px;">
                             <option value="">Sin evento</option>
                             <option value="inicio-clases">🟠 Inicio de clases</option>
                             <option value="receso-vacaciones">🟡 Receso / Vacaciones</option>
@@ -1582,7 +1546,7 @@ HEADER
             <div id="calendarioContainer" class="calendario-sep-container">
                 <!-- Generado por JavaScript -->
             </div>
-            <div style="margin-top:10px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
+            <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
                 <strong>💡 Instrucciones:</strong> Selecciona un día, elige el tipo de evento y/o escribe un tema o evento personalizado, luego haz clic en "Aplicar". 
                 Los eventos se guardan automáticamente. Usa "Aplicar al Cronograma" para que el tema quede registrado en el día indicado del cronograma.
             </div>
@@ -1598,7 +1562,7 @@ HEADER
                 <span class="card-title">📋 Dosificación y Jerarquización Anual - Informática</span>
                 <div class="dosificacion-actions">
                     <div class="dosificacion-grade-selector">
-                        <label style="font-size:0.8rem; color:var(--text-secondary);">Grado:</label>
+                        <label style="font-size:0.75rem; color:var(--text-secondary);">Grado:</label>
                         <select id="dosificacionGrade" onchange="renderDosificacion()">
                             <option value="1">1º Secundaria</option>
                             <option value="2">2º Secundaria</option>
@@ -1623,7 +1587,7 @@ HEADER
                 <span class="card-title">📝 Planeación Semanal - Informática</span>
                 <div class="planeacion-actions">
                     <div class="planeacion-grade-selector">
-                        <label style="font-size:0.8rem; color:var(--text-secondary);">Grado:</label>
+                        <label style="font-size:0.75rem; color:var(--text-secondary);">Grado:</label>
                         <select id="planeacionGrade" onchange="renderPlaneacion()">
                             <option value="1">1º Secundaria</option>
                             <option value="2">2º Secundaria</option>
@@ -1636,7 +1600,7 @@ HEADER
                 </div>
             </div>
             <div id="planeacionContainer" class="planeacion-container"></div>
-            <div style="margin-top:10px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
+            <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
                 <strong>💡 Instrucciones:</strong> Edita todos los campos directamente. Los cambios se guardan automáticamente al hacer clic en "Guardar". 
                 Usa "Agregar Semana" para añadir una nueva fila de planeación.
             </div>
@@ -1662,12 +1626,12 @@ HEADER
                 <div class="search-results-list" id="searchResultsList"></div>
             </div>
             
-            <div id="noResultsMessage" style="display:none; padding:10px; text-align:center; color:var(--text-secondary); margin-top:6px;">
+            <div id="noResultsMessage" style="display:none; padding:8px; text-align:center; color:var(--text-secondary); margin-top:4px;">
                 No se encontraron actividades con ese nombre.
             </div>
             
-            <div id="selectedActivityInfo" style="display:none; background:var(--primary-light); padding:10px; border-radius:5px; margin-top:10px;">
-                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+            <div id="selectedActivityInfo" style="display:none; background:var(--primary-light); padding:8px; border-radius:5px; margin-top:8px;">
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; margin-bottom:6px;">
                     <span><strong>📝 Actividad:</strong> <span id="selectedActName"></span></span>
                     <span><strong>📅 Fecha actual:</strong> <span id="selectedActDate"></span></span>
                 </div>
@@ -1716,7 +1680,7 @@ HEADER
                         <input type="number" id="moveDay" min="1" max="31" value="1" onchange="checkConflict()" oninput="checkConflict()">
                     </div>
                     <div class="form-group" style="justify-content:flex-end;">
-                        <button class="btn btn-warning" onclick="moveActivity()" style="height:38px;">🔄 Mover actividad</button>
+                        <button class="btn btn-warning" onclick="moveActivity()" style="height:36px;">🔄 Mover actividad</button>
                     </div>
                 </div>
                 
@@ -1783,7 +1747,7 @@ HEADER
             <div class="card-header">
                 <span class="card-title">📤 Exportar</span>
             </div>
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div style="display:flex; gap:4px; flex-wrap:wrap;">
                 <button class="btn btn-excel" onclick="exportToExcel()">📊 Exportar a Excel</button>
                 <button class="btn btn-word" onclick="exportPlanWord()">📄 Exportar Plan Anual a Word</button>
                 <button class="btn btn-outline" onclick="exportJSON()">📋 Exportar JSON</button>
@@ -1816,7 +1780,7 @@ MODALES
         
         <div id="modalConflictAlert" class="alert-conflict" style="display:none;">
             ⚠️ ¡Conflicto! Ya existe una actividad en esta fecha y grado. 
-            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:6px;">Sobrescribir</button>
+            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:4px;">Sobrescribir</button>
         </div>
         
         <div class="form-group">
@@ -1896,7 +1860,7 @@ MODALES
 <div class="modal-overlay" id="bulkModal">
     <div class="modal">
         <h3>📊 Asignar tema a <span id="bulkCount">0</span> celdas</h3>
-        <div class="info-text"><span id="bulkDetails" style="font-size:0.75rem;"></span></div>
+        <div class="info-text"><span id="bulkDetails" style="font-size:0.7rem;"></span></div>
         <div class="form-group">
             <label>📝 Actividad / Tema</label>
             <input type="text" id="bulkActivity" placeholder="Ej. Proyecto" autofocus>
@@ -2489,9 +2453,12 @@ let selectedCells = [];
 let editingProject = null;
 let selectedSearchActivity = null;
 let dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
+let pendingOverwrite = false;
 
+// ============================================================
+// FUNCIONES DE CARGA Y GUARDADO
+// ============================================================
 function loadData() {
-    // Cargar Plan Anual
     const savedPlan = localStorage.getItem('cronograma_plan');
     if (savedPlan) {
         try { planData = JSON.parse(savedPlan); } 
@@ -2500,7 +2467,6 @@ function loadData() {
         planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
     }
 
-    // Cargar calendario SEP
     const savedCalendario = localStorage.getItem('cronograma_calendario');
     if (savedCalendario) {
         try { calendarioData = JSON.parse(savedCalendario); } 
@@ -2509,7 +2475,6 @@ function loadData() {
         calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL));
     }
 
-    // Cargar actividades
     const saved = localStorage.getItem('cronograma_activities');
     if (saved) {
         try { activities = JSON.parse(saved); } 
@@ -2532,7 +2497,6 @@ function loadData() {
         catch(e) { dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA)); }
     }
 
-    // Cargar planeación
     const savedPlaneacion = localStorage.getItem('cronograma_planeacion');
     if (savedPlaneacion) {
         try { planeacionData = JSON.parse(savedPlaneacion); } 
@@ -2562,6 +2526,7 @@ function savePlan() {
     localStorage.setItem('cronograma_plan', JSON.stringify(planData)); 
     showToast('✅ Plan Anual guardado');
 }
+
 function saveConfig() {
     config.schoolName = document.getElementById('schoolName').value;
     config.schoolCycle = document.getElementById('schoolCycle').value;
@@ -2681,36 +2646,6 @@ function getDaysInMonth(month) {
     return days[month] || 31;
 }
 
-function computeFechaFinSesiones(fechaInicioISO, sesiones) {
-    if (!fechaInicioISO || !sesiones || sesiones < 1) return null;
-    const parts = fechaInicioISO.split('-').map(Number);
-    let year = parts[0], month = parts[1], day = parts[2];
-    let count = 0;
-    let lastValid = null;
-    let safety = 0;
-    while (count < sesiones && safety < 1000) {
-        safety++;
-        if (!isWeekend(month, day, year)) {
-            count++;
-            lastValid = { month, day, year };
-            if (count >= sesiones) break;
-        }
-        day++;
-        const dim = getDaysInMonth(month);
-        if (day > dim) {
-            day = 1;
-            month++;
-            if (month > 12) { month = 1; year++; }
-        }
-    }
-    return lastValid;
-}
-
-function formatFechaCorta(f) {
-    if (!f) return '';
-    return `${String(f.day).padStart(2, '0')}/${String(f.month).padStart(2, '0')}/${f.year}`;
-}
-
 function getGradesForActivity(grade) {
     if (grade === 'all') return [1, 2, 3];
     return [parseInt(grade)];
@@ -2722,7 +2657,7 @@ function isProject(type) {
 
 function isOfficialEvent(type) {
     const officialTypes = ['inicio-clases', 'receso-vacaciones', 'festivo-suspension', 
-                           'cte-intensiva', 'cte-ordinaria', 'fortalecimiento', 'fin-ciclo', 'normal'];
+                           'cte-intensiva', 'cte-ordinaria', 'fortalecimiento', 'fin-ciclo', 'normal', 'tema-personalizado'];
     return officialTypes.includes(type);
 }
 
@@ -2816,9 +2751,6 @@ function renderPlan() {
     container.innerHTML = html;
 }
 
-// ============================================================
-// FUNCIONES PARA ACTUALIZAR PLAN ANUAL
-// ============================================================
 function updatePlanField(field, value) {
     planData[field] = value;
     localStorage.setItem('cronograma_plan', JSON.stringify(planData));
@@ -2884,13 +2816,12 @@ function printPlan() {
 }
 
 // ============================================================
-// EXPORTAR PLAN A WORD (.DOCX)
+// EXPORTAR PLAN A WORD
 // ============================================================
 function exportPlanWord() {
     const content = document.getElementById('planContainer');
     const data = planData;
     
-    // Construir HTML para Word
     let html = `
     <html xmlns:o="urn:schemas-microsoft-com:office:office" 
           xmlns:w="urn:schemas-microsoft-com:office:word" 
@@ -2898,13 +2829,6 @@ function exportPlanWord() {
     <head>
         <meta charset="UTF-8">
         <title>Plan Anual - Informática</title>
-        <!--[if gte mso 9]>
-        <xml>
-            <w:WordDocument>
-                <w:View>Print</w:View>
-            </w:WordDocument>
-        </xml>
-        <![endif]-->
         <style>
             body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
             h1 { text-align: center; font-size: 18pt; font-weight: bold; }
@@ -2921,10 +2845,6 @@ function exportPlanWord() {
             .signature-title { font-size: 9pt; color: #555; }
             .signature-row { text-align: center; margin-top: 20px; }
             .signature-row div { display: inline-block; width: 30%; }
-    `;
-    
-    // Agregar estilos para las tablas
-    html += `
         </style>
     </head>
     <body>
@@ -2985,9 +2905,7 @@ function exportPlanWord() {
     </body>
     </html>`;
     
-    const blob = new Blob([html], { 
-        type: 'application/msword;charset=utf-8' 
-    });
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `Plan_Anual_Informatica_${new Date().toISOString().slice(0,10)}.doc`;
@@ -3182,8 +3100,6 @@ function applyCalendarToCronograma() {
         'normal': 'Normal'
     };
     
-    // Elimina del cronograma los eventos oficiales y los temas personalizados
-    // previamente sincronizados, para regenerarlos con los datos actuales del calendario.
     const toRemove = activities.filter(a => isOfficialEvent(a.type) || a.type === 'tema-personalizado');
     for (const r of toRemove) {
         const idx = activities.indexOf(r);
@@ -3296,40 +3212,16 @@ function renderDosificacion() {
     
     let totalSesiones = 0;
     let trimCount = 0;
-    const trimDateRanges = [
-        { min: '2026-09-01', max: '2026-11-30' },
-        { min: '2026-12-01', max: '2027-03-31' },
-        { min: '2027-04-01', max: '2027-07-31' }
-    ];
-    
-    // Fechas de inicio sugeridas por trimestre y proyecto
-    const trimStartDates = {
-        1: ['2026-09-01', '2026-09-17', '2026-10-05', '2026-10-21'],
-        2: ['2026-12-01', '2026-12-17', '2027-01-12', '2027-01-28'],
-        3: ['2027-04-05', '2027-04-21', '2027-05-10', '2027-05-26']
-    };
     
     for (const trim of data.trimestres) {
         trimCount++;
         let firstRow = true;
         const mesesValue = data.meses ? data.meses[trim.nombre] : '';
-        const dateRange = trimDateRanges[trimCount - 1] || trimDateRanges[0];
-        const startDates = trimStartDates[trimCount] || trimStartDates[1];
         
         for (const proyecto of trim.proyectos) {
             totalSesiones += proyecto.sesiones;
             const rowspan = firstRow ? trim.proyectos.length : 1;
             const projIndex = trim.proyectos.indexOf(proyecto);
-            
-            // Si no tiene fecha de inicio, asignar una sugerida
-            let fechaInicio = proyecto.fechaInicio || '';
-            if (!fechaInicio && startDates[projIndex]) {
-                fechaInicio = startDates[projIndex];
-                proyecto.fechaInicio = fechaInicio;
-            }
-            
-            const fechaFin = computeFechaFinSesiones(fechaInicio, parseInt(proyecto.sesiones) || 0);
-            const fechaFinLabelId = `finLabel-${grade}-${trimCount - 1}-${projIndex}`;
             
             html += `<tr>
                 ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
@@ -3356,14 +3248,6 @@ function renderDosificacion() {
                            value="${proyecto.sesiones}" 
                            onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'sesiones', parseInt(this.value) || 0)"
                            style="width:44px; text-align:center; font-weight:600;">
-                    <div class="fecha-sesion-box">
-                        <label>📅 Inicio</label>
-                        <input type="date" class="fecha-inicio-input" 
-                               value="${fechaInicio}" 
-                               min="${dateRange.min}" max="${dateRange.max}"
-                               onchange="updateProyectoFechaInicio(${grade}, ${trimCount-1}, ${projIndex}, this.value)">
-                        <span class="fecha-fin-label" id="${fechaFinLabelId}">${fechaFin ? '→ Fin: ' + formatFechaCorta(fechaFin) : ''}</span>
-                    </div>
                 </td>
             </tr>`;
             firstRow = false;
@@ -3420,24 +3304,6 @@ function updateDosificacionProyecto(grade, trimIndex, projIndex, field, value) {
     localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
     if (field === 'sesiones') {
         recalcTotalSesiones(grade);
-        updateFechaFinLabel(grade, trimIndex, projIndex);
-    }
-}
-
-function updateProyectoFechaInicio(grade, trimIndex, projIndex, value) {
-    updateDosificacionProyecto(grade, trimIndex, projIndex, 'fechaInicio', value);
-    updateFechaFinLabel(grade, trimIndex, projIndex);
-}
-
-function updateFechaFinLabel(grade, trimIndex, projIndex) {
-    const proyecto = dosificacionData[grade].trimestres[trimIndex].proyectos[projIndex];
-    const label = document.getElementById(`finLabel-${grade}-${trimIndex}-${projIndex}`);
-    if (!label) return;
-    if (proyecto.fechaInicio) {
-        const fin = computeFechaFinSesiones(proyecto.fechaInicio, parseInt(proyecto.sesiones) || 0);
-        label.textContent = fin ? `→ Fin: ${formatFechaCorta(fin)}` : '';
-    } else {
-        label.textContent = '';
     }
 }
 
@@ -3522,7 +3388,6 @@ function implementarDosificacion() {
     let count = 0;
     const gradeNum = parseInt(grade);
     
-    // Eliminar proyectos existentes de este grado
     for (const trim of data.trimestres) {
         for (const proyecto of trim.proyectos) {
             const toRemove = activities.filter(a => {
@@ -3552,21 +3417,6 @@ function implementarDosificacion() {
             let day = currentDay;
             let month = currentMonth;
             let monthIdx = currentMonthIndex;
-            
-            // Si el proyecto tiene una fecha de inicio manual, se usa como punto de partida
-            if (proyecto.fechaInicio) {
-                const parts = proyecto.fechaInicio.split('-').map(Number);
-                if (parts.length === 3) {
-                    const fMonth = parts[1];
-                    const fDay = parts[2];
-                    const fMonthIdx = trimInfo.months.indexOf(fMonth);
-                    if (fMonthIdx >= 0) {
-                        month = fMonth;
-                        day = fDay;
-                        monthIdx = fMonthIdx;
-                    }
-                }
-            }
             
             while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
                 const year = getYear(month);
@@ -3623,7 +3473,7 @@ function implementarDosificacion() {
 }
 
 // ============================================================
-// FUNCIONES PARA CRONOGRAMA (resumidas)
+// RENDERIZADO DEL CRONOGRAMA
 // ============================================================
 function renderCronograma() {
     const container = document.getElementById('cronogramaContainer');
@@ -3805,7 +3655,7 @@ function renderCronograma() {
 }
 
 // ============================================================
-// FUNCIÓN CORREGIDA - openEditModal (sin congelamiento)
+// FUNCIONES DEL MODAL - CORREGIDAS
 // ============================================================
 function openEditModal(grade, month, day) {
     const year = getYear(month);
@@ -3843,38 +3693,7 @@ function openEditModal(grade, month, day) {
             const first = projectCells[0];
             const last = projectCells[projectCells.length - 1];
             
-            // CÁLCULO OPTIMIZADO DE DURACIÓN - SIN CONGELAMIENTO
             let durationDays = projectCells.length;
-            
-            // Si hay muchas celdas, calcular días hábiles con límite
-            if (durationDays > 30) {
-                let tempM = first.month;
-                let tempD = first.day;
-                let tempY = getYear(tempM);
-                let count = 0;
-                let safety = 0;
-                const maxSafety = 500;
-                
-                while (count < durationDays && safety < maxSafety) {
-                    safety++;
-                    if (!isWeekend(tempM, tempD, tempY)) {
-                        count++;
-                    }
-                    if (count < durationDays) {
-                        tempD++;
-                        const dim = getDaysInMonth(tempM);
-                        if (tempD > dim) {
-                            tempD = 1;
-                            tempM++;
-                            if (tempM > 12) { tempM = 1; tempY++; }
-                        }
-                    }
-                }
-                if (safety < maxSafety) {
-                    durationDays = count;
-                }
-                // Si safety llegó al límite, mantener el length
-            }
             
             document.getElementById('modalTitle').textContent = '✏️ Editar Proyecto';
             document.getElementById('deleteBtn').style.display = 'inline-flex';
@@ -3935,6 +3754,296 @@ function openEditModal(grade, month, day) {
     setTimeout(() => document.getElementById('editActivity').focus(), 100);
 }
 
+function closeModal() {
+    document.getElementById('activityModal').classList.remove('show');
+    editingIndex = -1;
+    editingProject = null;
+    pendingOverwrite = false;
+}
+
+function updateFechaInfo() {
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const duration = parseInt(document.getElementById('editDuration').value);
+    const unit = document.getElementById('editUnit').value;
+    const year = getYear(month);
+    
+    const wd = getWeekday(month, day, year);
+    const wdName = WEEKDAYS_LONG[wd];
+    const monthName = getMonthName(month);
+    
+    document.getElementById('fechaInfo').textContent = `📅 ${wdName} ${day} de ${monthName} ${year}`;
+    document.getElementById('weekdayBadge').textContent = wdName;
+    
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    let tempMonth = month;
+    let tempDay = day;
+    let diasValidos = 0;
+    let contador = 0;
+    
+    while (diasValidos < totalDays && contador < 100) {
+        const y = getYear(tempMonth);
+        if (!isWeekend(tempMonth, tempDay, y)) {
+            diasValidos++;
+        }
+        if (diasValidos < totalDays) {
+            tempDay++;
+            const daysInMonth = getDaysInMonth(tempMonth);
+            if (tempDay > daysInMonth) {
+                tempDay = 1;
+                tempMonth++;
+                if (tempMonth > 12) tempMonth = 1;
+            }
+        }
+        contador++;
+    }
+    
+    const endMonth = tempMonth;
+    const endDay = tempDay;
+    const endYear = getYear(endMonth);
+    
+    const endWk = getWeekday(endMonth, endDay, endYear);
+    const endWkName = WEEKDAYS_LONG[endWk];
+    const endMonthName = getMonthName(endMonth);
+    
+    const rangeInfo = document.getElementById('rangeInfo');
+    if (totalDays > 1) {
+        rangeInfo.style.display = 'flex';
+        document.getElementById('rangoTexto').textContent = `Del ${wdName} ${day} de ${monthName} al ${endWkName} ${endDay} de ${endMonthName} ${endYear}`;
+        document.getElementById('diasTotales').textContent = `${totalDays} días`;
+    } else {
+        rangeInfo.style.display = 'none';
+    }
+    
+    checkModalConflict();
+}
+
+function checkModalConflict() {
+    const grade = document.getElementById('editGrade').value;
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const activity = document.getElementById('editActivity').value.trim();
+    
+    const grades = getGradesForActivity(grade);
+    let conflict = false;
+    let conflictText = '';
+    
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === month && 
+                   a.day === day && 
+                   a.activity !== activity &&
+                   !(editingProject !== null && a.activity === editingProject);
+        });
+        if (exists) {
+            conflict = true;
+            conflictText = `Ya existe una actividad en ${g}º Grado en ${getMonthName(month)} ${day}, ${getYear(month)}`;
+            break;
+        }
+    }
+    
+    const alert = document.getElementById('modalConflictAlert');
+    if (conflict) {
+        alert.style.display = 'block';
+        alert.innerHTML = `⚠️ ¡Conflicto! ${conflictText}. 
+            <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:6px;">Sobrescribir</button>`;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+function confirmOverwrite() {
+    pendingOverwrite = true;
+    document.getElementById('modalConflictAlert').style.display = 'none';
+    showToast('✅ Puedes guardar para sobrescribir la actividad existente');
+}
+
+function saveActivity() {
+    const grade = document.getElementById('editGrade').value;
+    const month = parseInt(document.getElementById('editMonth').value);
+    const day = parseInt(document.getElementById('editDay').value);
+    const duration = parseInt(document.getElementById('editDuration').value);
+    const unit = document.getElementById('editUnit').value;
+    const activity = document.getElementById('editActivity').value.trim();
+    const type = document.getElementById('editType').value;
+
+    if (!activity) { showToast('⚠️ Escribe una actividad'); return; }
+    if (duration < 1) { showToast('⚠️ La duración debe ser al menos 1'); return; }
+
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    const grades = getGradesForActivity(grade);
+    
+    if (!pendingOverwrite) {
+        let conflict = false;
+        for (const g of grades) {
+            for (let i = 0; i < totalDays; i++) {
+                let tempMonth = month;
+                let tempDay = day + i;
+                let tempYear = getYear(tempMonth);
+                const daysInMonth = getDaysInMonth(tempMonth);
+                if (tempDay > daysInMonth) {
+                    tempDay -= daysInMonth;
+                    tempMonth++;
+                    if (tempMonth > 12) tempMonth = 1;
+                    tempYear = getYear(tempMonth);
+                }
+                if (!isWeekend(tempMonth, tempDay, tempYear)) {
+                    const exists = activities.some(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(g) && 
+                               a.month === tempMonth && 
+                               a.day === tempDay &&
+                               a.activity !== activity;
+                    });
+                    if (exists) {
+                        conflict = true;
+                        break;
+                    }
+                }
+            }
+            if (conflict) break;
+        }
+        
+        if (conflict) {
+            showToast('⚠️ Hay un conflicto en el rango seleccionado. Revisa las fechas.');
+            document.getElementById('modalConflictAlert').style.display = 'block';
+            document.getElementById('modalConflictAlert').innerHTML = '⚠️ ¡Conflicto! Ya existe una actividad en este rango. <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:6px;">Sobrescribir</button>';
+            return;
+        }
+    }
+    
+    if (editingProject !== null && isProject(type)) {
+        for (const g of grades) {
+            const toRemove = activities.filter(a => {
+                const gradesAct = getGradesForActivity(a.grade);
+                return gradesAct.includes(g) && 
+                       a.activity === editingProject && 
+                       isProject(a.type);
+            });
+            for (const r of toRemove) {
+                const idx = activities.indexOf(r);
+                if (idx >= 0) activities.splice(idx, 1);
+            }
+        }
+    } else if (editingIndex >= 0) {
+        const act = activities[editingIndex];
+        if (act) {
+            if (isProject(act.type)) {
+                for (const g of grades) {
+                    const toRemove = activities.filter(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(g) && 
+                               a.activity === act.activity && 
+                               isProject(a.type);
+                    });
+                    for (const r of toRemove) {
+                        const idx = activities.indexOf(r);
+                        if (idx >= 0) activities.splice(idx, 1);
+                    }
+                }
+            } else {
+                activities.splice(editingIndex, 1);
+            }
+        }
+    }
+    
+    let count = 0;
+    let currentMonth = month;
+    let currentDay = day;
+    let diasAsignados = 0;
+    let maxIteraciones = 200;
+    
+    while (diasAsignados < totalDays && maxIteraciones > 0) {
+        maxIteraciones--;
+        const yearForDate = getYear(currentMonth);
+        if (!isWeekend(currentMonth, currentDay, yearForDate)) {
+            for (const g of grades) {
+                const existingIdx = activities.findIndex(a => {
+                    const gradesAct = getGradesForActivity(a.grade);
+                    return gradesAct.includes(g) && 
+                           a.month === currentMonth && 
+                           a.day === currentDay;
+                });
+                
+                if (existingIdx >= 0) {
+                    activities[existingIdx] = { 
+                        grade: g, 
+                        month: currentMonth, 
+                        day: currentDay, 
+                        activity: activity, 
+                        type: type, 
+                        duration: duration, 
+                        unit: unit 
+                    };
+                } else {
+                    activities.push({ 
+                        grade: g, 
+                        month: currentMonth, 
+                        day: currentDay, 
+                        activity: activity, 
+                        type: type, 
+                        duration: duration, 
+                        unit: unit 
+                    });
+                }
+                count++;
+            }
+            diasAsignados++;
+        }
+        
+        currentDay++;
+        const daysInMonth = getDaysInMonth(currentMonth);
+        if (currentDay > daysInMonth) {
+            currentDay = 1;
+            currentMonth++;
+            if (currentMonth > 12) currentMonth = 1;
+        }
+    }
+
+    saveActivities();
+    renderCronograma();
+    closeModal();
+    pendingOverwrite = false;
+    showToast(`✅ "${activity}" asignado a ${count} celdas`);
+}
+
+function deleteActivity() {
+    const grade = document.getElementById('editGrade').value;
+    const activity = document.getElementById('editActivity').value.trim();
+    const type = document.getElementById('editType').value;
+    
+    if (!activity) { showToast('⚠️ No hay actividad para eliminar'); return; }
+    
+    if (!confirm(`¿Eliminar completamente el proyecto "${activity}"?\nSe eliminarán todas sus celdas.`)) return;
+    
+    const grades = getGradesForActivity(grade);
+    let count = 0;
+    
+    for (const g of grades) {
+        const toRemove = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.activity === activity && 
+                   a.type === type;
+        });
+        count += toRemove.length;
+        for (const r of toRemove) {
+            const idx = activities.indexOf(r);
+            if (idx >= 0) activities.splice(idx, 1);
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    closeModal();
+    showToast(`🗑️ Proyecto "${activity}" eliminado (${count} celdas)`);
+}
+
+// ============================================================
+// MANEJADOR DE CLICK EN CELDAS
+// ============================================================
 function handleCellClick(grade, month, day, event) {
     const year = getYear(month);
     if (isWeekend(month, day, year)) {
@@ -4026,18 +4135,307 @@ function updateSelectionInfo() {
 }
 
 // ============================================================
-// MODALES Y FUNCIONES RESTANTES
+// BULK MODAL
 // ============================================================
-// (Las funciones restantes son las mismas que en el código original)
-// openNewActivityModal, closeModal, updateFechaInfo, checkModalConflict,
-// confirmOverwrite, saveActivity, deleteActivity, openBulkModal, 
-// closeBulkModal, saveBulk, searchActivities, selectSearchResult,
-// checkConflict, moveActivity, clearAllActivities, renderPlaneacion,
-// printPlaneacion, exportToExcel, printPreview, exportJSON, importJSONFile,
-// applyTheme, toggleTheme, adjustColor, showToast
+function openBulkModal() {
+    if (selectedCells.length === 0) {
+        showToast('⚠️ Primero selecciona celdas');
+        return;
+    }
+    document.getElementById('bulkCount').textContent = selectedCells.length;
+    document.getElementById('bulkActivity').value = '';
+    document.getElementById('bulkType').value = 'proyecto';
+    document.getElementById('bulkModal').classList.add('show');
+}
 
-// Por brevedad, mantengo las funciones originales sin cambios
-// ya que el problema principal era openEditModal
+function closeBulkModal() {
+    document.getElementById('bulkModal').classList.remove('show');
+}
+
+function saveBulk() {
+    const activity = document.getElementById('bulkActivity').value.trim();
+    const type = document.getElementById('bulkType').value;
+
+    if (!activity) {
+        showToast('⚠️ Escribe un nombre');
+        return;
+    }
+
+    let count = 0;
+    for (const key of selectedCells) {
+        const [grade, month, day] = key.split('-').map(Number);
+        const year = getYear(month);
+        if (isWeekend(month, day, year)) continue;
+        const idx = activities.findIndex(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(grade) && a.month === month && a.day === day;
+        });
+        if (idx >= 0) {
+            activities[idx] = { grade, month, day, activity, type, duration: 1, unit: 'days' };
+        } else {
+            activities.push({ grade, month, day, activity, type, duration: 1, unit: 'days' });
+        }
+        count++;
+    }
+
+    saveActivities();
+    clearSelection();
+    renderCronograma();
+    closeBulkModal();
+    showToast(`✅ "${activity}" asignado a ${count} celdas`);
+}
+
+// ============================================================
+// EDITOR - BUSCAR Y MOVER ACTIVIDADES
+// ============================================================
+function searchActivities() {
+    const query = document.getElementById('searchActivity').value.toLowerCase().trim();
+    const resultsContainer = document.getElementById('searchResultsContainer');
+    const resultsList = document.getElementById('searchResultsList');
+    const noResults = document.getElementById('noResultsMessage');
+    const selectedInfo = document.getElementById('selectedActivityInfo');
+    
+    resultsContainer.style.display = 'none';
+    noResults.style.display = 'none';
+    selectedInfo.style.display = 'none';
+    selectedSearchActivity = null;
+    document.getElementById('conflictAlert').style.display = 'none';
+    
+    if (!query || query.length < 2) return;
+    
+    const found = activities.filter(a => a.activity.toLowerCase().includes(query));
+    const unique = [];
+    const seen = new Set();
+    for (const item of found) {
+        const key = `${item.activity}-${item.grade}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+            unique.push(item);
+        }
+    }
+    
+    if (unique.length === 0) {
+        noResults.style.display = 'block';
+        return;
+    }
+    
+    resultsContainer.style.display = 'block';
+    resultsList.innerHTML = '';
+    
+    for (const item of unique) {
+        const year = getYear(item.month);
+        const wd = getWeekday(item.month, item.day, year);
+        const gradeLabel = item.grade === 'all' ? 'Todos' : `${item.grade}º`;
+        const typeIcons = { 
+            'proyecto': '🎯', 'inicio-clases': '🟠', 'receso-vacaciones': '🟡', 
+            'festivo-suspension': '🔴', 'cte-intensiva': '🔵', 'cte-ordinaria': '🩷',
+            'fortalecimiento': '🟢', 'fin-ciclo': '🏁', 'normal': '⚪', 'tema-personalizado': '📝'
+        };
+        const icon = typeIcons[item.type] || '📘';
+        const durationLabel = item.duration && item.duration > 1 ? ` (${item.duration} ${item.unit})` : '';
+        
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        div.dataset.grade = item.grade;
+        div.dataset.month = item.month;
+        div.dataset.day = item.day;
+        div.dataset.activity = item.activity;
+        div.dataset.type = item.type;
+        div.dataset.duration = item.duration || 1;
+        div.dataset.unit = item.unit || 'days';
+        
+        div.innerHTML = `
+            <span class="result-name">${icon} ${item.activity}${durationLabel}</span>
+            <span class="result-detail">${getMonthName(item.month)} ${item.day}, ${year} (${WEEKDAYS_SHORT[wd]})</span>
+            <span class="result-badge">${gradeLabel}</span>
+        `;
+        
+        div.addEventListener('click', function() {
+            selectSearchResult(this);
+        });
+        resultsList.appendChild(div);
+    }
+}
+
+function selectSearchResult(element) {
+    document.querySelectorAll('.search-result-item').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    
+    const data = {
+        grade: element.dataset.grade,
+        month: parseInt(element.dataset.month),
+        day: parseInt(element.dataset.day),
+        activity: element.dataset.activity,
+        type: element.dataset.type,
+        duration: parseInt(element.dataset.duration) || 1,
+        unit: element.dataset.unit || 'days'
+    };
+    
+    selectedSearchActivity = data;
+    
+    const year = getYear(data.month);
+    const wd = getWeekday(data.month, data.day, year);
+    const gradeLabel = data.grade === 'all' ? 'Todos' : `${data.grade}º`;
+    
+    document.getElementById('selectedActName').textContent = data.activity;
+    document.getElementById('selectedActDate').textContent = `${WEEKDAYS_LONG[wd]} ${data.day} de ${getMonthName(data.month)} ${year}`;
+    
+    document.getElementById('selectedActivityInfo').style.display = 'block';
+    document.getElementById('moveGrade').value = data.grade;
+    document.getElementById('moveTrimestre').value = 'all';
+    document.getElementById('moveMonth').value = data.month;
+    document.getElementById('moveDay').value = data.day;
+    document.getElementById('conflictAlert').style.display = 'none';
+    checkConflict();
+}
+
+function checkConflict() {
+    if (!selectedSearchActivity) return;
+    
+    const newMonth = parseInt(document.getElementById('moveMonth').value);
+    const newDay = parseInt(document.getElementById('moveDay').value);
+    const grade = document.getElementById('moveGrade').value;
+    const activity = selectedSearchActivity.activity;
+    
+    const grades = getGradesForActivity(grade);
+    let conflict = false;
+    let conflictText = '';
+    
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === newMonth && 
+                   a.day === newDay && 
+                   a.activity !== activity;
+        });
+        if (exists) {
+            conflict = true;
+            conflictText = `${g}º Grado en ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}`;
+            break;
+        }
+    }
+    
+    const alert = document.getElementById('conflictAlert');
+    if (conflict) {
+        alert.style.display = 'block';
+        alert.textContent = `⚠️ ¡Conflicto! Ya existe una actividad en ${conflictText}.`;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+function moveActivity() {
+    if (!selectedSearchActivity) {
+        showToast('⚠️ Primero selecciona una actividad de la lista');
+        return;
+    }
+    
+    const newMonth = parseInt(document.getElementById('moveMonth').value);
+    const newDay = parseInt(document.getElementById('moveDay').value);
+    const moveGrade = document.getElementById('moveGrade').value;
+    const moveTrimestre = document.getElementById('moveTrimestre').value;
+    const activity = selectedSearchActivity.activity;
+    const type = selectedSearchActivity.type;
+    const duration = selectedSearchActivity.duration || 1;
+    const unit = selectedSearchActivity.unit || 'days';
+    
+    const allowedMonths = getTrimestreMonths(parseInt(moveTrimestre));
+    
+    if (moveTrimestre !== 'all' && !allowedMonths.includes(newMonth)) {
+        showToast(`⚠️ La fecha seleccionada no pertenece al ${moveTrimestre === '1' ? 'TRIMESTRE I' : moveTrimestre === '2' ? 'TRIMESTRE II' : 'TRIMESTRE III'}`);
+        return;
+    }
+    
+    const grades = getGradesForActivity(moveGrade);
+    let conflict = false;
+    for (const g of grades) {
+        const exists = activities.some(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.month === newMonth && 
+                   a.day === newDay && 
+                   a.activity !== activity;
+        });
+        if (exists) {
+            conflict = true;
+            break;
+        }
+    }
+    
+    if (conflict) {
+        if (!confirm(`⚠️ Hay un conflicto en la fecha ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}. ¿Deseas sobrescribir?`)) {
+            return;
+        }
+    }
+    
+    let count = 0;
+    for (const g of grades) {
+        const toRemove = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(g) && 
+                   a.activity === activity && 
+                   a.type === type &&
+                   (moveTrimestre === 'all' || allowedMonths.includes(a.month));
+        });
+        count += toRemove.length;
+        for (const r of toRemove) {
+            const idx = activities.indexOf(r);
+            if (idx >= 0) activities.splice(idx, 1);
+        }
+    }
+    
+    let currentMonth = newMonth;
+    let currentDay = newDay;
+    let diasCreados = 0;
+    const totalDays = unit === 'weeks' ? duration * 7 : duration;
+    
+    while (diasCreados < totalDays && diasCreados < 60) {
+        const year = getYear(currentMonth);
+        if (!isWeekend(currentMonth, currentDay, year)) {
+            for (const g of grades) {
+                activities.push({
+                    grade: g,
+                    month: currentMonth,
+                    day: currentDay,
+                    activity: activity,
+                    type: type,
+                    duration: duration,
+                    unit: unit
+                });
+            }
+            diasCreados++;
+        }
+        currentDay++;
+        const daysInMonth = getDaysInMonth(currentMonth);
+        if (currentDay > daysInMonth) {
+            currentDay = 1;
+            currentMonth++;
+            if (currentMonth > 12) currentMonth = 1;
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    
+    document.getElementById('searchActivity').value = '';
+    document.getElementById('searchResultsContainer').style.display = 'none';
+    document.getElementById('noResultsMessage').style.display = 'none';
+    document.getElementById('selectedActivityInfo').style.display = 'none';
+    document.getElementById('conflictAlert').style.display = 'none';
+    selectedSearchActivity = null;
+    
+    showToast(`✅ "${activity}" movida a ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)} (${count} celdas)`);
+}
+
+function clearAllActivities() {
+    if (confirm('¿Eliminar TODAS las actividades?')) {
+        activities = [];
+        saveActivities();
+        renderCronograma();
+        showToast('🗑️ Todas las actividades eliminadas');
+    }
+}
 
 // ============================================================
 // RENDERIZADO DE PLANEACIÓN SEMANAL
@@ -4105,7 +4503,6 @@ function renderPlaneacion() {
     </table>
     `;
     
-    // Agregar fila de firmas
     html += `
     <div style="margin-top:16px; text-align:center; font-size:0.85rem; font-weight:500;">
         Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026
@@ -4130,14 +4527,9 @@ function renderPlaneacion() {
     
     container.innerHTML = html;
     
-    // Agregar eventos para guardado automático en los campos editables
     container.querySelectorAll('.editable-periodo, .editable-actividades, .editable-recursos, .editable-producto').forEach(el => {
-        el.addEventListener('change', function() {
-            savePlaneacion();
-        });
-        el.addEventListener('blur', function() {
-            savePlaneacion();
-        });
+        el.addEventListener('change', function() { savePlaneacion(); });
+        el.addEventListener('blur', function() { savePlaneacion(); });
     });
 }
 
@@ -4550,6 +4942,9 @@ function printPreview() {
     printWindow.document.close();
 }
 
+// ============================================================
+// EXPORTAR JSON
+// ============================================================
 function exportJSON() {
     const data = { 
         activities: activities,
@@ -4689,80 +5084,9 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado');
+console.log('📚 Cronograma SEP 2026-2027 cargado y reparado');
 console.log(`📊 ${activities.length} actividades cargadas`);
-console.log('📝 Dosificación con fechas ajustadas por trimestre y grado');
-
-// Función auxiliar para cerrar el modal (en caso de que no esté definida)
-function closeModal() {
-    document.getElementById('activityModal').classList.remove('show');
-    editingIndex = -1;
-    editingProject = null;
-    pendingOverwrite = false;
-}
-
-function closeBulkModal() {
-    document.getElementById('bulkModal').classList.remove('show');
-}
-
-// Variables globales necesarias
-let pendingOverwrite = false;
-
-// Función para actualizar fecha en el modal
-function updateFechaInfo() {
-    const month = parseInt(document.getElementById('editMonth').value);
-    const day = parseInt(document.getElementById('editDay').value);
-    const duration = parseInt(document.getElementById('editDuration').value);
-    const unit = document.getElementById('editUnit').value;
-    const year = getYear(month);
-    
-    const wd = getWeekday(month, day, year);
-    const wdName = WEEKDAYS_LONG[wd];
-    const monthName = getMonthName(month);
-    
-    document.getElementById('fechaInfo').textContent = `📅 ${wdName} ${day} de ${monthName} ${year}`;
-    document.getElementById('weekdayBadge').textContent = wdName;
-    
-    const totalDays = unit === 'weeks' ? duration * 7 : duration;
-    let tempMonth = month;
-    let tempDay = day;
-    let diasValidos = 0;
-    let contador = 0;
-    
-    while (diasValidos < totalDays && contador < 100) {
-        const y = getYear(tempMonth);
-        if (!isWeekend(tempMonth, tempDay, y)) {
-            diasValidos++;
-        }
-        if (diasValidos < totalDays) {
-            tempDay++;
-            const daysInMonth = getDaysInMonth(tempMonth);
-            if (tempDay > daysInMonth) {
-                tempDay = 1;
-                tempMonth++;
-                if (tempMonth > 12) tempMonth = 1;
-            }
-        }
-        contador++;
-    }
-    
-    const endMonth = tempMonth;
-    const endDay = tempDay;
-    const endYear = getYear(endMonth);
-    
-    const endWk = getWeekday(endMonth, endDay, endYear);
-    const endWkName = WEEKDAYS_LONG[endWk];
-    const endMonthName = getMonthName(endMonth);
-    
-    const rangeInfo = document.getElementById('rangeInfo');
-    if (totalDays > 1) {
-        rangeInfo.style.display = 'flex';
-        document.getElementById('rangoTexto').textContent = `Del ${wdName} ${day} de ${monthName} al ${endWkName} ${endDay} de ${endMonthName} ${endYear}`;
-        document.getElementById('diasTotales').textContent = `${totalDays} días`;
-    } else {
-        rangeInfo.style.display = 'none';
-    }
-}
+console.log('✅ Sistema de edición de proyectos funcionando correctamente');
 </script>
 </body>
 </html>
