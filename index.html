@@ -27,6 +27,7 @@
             --color-fortalecimiento: #28A745;
             --color-fin-ciclo: #8B0000;
             --color-normal: #E8F0FE;
+            --color-tema: #17A2B8;
             --color-selected: #FF6B6B;
             --color-weekend: #e8e8e8;
             --color-proyecto: #6C5CE7;
@@ -47,6 +48,7 @@
             --color-cte-ordinaria: #C2185B;
             --color-fortalecimiento: #1A7A35;
             --color-fin-ciclo: #6B0000;
+            --color-tema: #12879C;
             --color-selected: #CC4444;
             --color-weekend: #2a2a2a;
             --color-proyecto: #4A3A8A;
@@ -483,6 +485,20 @@
             padding: 2px 6px;
             font-size: 0.6rem;
         }
+        .calendario-sep-table .event-editor .tema-input {
+            width: 130px;
+            flex: 1 1 130px;
+        }
+        .calendario-sep-table .tema-cell-text {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            font-style: italic;
+        }
+        .calendario-actions .calEditTema-input {
+            width: 160px;
+        }
 
         /* ============================================================
            ESTILOS PARA DOSIFICACIÓN - COLUMNA TRIMESTRE MUY REDUCIDA
@@ -517,38 +533,38 @@
             color: var(--primary-dark);
             font-weight: 600;
         }
-        /* COLUMNA TRIMESTRE - MUY REDUCIDA (ocupa ~1cm) */
+        /* COLUMNA TRIMESTRE - proporcional al resto de columnas, texto horizontal */
         .dosificacion-table .trimestre-cell {
             font-weight: 700;
             text-align: center;
             background: var(--primary-light);
             color: var(--primary-dark);
             vertical-align: middle;
-            width: 1.2%;
-            min-width: 8px;
-            max-width: 14px;
-            font-size: 0.45rem;
-            padding: 1px 0px;
-            line-height: 1;
+            width: 7%;
+            min-width: 60px;
+            max-width: 90px;
+            font-size: 0.7rem;
+            padding: 4px 3px;
+            line-height: 1.25;
         }
         .dosificacion-table .trimestre-cell .trim-label {
-            font-size: 0.55rem;
+            font-size: 0.72rem;
             font-weight: 700;
-            writing-mode: vertical-rl;
+            writing-mode: horizontal-tb;
             text-orientation: mixed;
             letter-spacing: 0px;
-            line-height: 1;
+            line-height: 1.2;
             display: block;
-            padding: 1px 0;
+            padding: 0;
         }
         .dosificacion-table .trimestre-cell .meses-label {
-            font-size: 0.3rem;
+            font-size: 0.6rem;
             font-weight: 400;
             color: var(--text-secondary);
             display: block;
-            margin-top: 1px;
-            line-height: 1;
-            writing-mode: vertical-rl;
+            margin-top: 3px;
+            line-height: 1.3;
+            writing-mode: horizontal-tb;
             text-orientation: mixed;
             letter-spacing: 0px;
         }
@@ -628,16 +644,46 @@
             width: 50px;
             margin: 0 auto;
         }
+        .dosificacion-table .fecha-sesion-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px dashed var(--border);
+        }
+        .dosificacion-table .fecha-sesion-box label {
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .dosificacion-table .fecha-inicio-input {
+            width: 100%;
+            font-size: 0.62rem;
+            padding: 2px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .dosificacion-table .fecha-fin-label {
+            font-size: 0.58rem;
+            color: var(--color-proyecto);
+            font-weight: 600;
+            min-height: 12px;
+            text-align: center;
+        }
 
         .dosificacion-table .col-trimestre { 
-            width: 1.2%; 
-            min-width: 8px; 
-            max-width: 14px; 
+            width: 7%; 
+            min-width: 60px; 
+            max-width: 90px; 
         }
-        .dosificacion-table .col-proyecto { width: 26%; min-width: 150px; }
-        .dosificacion-table .col-contenido { width: 22%; min-width: 120px; }
-        .dosificacion-table .col-pda { width: 42%; min-width: 200px; }
-        .dosificacion-table .col-sesiones { width: 8.8%; min-width: 50px; }
+        .dosificacion-table .col-proyecto { width: 24%; min-width: 150px; }
+        .dosificacion-table .col-contenido { width: 20%; min-width: 120px; }
+        .dosificacion-table .col-pda { width: 38%; min-width: 200px; }
+        .dosificacion-table .col-sesiones { width: 11%; min-width: 90px; }
 
         .dosificacion-grade-selector {
             display: flex;
@@ -875,6 +921,7 @@
         .grid-cell .activity.fortalecimiento { background: var(--color-fortalecimiento); color: transparent; }
         .grid-cell .activity.fin-ciclo { background: var(--color-fin-ciclo); color: transparent; }
         .grid-cell .activity.normal { background: var(--color-normal); color: transparent; }
+        .grid-cell .activity.tema-personalizado { background: var(--color-tema); color: transparent; }
         .grid-cell .activity.filled { border-radius: 3px; }
 
         .modal-overlay {
@@ -1298,14 +1345,14 @@
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 4px; }
             .dosificacion-table .col-trimestre { 
-                min-width: 6px; 
-                max-width: 10px;
+                min-width: 46px; 
+                max-width: 70px;
             }
             .dosificacion-table .trimestre-cell .trim-label {
-                font-size: 0.45rem;
+                font-size: 0.58rem;
             }
             .dosificacion-table .trimestre-cell .meses-label {
-                font-size: 0.25rem;
+                font-size: 0.48rem;
             }
             .calendario-sep-table { font-size: 0.55rem; }
             .calendario-sep-table th,
@@ -1326,14 +1373,14 @@
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 3px; }
             .dosificacion-table .col-trimestre { 
-                min-width: 5px; 
-                max-width: 8px;
+                min-width: 40px; 
+                max-width: 60px;
             }
             .dosificacion-table .trimestre-cell .trim-label {
-                font-size: 0.35rem;
+                font-size: 0.5rem;
             }
             .dosificacion-table .trimestre-cell .meses-label {
-                font-size: 0.2rem;
+                font-size: 0.42rem;
             }
             .calendario-sep-table { font-size: 0.5rem; }
             .calendario-sep-table th,
@@ -1444,6 +1491,7 @@ HEADER
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-cte-ordinaria);"></span> CTE Sesión Ordinaria</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-fortalecimiento);"></span> Fortalecimiento</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-fin-ciclo);"></span> Fin de ciclo</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-tema);"></span> Tema / Evento personalizado</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-proyecto);"></span> Proyecto / Tema</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-selected);"></span> Seleccionado</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-weekend); border:1px solid #ccc;"></span> Fin de semana</span>
@@ -1508,6 +1556,7 @@ HEADER
                             <option value="fin-ciclo">🏁 Fin de ciclo</option>
                             <option value="normal">⚪ Normal</option>
                         </select>
+                        <input type="text" id="calEditTema" class="calEditTema-input" placeholder="📝 Tema o evento (opcional)">
                         <button class="btn btn-primary btn-sm" onclick="updateCalendarEvent()">💾 Aplicar</button>
                         <button class="btn btn-danger btn-sm" onclick="removeCalendarEvent()">🗑️ Quitar</button>
                     </div>
@@ -1519,8 +1568,8 @@ HEADER
                 <!-- Generado por JavaScript -->
             </div>
             <div style="margin-top:12px; padding:10px; background:var(--primary-light); border-radius:6px; font-size:0.8rem; color:var(--text-secondary);">
-                <strong>💡 Instrucciones:</strong> Selecciona un día, elige el tipo de evento y haz clic en "Aplicar". 
-                Los eventos se guardan automáticamente. Usa "Aplicar al Cronograma" para sincronizar.
+                <strong>💡 Instrucciones:</strong> Selecciona un día, elige el tipo de evento y/o escribe un tema o evento personalizado, luego haz clic en "Aplicar". 
+                Los eventos se guardan automáticamente. Usa "Aplicar al Cronograma" para que el tema quede registrado en el día indicado del cronograma.
             </div>
         </div>
     </div>
@@ -2617,6 +2666,36 @@ function getDaysInMonth(month) {
     return days[month] || 31;
 }
 
+function computeFechaFinSesiones(fechaInicioISO, sesiones) {
+    if (!fechaInicioISO || !sesiones || sesiones < 1) return null;
+    const parts = fechaInicioISO.split('-').map(Number);
+    let year = parts[0], month = parts[1], day = parts[2];
+    let count = 0;
+    let lastValid = null;
+    let safety = 0;
+    while (count < sesiones && safety < 1000) {
+        safety++;
+        if (!isWeekend(month, day, year)) {
+            count++;
+            lastValid = { month, day, year };
+            if (count >= sesiones) break;
+        }
+        day++;
+        const dim = getDaysInMonth(month);
+        if (day > dim) {
+            day = 1;
+            month++;
+            if (month > 12) { month = 1; year++; }
+        }
+    }
+    return lastValid;
+}
+
+function formatFechaCorta(f) {
+    if (!f) return '';
+    return `${String(f.day).padStart(2, '0')}/${String(f.month).padStart(2, '0')}/${f.year}`;
+}
+
 function getGradesForActivity(grade) {
     if (grade === 'all') return [1, 2, 3];
     return [parseInt(grade)];
@@ -2939,19 +3018,21 @@ function renderCalendario() {
     let html = `<table class="calendario-sep-table">
         <thead>
             <tr>
-                <th style="width:10%;">Mes</th>
+                <th style="width:9%;">Mes</th>
                 <th style="width:5%;">Día</th>
-                <th style="width:10%;">Semana</th>
-                <th style="width:15%;">Evento</th>
+                <th style="width:9%;">Semana</th>
+                <th style="width:17%;">Evento</th>
                 <th style="width:60%;">Acciones</th>
             </tr>
         </thead>
         <tbody>`;
 
     const eventMap = {};
+    const temaMap = {};
     for (const ev of calendarioData) {
         const key = `${ev.month}-${ev.day}`;
         eventMap[key] = ev.type;
+        temaMap[key] = ev.tema || '';
     }
 
     for (const month of months) {
@@ -2960,6 +3041,7 @@ function renderCalendario() {
         for (let day = 1; day <= daysInMonth; day++) {
             const key = `${month.num}-${day}`;
             const type = eventMap[key] || '';
+            const tema = temaMap[key] || '';
             const year = month.year;
             const wd = getWeekday(month.num, day, year);
             const wdName = WEEKDAYS_LONG[wd];
@@ -2970,7 +3052,7 @@ function renderCalendario() {
                 <td>${month.name}</td>
                 <td class="${isWeekendDay ? 'weekend' : ''}" style="font-weight:600;">${day}</td>
                 <td>${wdName}</td>
-                <td>${type ? `<span class="event-badge ${type}">${typeLabel}</span>` : '—'}</td>
+                <td>${type ? `<span class="event-badge ${type}">${typeLabel}</span>` : '—'}${tema ? `<span class="tema-cell-text">${tema}</span>` : ''}</td>
                 <td>
                     <div class="event-editor">
                         <select class="cal-type-select" data-month="${month.num}" data-day="${day}">
@@ -2984,8 +3066,9 @@ function renderCalendario() {
                             <option value="fin-ciclo" ${type === 'fin-ciclo' ? 'selected' : ''}>🏁 Fin de ciclo</option>
                             <option value="normal" ${type === 'normal' ? 'selected' : ''}>⚪ Normal</option>
                         </select>
+                        <input type="text" class="cal-tema-input tema-input" data-month="${month.num}" data-day="${day}" placeholder="📝 Tema o evento" value="${tema.replace(/"/g, '&quot;')}">
                         <button class="btn btn-primary btn-sm" onclick="updateCalEventFromRow(this)">💾</button>
-                        ${type ? `<button class="btn btn-danger btn-sm" onclick="removeCalEventFromRow(this)">🗑️</button>` : ''}
+                        ${(type || tema) ? `<button class="btn btn-danger btn-sm" onclick="removeCalEventFromRow(this)">🗑️</button>` : ''}
                     </div>
                 </td>
             </tr>`;
@@ -2999,17 +3082,19 @@ function renderCalendario() {
 function updateCalEventFromRow(btn) {
     const row = btn.closest('tr');
     const select = row.querySelector('.cal-type-select');
+    const temaInput = row.querySelector('.cal-tema-input');
     const month = parseInt(select.dataset.month);
     const day = parseInt(select.dataset.day);
     const type = select.value;
+    const tema = temaInput ? temaInput.value.trim() : '';
     
     const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
     if (idx >= 0) {
         calendarioData.splice(idx, 1);
     }
     
-    if (type) {
-        calendarioData.push({ month, day, type });
+    if (type || tema) {
+        calendarioData.push({ month, day, type, tema });
     }
     
     saveCalendario();
@@ -3036,18 +3121,21 @@ function updateCalendarEvent() {
     const month = parseInt(document.getElementById('calEditMonth').value);
     const day = parseInt(document.getElementById('calEditDay').value);
     const type = document.getElementById('calEditType').value;
+    const temaEl = document.getElementById('calEditTema');
+    const tema = temaEl ? temaEl.value.trim() : '';
     
     const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
     if (idx >= 0) {
         calendarioData.splice(idx, 1);
     }
     
-    if (type) {
-        calendarioData.push({ month, day, type });
+    if (type || tema) {
+        calendarioData.push({ month, day, type, tema });
     }
     
     saveCalendario();
     renderCalendario();
+    if (temaEl) temaEl.value = '';
     showToast(`✅ Evento actualizado para ${getMonthName(month)} ${day}`);
 }
 
@@ -3079,24 +3167,36 @@ function applyCalendarToCronograma() {
         'normal': 'Normal'
     };
     
-    const toRemove = activities.filter(a => {
-        const gradesAct = getGradesForActivity(a.grade);
-        return isOfficialEvent(a.type);
-    });
+    // Elimina del cronograma los eventos oficiales y los temas personalizados
+    // previamente sincronizados, para regenerarlos con los datos actuales del calendario.
+    const toRemove = activities.filter(a => isOfficialEvent(a.type) || a.type === 'tema-personalizado');
     for (const r of toRemove) {
         const idx = activities.indexOf(r);
         if (idx >= 0) activities.splice(idx, 1);
     }
     
     for (const ev of calendarioData) {
-        const activity = typeToActivity[ev.type];
-        if (activity) {
+        const baseLabel = typeToActivity[ev.type] || '';
+        const tema = (ev.tema || '').trim();
+        let activityText = '';
+        let activityType = ev.type || '';
+        
+        if (baseLabel && tema) {
+            activityText = `${baseLabel}: ${tema}`;
+        } else if (baseLabel) {
+            activityText = baseLabel;
+        } else if (tema) {
+            activityText = tema;
+            activityType = 'tema-personalizado';
+        }
+        
+        if (activityText) {
             newActivities.push({
                 grade: 'all',
                 month: ev.month,
                 day: ev.day,
-                activity: activity,
-                type: ev.type,
+                activity: activityText,
+                type: activityType,
                 duration: 1,
                 unit: 'days'
             });
@@ -3104,10 +3204,7 @@ function applyCalendarToCronograma() {
     }
     
     for (const a of newActivities) {
-        const exists = activities.some(ex => ex.month === a.month && ex.day === a.day && ex.type === a.type);
-        if (!exists) {
-            activities.push(a);
-        }
+        activities.push(a);
     }
     
     saveActivities();
@@ -3184,15 +3281,25 @@ function renderDosificacion() {
     
     let totalSesiones = 0;
     let trimCount = 0;
+    const trimDateRanges = [
+        { min: '2026-09-01', max: '2026-11-30' },
+        { min: '2026-12-01', max: '2027-03-31' },
+        { min: '2027-04-01', max: '2027-07-31' }
+    ];
     
     for (const trim of data.trimestres) {
         trimCount++;
         let firstRow = true;
         const mesesValue = data.meses ? data.meses[trim.nombre] : '';
+        const dateRange = trimDateRanges[trimCount - 1] || trimDateRanges[0];
         
         for (const proyecto of trim.proyectos) {
             totalSesiones += proyecto.sesiones;
             const rowspan = firstRow ? trim.proyectos.length : 1;
+            const projIndex = trim.proyectos.indexOf(proyecto);
+            const fechaInicio = proyecto.fechaInicio || '';
+            const fechaFin = computeFechaFinSesiones(fechaInicio, parseInt(proyecto.sesiones) || 0);
+            const fechaFinLabelId = `finLabel-${grade}-${trimCount - 1}-${projIndex}`;
             
             html += `<tr>
                 ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
@@ -3201,24 +3308,32 @@ function renderDosificacion() {
                 </td>` : ''}
                 <td>
                     <textarea class="editable-textarea" 
-                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'nombre', this.value)" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'nombre', this.value)" 
                               style="width:100%; min-height:40px; font-weight:600; color:var(--color-proyecto);">${proyecto.nombre}</textarea>
                 </td>
                 <td>
                     <textarea class="editable-textarea" 
-                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'contenido', this.value)" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'contenido', this.value)" 
                               style="width:100%; min-height:40px;">${proyecto.contenido}</textarea>
                 </td>
                 <td>
                     <textarea class="editable-textarea" 
-                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'pda', this.value)" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'pda', this.value)" 
                               style="width:100%; min-height:60px;">${proyecto.pda}</textarea>
                 </td>
                 <td class="sesiones-cell">
                     <input type="number" class="editable-input sesiones-input" 
                            value="${proyecto.sesiones}" 
-                           onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${trim.proyectos.indexOf(proyecto)}, 'sesiones', parseInt(this.value) || 0)"
+                           onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'sesiones', parseInt(this.value) || 0)"
                            style="width:50px; text-align:center; font-weight:600;">
+                    <div class="fecha-sesion-box">
+                        <label>📅 Inicio</label>
+                        <input type="date" class="fecha-inicio-input" 
+                               value="${fechaInicio}" 
+                               min="${dateRange.min}" max="${dateRange.max}"
+                               onchange="updateProyectoFechaInicio(${grade}, ${trimCount-1}, ${projIndex}, this.value)">
+                        <span class="fecha-fin-label" id="${fechaFinLabelId}">${fechaFin ? '→ Fin: ' + formatFechaCorta(fechaFin) : ''}</span>
+                    </div>
                 </td>
             </tr>`;
             firstRow = false;
@@ -3275,6 +3390,24 @@ function updateDosificacionProyecto(grade, trimIndex, projIndex, field, value) {
     localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
     if (field === 'sesiones') {
         recalcTotalSesiones(grade);
+        updateFechaFinLabel(grade, trimIndex, projIndex);
+    }
+}
+
+function updateProyectoFechaInicio(grade, trimIndex, projIndex, value) {
+    updateDosificacionProyecto(grade, trimIndex, projIndex, 'fechaInicio', value);
+    updateFechaFinLabel(grade, trimIndex, projIndex);
+}
+
+function updateFechaFinLabel(grade, trimIndex, projIndex) {
+    const proyecto = dosificacionData[grade].trimestres[trimIndex].proyectos[projIndex];
+    const label = document.getElementById(`finLabel-${grade}-${trimIndex}-${projIndex}`);
+    if (!label) return;
+    if (proyecto.fechaInicio) {
+        const fin = computeFechaFinSesiones(proyecto.fechaInicio, parseInt(proyecto.sesiones) || 0);
+        label.textContent = fin ? `→ Fin: ${formatFechaCorta(fin)}` : '';
+    } else {
+        label.textContent = '';
     }
 }
 
@@ -3388,6 +3521,20 @@ function implementarDosificacion() {
             let day = currentDay;
             let month = currentMonth;
             let monthIdx = currentMonthIndex;
+            
+            // Si el proyecto tiene una fecha de inicio manual, se usa como punto de partida
+            // en lugar de continuar de forma automática desde el proyecto anterior.
+            if (proyecto.fechaInicio) {
+                const parts = proyecto.fechaInicio.split('-').map(Number);
+                const fMonth = parts[1];
+                const fDay = parts[2];
+                const fMonthIdx = trimInfo.months.indexOf(fMonth);
+                if (fMonthIdx >= 0) {
+                    month = fMonth;
+                    day = fDay;
+                    monthIdx = fMonthIdx;
+                }
+            }
             
             while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
                 const year = getYear(month);
@@ -3601,8 +3748,9 @@ function renderCronograma() {
                         const selectClass = isSelected ? 'selected' : '';
                         const weekendClass = weekend ? 'weekend' : '';
                         const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
+                        const titleAttr = acts[0].activity ? ` title="${String(acts[0].activity).replace(/"/g, '&quot;')}"` : '';
                         
-                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${colorOnlyClass}" ${clickAttr}>
+                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${colorOnlyClass}" ${clickAttr}${titleAttr}>
                             <div class="activity ${typeClass} filled"></div>
                         </div>`;
                     } else {
