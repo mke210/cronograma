@@ -361,154 +361,6 @@
         }
 
         /* ============================================================
-           ESTILOS PARA CALENDARIO SEP
-           ============================================================ */
-        .calendario-sep-container {
-            overflow-x: auto;
-            padding: 4px 0;
-        }
-        .calendario-sep-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.6rem;
-            background: var(--card-bg);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .calendario-sep-table th,
-        .calendario-sep-table td {
-            border: 1px solid var(--border);
-            padding: 3px 5px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .calendario-sep-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
-        .calendario-sep-table .month-header {
-            background: #28A745;
-            color: white;
-            font-weight: 700;
-            font-size: 0.65rem;
-        }
-        .calendario-sep-table .weekday-header {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            font-weight: 600;
-            font-size: 0.5rem;
-        }
-        .calendario-sep-table .day-cell {
-            min-width: 24px;
-            height: 22px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        .calendario-sep-table .day-cell:hover {
-            background: var(--primary-light);
-            transform: scale(1.05);
-            z-index: 10;
-        }
-        .calendario-sep-table .day-cell .event-badge {
-            display: block;
-            font-size: 0.35rem;
-            padding: 1px 2px;
-            border-radius: 2px;
-            margin-top: 1px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-        }
-        .calendario-sep-table .day-cell .event-badge.inicio-clases { background: var(--color-inicio); color: white; }
-        .calendario-sep-table .day-cell .event-badge.receso-vacaciones { background: var(--color-vacacion); color: #1A1A1A; }
-        .calendario-sep-table .day-cell .event-badge.festivo-suspension { background: var(--color-festivo); color: white; }
-        .calendario-sep-table .day-cell .event-badge.cte-intensiva { background: var(--color-cte-intensiva); color: white; }
-        .calendario-sep-table .day-cell .event-badge.cte-ordinaria { background: var(--color-cte-ordinaria); color: white; }
-        .calendario-sep-table .day-cell .event-badge.fortalecimiento { background: var(--color-fortalecimiento); color: white; }
-        .calendario-sep-table .day-cell .event-badge.fin-ciclo { background: var(--color-fin-ciclo); color: white; }
-        .calendario-sep-table .day-cell .event-badge.normal { background: var(--color-normal); color: var(--primary); }
-        .calendario-sep-table .day-cell .event-badge.tema-personalizado { background: var(--color-tema); color: white; }
-        .calendario-sep-table .day-cell.weekend {
-            background: var(--color-weekend);
-            opacity: 0.6;
-        }
-        .calendario-sep-table .day-cell.selected-cell {
-            outline: 2px solid var(--color-selected);
-            outline-offset: -2px;
-            z-index: 5;
-            background: rgba(255, 107, 107, 0.15);
-        }
-        .calendario-sep-table .day-cell .day-number {
-            font-weight: 600;
-            font-size: 0.5rem;
-        }
-
-        .calendario-actions {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            align-items: center;
-            margin: 4px 0;
-        }
-        .calendario-actions .form-group {
-            margin-bottom: 0;
-            min-width: 80px;
-        }
-        .calendario-actions .form-group select,
-        .calendario-actions .form-group input {
-            padding: 3px 6px;
-            font-size: 0.7rem;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-        }
-        .calendario-actions .form-group-inline {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .calendario-sep-table .event-editor {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .calendario-sep-table .event-editor select,
-        .calendario-sep-table .event-editor input {
-            padding: 2px 4px;
-            font-size: 0.6rem;
-            border-radius: 3px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-        }
-        .calendario-sep-table .event-editor .btn-sm {
-            padding: 2px 5px;
-            font-size: 0.5rem;
-        }
-        .calendario-sep-table .event-editor .tema-input {
-            width: 100px;
-            flex: 1 1 100px;
-        }
-        .calendario-sep-table .tema-cell-text {
-            display: block;
-            font-size: 0.55rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-            font-style: italic;
-        }
-        .calendario-actions .calEditTema-input {
-            width: 120px;
-        }
-
-        /* ============================================================
            ESTILOS PARA DOSIFICACIÓN
            ============================================================ */
         .dosificacion-container {
@@ -1333,10 +1185,6 @@
             .dosificacion-table .trimestre-cell .meses-label {
                 font-size: 0.38rem;
             }
-            .calendario-sep-table { font-size: 0.45rem; }
-            .calendario-sep-table th,
-            .calendario-sep-table td { padding: 2px 3px; }
-            .calendario-actions .form-group { min-width: 60px; }
             .plan-container { padding: 8px; }
             .plan-table { font-size: 0.5rem; }
             .plan-table th, .plan-table td { padding: 2px 3px; }
@@ -1361,9 +1209,6 @@
             .dosificacion-table .trimestre-cell .meses-label {
                 font-size: 0.32rem;
             }
-            .calendario-sep-table { font-size: 0.4rem; }
-            .calendario-sep-table th,
-            .calendario-sep-table td { padding: 1px 2px; }
             .plan-table { font-size: 0.4rem; }
             .plan-table th, .plan-table td { padding: 1px 2px; }
             .plan-container h1 { font-size: 0.75rem; }
@@ -1429,7 +1274,6 @@ HEADER
     <nav class="tabs" id="tabNav">
         <button class="tab-btn active" data-tab="cronograma">📅 Cronograma</button>
         <button class="tab-btn" data-tab="plan">📋 Plan Anual</button>
-        <button class="tab-btn" data-tab="calendario">📆 Calendario SEP</button>
         <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
         <button class="tab-btn" data-tab="planeacion">📝 Planeación Semanal</button>
         <button class="tab-btn" data-tab="editor">✏️ Editor</button>
@@ -1496,61 +1340,6 @@ HEADER
             </div>
             <div id="planContainer" class="plan-container">
                 <!-- Generado por JavaScript -->
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    PESTAÑA CALENDARIO SEP
-    ============================================================ -->
-    <div class="tab-content" id="tab-calendario">
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">📆 Calendario Escolar SEP 2026-2027</span>
-                <div class="calendario-actions">
-                    <div class="form-group form-group-inline">
-                        <label style="font-size:0.7rem; color:var(--text-secondary);">Editar:</label>
-                        <select id="calEditMonth" style="width:80px;">
-                            <option value="8">Agosto</option>
-                            <option value="9">Septiembre</option>
-                            <option value="10">Octubre</option>
-                            <option value="11">Noviembre</option>
-                            <option value="12">Diciembre</option>
-                            <option value="1">Enero</option>
-                            <option value="2">Febrero</option>
-                            <option value="3">Marzo</option>
-                            <option value="4">Abril</option>
-                            <option value="5">Mayo</option>
-                            <option value="6">Junio</option>
-                            <option value="7">Julio</option>
-                        </select>
-                        <input type="number" id="calEditDay" min="1" max="31" value="1" style="width:40px;">
-                        <select id="calEditType" style="width:120px;">
-                            <option value="">Sin evento</option>
-                            <option value="inicio-clases">🟠 Inicio de clases</option>
-                            <option value="receso-vacaciones">🟡 Receso / Vacaciones</option>
-                            <option value="festivo-suspension">🔴 Festivo / Suspensión</option>
-                            <option value="cte-intensiva">🔵 CTE Fase Intensiva</option>
-                            <option value="cte-ordinaria">🩷 CTE Sesión Ordinaria</option>
-                            <option value="fortalecimiento">🟢 Fortalecimiento</option>
-                            <option value="fin-ciclo">🏁 Fin de ciclo</option>
-                            <option value="normal">⚪ Normal</option>
-                            <option value="tema-personalizado">📝 Tema personalizado</option>
-                        </select>
-                        <input type="text" id="calEditTema" class="calEditTema-input" placeholder="📝 Tema (opcional)">
-                        <button class="btn btn-primary btn-sm" onclick="updateCalendarEvent()">💾 Aplicar</button>
-                        <button class="btn btn-danger btn-sm" onclick="removeCalendarEvent()">🗑️ Quitar</button>
-                    </div>
-                    <button class="btn btn-success btn-sm" onclick="applyCalendarToCronograma()">📌 Aplicar al Cronograma</button>
-                    <button class="btn btn-warning btn-sm" onclick="resetCalendar()">🔄 Restaurar SEP</button>
-                </div>
-            </div>
-            <div id="calendarioContainer" class="calendario-sep-container">
-                <!-- Generado por JavaScript -->
-            </div>
-            <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
-                <strong>💡 Instrucciones:</strong> Selecciona un día, elige el tipo de evento y/o escribe un tema personalizado. 
-                Los días festivos se marcan como "Festivo / Suspensión". Al implementar proyectos, estos días se saltan automáticamente.
             </div>
         </div>
     </div>
@@ -2019,107 +1808,6 @@ const PLAN_ANUAL_INICIAL = {
 };
 
 // ============================================================
-// DATOS DEL CALENDARIO SEP
-// ============================================================
-const CALENDARIO_SEP_INICIAL = [
-    { month: 8, day: 24, type: 'cte-intensiva' },
-    { month: 8, day: 25, type: 'cte-intensiva' },
-    { month: 8, day: 26, type: 'cte-intensiva' },
-    { month: 8, day: 27, type: 'cte-intensiva' },
-    { month: 8, day: 28, type: 'cte-intensiva' },
-    { month: 8, day: 31, type: 'inicio-clases' },
-    { month: 9, day: 4, type: 'cte-ordinaria' },
-    { month: 9, day: 11, type: 'cte-ordinaria' },
-    { month: 9, day: 16, type: 'festivo-suspension' },
-    { month: 9, day: 18, type: 'cte-ordinaria' },
-    { month: 9, day: 25, type: 'cte-ordinaria' },
-    { month: 10, day: 2, type: 'cte-ordinaria' },
-    { month: 10, day: 9, type: 'cte-ordinaria' },
-    { month: 10, day: 16, type: 'cte-ordinaria' },
-    { month: 10, day: 23, type: 'cte-ordinaria' },
-    { month: 10, day: 30, type: 'cte-ordinaria' },
-    { month: 11, day: 2, type: 'festivo-suspension' },
-    { month: 11, day: 6, type: 'cte-ordinaria' },
-    { month: 11, day: 13, type: 'cte-ordinaria' },
-    { month: 11, day: 16, type: 'festivo-suspension' },
-    { month: 11, day: 20, type: 'cte-ordinaria' },
-    { month: 11, day: 27, type: 'cte-ordinaria' },
-    { month: 12, day: 4, type: 'cte-ordinaria' },
-    { month: 12, day: 11, type: 'cte-ordinaria' },
-    { month: 12, day: 18, type: 'cte-ordinaria' },
-    { month: 12, day: 21, type: 'receso-vacaciones' },
-    { month: 12, day: 22, type: 'receso-vacaciones' },
-    { month: 12, day: 23, type: 'receso-vacaciones' },
-    { month: 12, day: 24, type: 'receso-vacaciones' },
-    { month: 12, day: 25, type: 'receso-vacaciones' },
-    { month: 12, day: 26, type: 'receso-vacaciones' },
-    { month: 12, day: 27, type: 'receso-vacaciones' },
-    { month: 12, day: 28, type: 'receso-vacaciones' },
-    { month: 12, day: 29, type: 'receso-vacaciones' },
-    { month: 12, day: 30, type: 'receso-vacaciones' },
-    { month: 12, day: 31, type: 'receso-vacaciones' },
-    { month: 1, day: 1, type: 'receso-vacaciones' },
-    { month: 1, day: 2, type: 'receso-vacaciones' },
-    { month: 1, day: 3, type: 'receso-vacaciones' },
-    { month: 1, day: 4, type: 'receso-vacaciones' },
-    { month: 1, day: 5, type: 'receso-vacaciones' },
-    { month: 1, day: 6, type: 'receso-vacaciones' },
-    { month: 1, day: 7, type: 'receso-vacaciones' },
-    { month: 1, day: 8, type: 'receso-vacaciones' },
-    { month: 1, day: 11, type: 'inicio-clases' },
-    { month: 1, day: 29, type: 'cte-ordinaria' },
-    { month: 2, day: 1, type: 'festivo-suspension' },
-    { month: 2, day: 5, type: 'cte-ordinaria' },
-    { month: 2, day: 12, type: 'cte-ordinaria' },
-    { month: 2, day: 19, type: 'cte-ordinaria' },
-    { month: 2, day: 26, type: 'cte-ordinaria' },
-    { month: 3, day: 5, type: 'cte-ordinaria' },
-    { month: 3, day: 12, type: 'cte-ordinaria' },
-    { month: 3, day: 15, type: 'festivo-suspension' },
-    { month: 3, day: 19, type: 'cte-ordinaria' },
-    { month: 3, day: 22, type: 'receso-vacaciones' },
-    { month: 3, day: 23, type: 'receso-vacaciones' },
-    { month: 3, day: 24, type: 'receso-vacaciones' },
-    { month: 3, day: 25, type: 'receso-vacaciones' },
-    { month: 3, day: 26, type: 'receso-vacaciones' },
-    { month: 3, day: 27, type: 'receso-vacaciones' },
-    { month: 3, day: 28, type: 'receso-vacaciones' },
-    { month: 3, day: 29, type: 'receso-vacaciones' },
-    { month: 3, day: 30, type: 'receso-vacaciones' },
-    { month: 3, day: 31, type: 'receso-vacaciones' },
-    { month: 4, day: 1, type: 'receso-vacaciones' },
-    { month: 4, day: 2, type: 'receso-vacaciones' },
-    { month: 4, day: 5, type: 'inicio-clases' },
-    { month: 4, day: 30, type: 'cte-ordinaria' },
-    { month: 5, day: 5, type: 'festivo-suspension' },
-    { month: 5, day: 7, type: 'cte-ordinaria' },
-    { month: 5, day: 14, type: 'cte-ordinaria' },
-    { month: 5, day: 15, type: 'festivo-suspension' },
-    { month: 5, day: 21, type: 'cte-ordinaria' },
-    { month: 5, day: 28, type: 'cte-ordinaria' },
-    { month: 6, day: 4, type: 'cte-ordinaria' },
-    { month: 6, day: 11, type: 'cte-ordinaria' },
-    { month: 6, day: 18, type: 'cte-ordinaria' },
-    { month: 6, day: 25, type: 'cte-ordinaria' },
-    { month: 7, day: 2, type: 'cte-ordinaria' },
-    { month: 7, day: 9, type: 'cte-ordinaria' },
-    { month: 7, day: 16, type: 'fin-ciclo' },
-    { month: 7, day: 19, type: 'receso-vacaciones' },
-    { month: 7, day: 20, type: 'receso-vacaciones' },
-    { month: 7, day: 21, type: 'receso-vacaciones' },
-    { month: 7, day: 22, type: 'receso-vacaciones' },
-    { month: 7, day: 23, type: 'receso-vacaciones' },
-    { month: 7, day: 24, type: 'receso-vacaciones' },
-    { month: 7, day: 25, type: 'receso-vacaciones' },
-    { month: 7, day: 26, type: 'receso-vacaciones' },
-    { month: 7, day: 27, type: 'receso-vacaciones' },
-    { month: 7, day: 28, type: 'receso-vacaciones' },
-    { month: 7, day: 29, type: 'receso-vacaciones' },
-    { month: 7, day: 30, type: 'receso-vacaciones' },
-    { month: 7, day: 31, type: 'receso-vacaciones' },
-];
-
-// ============================================================
 // DATOS DE DOSIFICACIÓN - INFORMÁTICA
 // ============================================================
 const DOSIFICACION_DATA = {
@@ -2448,7 +2136,6 @@ const PLANEACION_INICIAL = {
 // ============================================================
 let activities = [];
 let config = {};
-let calendarioData = [];
 let planData = {};
 let planeacionData = {};
 let editingIndex = -1;
@@ -2459,52 +2146,12 @@ let dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
 let pendingOverwrite = false;
 
 // ============================================================
-// FUNCIÓN PARA VERIFICAR SI UN DÍA ES HÁBIL (NO FIN DE SEMANA Y NO FESTIVO)
+// FUNCIÓN PARA VERIFICAR SI UN DÍA ES HÁBIL
 // ============================================================
 function isDiaHabil(month, day, year) {
     // Si es fin de semana, no es hábil
     if (isWeekend(month, day, year)) return false;
-    
-    // Verificar si es un día festivo según el calendario SEP
-    const key = `${month}-${day}`;
-    const festivo = calendarioData.some(e => {
-        const evKey = `${e.month}-${e.day}`;
-        return evKey === key && (e.type === 'festivo-suspension' || e.type === 'receso-vacaciones');
-    });
-    
-    // Si está marcado como festivo en el calendario, no es hábil
-    if (festivo) return false;
-    
     return true;
-}
-
-// ============================================================
-// FUNCIÓN PARA CONTAR DÍAS HÁBILES ENTRE DOS FECHAS
-// ============================================================
-function contarDiasHabiles(month, day, totalDias) {
-    let count = 0;
-    let currentMonth = month;
-    let currentDay = day;
-    let currentYear = getYear(currentMonth);
-    let maxIter = 500;
-    
-    while (count < totalDias && maxIter > 0) {
-        maxIter--;
-        if (isDiaHabil(currentMonth, currentDay, currentYear)) {
-            count++;
-        }
-        if (count < totalDias) {
-            currentDay++;
-            const daysInMonth = getDaysInMonth(currentMonth);
-            if (currentDay > daysInMonth) {
-                currentDay = 1;
-                currentMonth++;
-                if (currentMonth > 12) { currentMonth = 1; currentYear++; }
-            }
-        }
-    }
-    
-    return { count, lastMonth: currentMonth, lastDay: currentDay, lastYear: currentYear };
 }
 
 // ============================================================
@@ -2517,14 +2164,6 @@ function loadData() {
         catch(e) { planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL)); }
     } else {
         planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
-    }
-
-    const savedCalendario = localStorage.getItem('cronograma_calendario');
-    if (savedCalendario) {
-        try { calendarioData = JSON.parse(savedCalendario); } 
-        catch(e) { calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL)); }
-    } else {
-        calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL));
     }
 
     const saved = localStorage.getItem('cronograma_activities');
@@ -2573,7 +2212,6 @@ function loadData() {
 }
 
 function saveActivities() { localStorage.setItem('cronograma_activities', JSON.stringify(activities)); }
-function saveCalendario() { localStorage.setItem('cronograma_calendario', JSON.stringify(calendarioData)); }
 function savePlan() { 
     localStorage.setItem('cronograma_plan', JSON.stringify(planData)); 
     showToast('✅ Plan Anual guardado');
@@ -2646,19 +2284,16 @@ function deletePlaneacionRow(btn) {
 function resetData() {
     if (confirm('¿Restaurar datos de fábrica?')) {
         planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
-        calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL));
         activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
         planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
         localStorage.setItem('cronograma_plan', JSON.stringify(planData));
-        saveCalendario();
         saveActivities();
         saveConfig();
         localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
         localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
         renderPlan();
-        renderCalendario();
         renderCronograma();
         renderDosificacion();
         renderPlaneacion();
@@ -2969,245 +2604,6 @@ function exportPlanWord() {
 }
 
 // ============================================================
-// RENDERIZADO DEL CALENDARIO SEP
-// ============================================================
-function renderCalendario() {
-    const container = document.getElementById('calendarioContainer');
-    
-    const months = [
-        { num: 8, name: 'Agosto', year: 2026 },
-        { num: 9, name: 'Septiembre', year: 2026 },
-        { num: 10, name: 'Octubre', year: 2026 },
-        { num: 11, name: 'Noviembre', year: 2026 },
-        { num: 12, name: 'Diciembre', year: 2026 },
-        { num: 1, name: 'Enero', year: 2027 },
-        { num: 2, name: 'Febrero', year: 2027 },
-        { num: 3, name: 'Marzo', year: 2027 },
-        { num: 4, name: 'Abril', year: 2027 },
-        { num: 5, name: 'Mayo', year: 2027 },
-        { num: 6, name: 'Junio', year: 2027 },
-        { num: 7, name: 'Julio', year: 2027 }
-    ];
-
-    const typeLabels = {
-        'inicio-clases': 'Inicio de clases',
-        'receso-vacaciones': 'Receso / Vacaciones',
-        'festivo-suspension': 'Festivo / Suspensión',
-        'cte-intensiva': 'CTE Fase Intensiva',
-        'cte-ordinaria': 'CTE Sesión Ordinaria',
-        'fortalecimiento': 'Fortalecimiento',
-        'fin-ciclo': 'Fin de ciclo',
-        'normal': 'Normal',
-        'tema-personalizado': '📝 Tema personalizado'
-    };
-
-    let html = `<table class="calendario-sep-table">
-        <thead>
-            <tr>
-                <th style="width:9%;">Mes</th>
-                <th style="width:5%;">Día</th>
-                <th style="width:9%;">Semana</th>
-                <th style="width:17%;">Evento</th>
-                <th style="width:60%;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>`;
-
-    const eventMap = {};
-    const temaMap = {};
-    for (const ev of calendarioData) {
-        const key = `${ev.month}-${ev.day}`;
-        eventMap[key] = ev.type;
-        temaMap[key] = ev.tema || '';
-    }
-
-    for (const month of months) {
-        const daysInMonth = getDaysInMonth(month.num);
-        
-        for (let day = 1; day <= daysInMonth; day++) {
-            const key = `${month.num}-${day}`;
-            const type = eventMap[key] || '';
-            const tema = temaMap[key] || '';
-            const year = month.year;
-            const wd = getWeekday(month.num, day, year);
-            const wdName = WEEKDAYS_LONG[wd];
-            const isWeekendDay = isWeekend(month.num, day, year);
-            const typeLabel = type ? typeLabels[type] || type : '—';
-            
-            html += `<tr>
-                <td>${month.name}</td>
-                <td class="${isWeekendDay ? 'weekend' : ''}" style="font-weight:600;">${day}</td>
-                <td>${wdName}</td>
-                <td>${type ? `<span class="event-badge ${type}">${typeLabel}</span>` : '—'}${tema ? `<span class="tema-cell-text">${tema}</span>` : ''}</td>
-                <td>
-                    <div class="event-editor">
-                        <select class="cal-type-select" data-month="${month.num}" data-day="${day}">
-                            <option value="">Sin evento</option>
-                            <option value="inicio-clases" ${type === 'inicio-clases' ? 'selected' : ''}>🟠 Inicio de clases</option>
-                            <option value="receso-vacaciones" ${type === 'receso-vacaciones' ? 'selected' : ''}>🟡 Receso / Vacaciones</option>
-                            <option value="festivo-suspension" ${type === 'festivo-suspension' ? 'selected' : ''}>🔴 Festivo / Suspensión</option>
-                            <option value="cte-intensiva" ${type === 'cte-intensiva' ? 'selected' : ''}>🔵 CTE Fase Intensiva</option>
-                            <option value="cte-ordinaria" ${type === 'cte-ordinaria' ? 'selected' : ''}>🩷 CTE Sesión Ordinaria</option>
-                            <option value="fortalecimiento" ${type === 'fortalecimiento' ? 'selected' : ''}>🟢 Fortalecimiento</option>
-                            <option value="fin-ciclo" ${type === 'fin-ciclo' ? 'selected' : ''}>🏁 Fin de ciclo</option>
-                            <option value="normal" ${type === 'normal' ? 'selected' : ''}>⚪ Normal</option>
-                            <option value="tema-personalizado" ${type === 'tema-personalizado' ? 'selected' : ''}>📝 Tema personalizado</option>
-                        </select>
-                        <input type="text" class="cal-tema-input tema-input" data-month="${month.num}" data-day="${day}" placeholder="📝 Tema o evento" value="${tema.replace(/"/g, '&quot;')}">
-                        <button class="btn btn-primary btn-sm" onclick="updateCalEventFromRow(this)">💾</button>
-                        ${(type || tema) ? `<button class="btn btn-danger btn-sm" onclick="removeCalEventFromRow(this)">🗑️</button>` : ''}
-                    </div>
-                </td>
-            </tr>`;
-        }
-    }
-
-    html += '</tbody></table>';
-    container.innerHTML = html;
-}
-
-function updateCalEventFromRow(btn) {
-    const row = btn.closest('tr');
-    const select = row.querySelector('.cal-type-select');
-    const temaInput = row.querySelector('.cal-tema-input');
-    const month = parseInt(select.dataset.month);
-    const day = parseInt(select.dataset.day);
-    const type = select.value;
-    const tema = temaInput ? temaInput.value.trim() : '';
-    
-    const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
-    if (idx >= 0) {
-        calendarioData.splice(idx, 1);
-    }
-    
-    if (type || tema) {
-        calendarioData.push({ month, day, type, tema });
-    }
-    
-    saveCalendario();
-    renderCalendario();
-    showToast(`✅ Evento actualizado para ${getMonthName(month)} ${day}`);
-}
-
-function removeCalEventFromRow(btn) {
-    const row = btn.closest('tr');
-    const select = row.querySelector('.cal-type-select');
-    const month = parseInt(select.dataset.month);
-    const day = parseInt(select.dataset.day);
-    
-    const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
-    if (idx >= 0) {
-        calendarioData.splice(idx, 1);
-        saveCalendario();
-        renderCalendario();
-        showToast(`🗑️ Evento eliminado para ${getMonthName(month)} ${day}`);
-    }
-}
-
-function updateCalendarEvent() {
-    const month = parseInt(document.getElementById('calEditMonth').value);
-    const day = parseInt(document.getElementById('calEditDay').value);
-    const type = document.getElementById('calEditType').value;
-    const temaEl = document.getElementById('calEditTema');
-    const tema = temaEl ? temaEl.value.trim() : '';
-    
-    const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
-    if (idx >= 0) {
-        calendarioData.splice(idx, 1);
-    }
-    
-    if (type || tema) {
-        calendarioData.push({ month, day, type, tema });
-    }
-    
-    saveCalendario();
-    renderCalendario();
-    if (temaEl) temaEl.value = '';
-    showToast(`✅ Evento actualizado para ${getMonthName(month)} ${day}`);
-}
-
-function removeCalendarEvent() {
-    const month = parseInt(document.getElementById('calEditMonth').value);
-    const day = parseInt(document.getElementById('calEditDay').value);
-    
-    const idx = calendarioData.findIndex(e => e.month === month && e.day === day);
-    if (idx >= 0) {
-        calendarioData.splice(idx, 1);
-        saveCalendario();
-        renderCalendario();
-        showToast(`🗑️ Evento eliminado para ${getMonthName(month)} ${day}`);
-    } else {
-        showToast(`⚠️ No hay evento en ${getMonthName(month)} ${day}`);
-    }
-}
-
-function applyCalendarToCronograma() {
-    const newActivities = [];
-    const typeToActivity = {
-        'inicio-clases': 'Inicio de clases',
-        'receso-vacaciones': 'Receso / Vacaciones',
-        'festivo-suspension': 'Festivo / Suspensión laboral',
-        'cte-intensiva': 'CTE Fase Intensiva',
-        'cte-ordinaria': 'CTE Sesión Ordinaria',
-        'fortalecimiento': 'Fortalecimiento de aprendizajes',
-        'fin-ciclo': 'Fin de Clases',
-        'normal': 'Normal',
-        'tema-personalizado': 'Tema personalizado'
-    };
-    
-    const toRemove = activities.filter(a => isOfficialEvent(a.type));
-    for (const r of toRemove) {
-        const idx = activities.indexOf(r);
-        if (idx >= 0) activities.splice(idx, 1);
-    }
-    
-    for (const ev of calendarioData) {
-        const baseLabel = typeToActivity[ev.type] || '';
-        const tema = (ev.tema || '').trim();
-        let activityText = '';
-        let activityType = ev.type || '';
-        
-        if (baseLabel && tema) {
-            activityText = `${baseLabel}: ${tema}`;
-        } else if (baseLabel) {
-            activityText = baseLabel;
-        } else if (tema) {
-            activityText = tema;
-            activityType = 'tema-personalizado';
-        }
-        
-        if (activityText) {
-            newActivities.push({
-                grade: 'all',
-                month: ev.month,
-                day: ev.day,
-                activity: activityText,
-                type: activityType,
-                duration: 1,
-                unit: 'days'
-            });
-        }
-    }
-    
-    for (const a of newActivities) {
-        activities.push(a);
-    }
-    
-    saveActivities();
-    renderCronograma();
-    showToast(`📌 Calendario aplicado al cronograma (${newActivities.length} eventos)`);
-}
-
-function resetCalendar() {
-    if (confirm('¿Restaurar el calendario SEP original?')) {
-        calendarioData = JSON.parse(JSON.stringify(CALENDARIO_SEP_INICIAL));
-        saveCalendario();
-        renderCalendario();
-        showToast('🔄 Calendario SEP restaurado');
-    }
-}
-
-// ============================================================
 // RENDERIZADO DE DOSIFICACIÓN
 // ============================================================
 function renderDosificacion() {
@@ -3426,7 +2822,7 @@ function printDosificacion() {
 }
 
 // ============================================================
-// IMPLEMENTAR DOSIFICACIÓN - CORREGIDO (salta días festivos)
+// IMPLEMENTAR DOSIFICACIÓN
 // ============================================================
 function implementarDosificacion() {
     const grade = document.getElementById('dosificacionGrade').value;
@@ -3437,10 +2833,15 @@ function implementarDosificacion() {
         return;
     }
     
-    const gradeNum = parseInt(grade);
-    let count = 0;
+    const trimestreMap = {
+        1: { months: [9, 10, 11], startDay: 1 },
+        2: { months: [12, 1, 2, 3], startDay: 1 },
+        3: { months: [4, 5, 6, 7], startDay: 1 }
+    };
     
-    // Eliminar proyectos existentes de este grado
+    let count = 0;
+    const gradeNum = parseInt(grade);
+    
     for (const trim of data.trimestres) {
         for (const proyecto of trim.proyectos) {
             const toRemove = activities.filter(a => {
@@ -3454,35 +2855,25 @@ function implementarDosificacion() {
         }
     }
     
-    // Fechas de inicio por trimestre
-    const trimStartDates = {
-        1: ['2026-09-01', '2026-09-17', '2026-10-05', '2026-10-21'],
-        2: ['2026-12-01', '2026-12-17', '2027-01-12', '2027-01-28'],
-        3: ['2027-04-05', '2027-04-21', '2027-05-10', '2027-05-26']
-    };
-    
     let trimIndex = 0;
     for (const trim of data.trimestres) {
         trimIndex++;
-        const startDates = trimStartDates[trimIndex] || trimStartDates[1];
+        const trimInfo = trimestreMap[trimIndex];
+        if (!trimInfo) continue;
+        
+        let currentMonthIndex = 0;
+        let currentDay = trimInfo.startDay;
+        let currentMonth = trimInfo.months[currentMonthIndex];
         
         for (const proyecto of trim.proyectos) {
             const sesiones = parseInt(proyecto.sesiones) || 12;
-            const projIndex = trim.proyectos.indexOf(proyecto);
+            let diasAgregados = 0;
+            let day = currentDay;
+            let month = currentMonth;
+            let monthIdx = currentMonthIndex;
             
-            // Obtener fecha de inicio del proyecto o usar la sugerida
-            let fechaInicio = proyecto.fechaInicio || startDates[projIndex] || '2026-09-01';
-            const parts = fechaInicio.split('-').map(Number);
-            let month = parts[1];
-            let day = parts[2];
-            let year = parts[0];
-            
-            let diasAsignados = 0;
-            let maxIter = 500;
-            
-            while (diasAsignados < sesiones && maxIter > 0) {
-                maxIter--;
-                // Verificar si el día es hábil (no fin de semana y no festivo)
+            while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
+                const year = getYear(month);
                 if (isDiaHabil(month, day, year)) {
                     const existingIdx = activities.findIndex(a => {
                         const gradesAct = getGradesForActivity(a.grade);
@@ -3510,18 +2901,23 @@ function implementarDosificacion() {
                             unit: 'days' 
                         });
                     }
-                    diasAsignados++;
+                    diasAgregados++;
                     count++;
                 }
-                // Avanzar al siguiente día
                 day++;
                 const daysInMonth = getDaysInMonth(month);
                 if (day > daysInMonth) {
                     day = 1;
-                    month++;
-                    if (month > 12) { month = 1; year++; }
+                    monthIdx++;
+                    if (monthIdx < trimInfo.months.length) {
+                        month = trimInfo.months[monthIdx];
+                    }
                 }
             }
+            
+            currentDay = day;
+            currentMonth = month;
+            currentMonthIndex = monthIdx;
         }
     }
     
@@ -3749,7 +3145,6 @@ function openEditModal(grade, month, day) {
         if (projectCells.length > 0) {
             projectCells.sort((a, b) => a.month - b.month || a.day - b.day);
             const first = projectCells[0];
-            const last = projectCells[projectCells.length - 1];
             
             let durationDays = projectCells.length;
             
@@ -4392,8 +3787,7 @@ function checkConflict() {
 }
 
 function moveActivity() {
-    // ... (función similar a la original pero usando isDiaHabil)
-    showToast('🔄 Función mover actividad');
+    showToast('🔄 Función mover actividad en desarrollo');
 }
 
 function clearAllActivities() {
@@ -4592,7 +3986,6 @@ function exportJSON() {
     const data = { 
         activities: activities,
         config: config,
-        calendario: calendarioData,
         plan: planData,
         dosificacion: dosificacionData,
         planeacion: planeacionData,
@@ -4614,7 +4007,6 @@ function importJSONFile(event) {
         try {
             const data = JSON.parse(e.target.result);
             if (data.activities) { activities = data.activities; saveActivities(); }
-            if (data.calendario) { calendarioData = data.calendario; saveCalendario(); renderCalendario(); }
             if (data.plan) { planData = data.plan; localStorage.setItem('cronograma_plan', JSON.stringify(planData)); renderPlan(); }
             if (data.config) { config = { ...config, ...data.config }; saveConfig(); }
             if (data.dosificacion) { dosificacionData = data.dosificacion; localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData)); renderDosificacion(); }
@@ -4682,7 +4074,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.getElementById(`tab-${tabId}`).classList.add('active');
         if (tabId === 'cronograma') renderCronograma();
         if (tabId === 'plan') renderPlan();
-        if (tabId === 'calendario') renderCalendario();
         if (tabId === 'dosificacion') renderDosificacion();
         if (tabId === 'planeacion') renderPlaneacion();
         if (tabId === 'config') {
@@ -4703,7 +4094,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 loadData();
 renderCronograma();
 renderPlan();
-renderCalendario();
 renderDosificacion();
 renderPlaneacion();
 
@@ -4727,9 +4117,8 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado');
+console.log('📚 Cronograma SEP 2026-2027 cargado (sin calendario SEP)');
 console.log(`📊 ${activities.length} actividades cargadas`);
-console.log('✅ Días festivos configurados: los proyectos los saltan automáticamente');
 </script>
 </body>
 </html>
