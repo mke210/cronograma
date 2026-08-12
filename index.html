@@ -1348,6 +1348,41 @@
             .grid-cell.trimestre-header { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .grid-cell.month-header { background: #28A745 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
+
+        /* ============================================================
+           ESTILOS PARA VERIFICACIÓN
+           ============================================================ */
+        .verificacion-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+        .verificacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.65rem;
+            background: var(--card-bg);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .verificacion-table th,
+        .verificacion-table td {
+            border: 1px solid var(--border);
+            padding: 4px 6px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .verificacion-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.65rem;
+        }
+        .verificacion-table .status-ok { color: #28A745; font-weight: 700; }
+        .verificacion-table .status-warning { color: #FF8C00; font-weight: 700; }
+        .verificacion-table .status-error { color: #DC3545; font-weight: 700; }
+        .verificacion-table .status-missing { color: #DC3545; font-weight: 700; }
+        .verificacion-table .status-extra { color: #FF8C00; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -1381,6 +1416,7 @@ HEADER
         <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
         <button class="tab-btn" data-tab="planeacion">📝 Planeación Semanal</button>
         <button class="tab-btn" data-tab="fechas">⚙️ Gestión de Fechas</button>
+        <button class="tab-btn" data-tab="verificacion">🔍 Verificación</button>
         <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
     </nav>
@@ -1402,7 +1438,6 @@ HEADER
                     <button class="btn btn-excel btn-sm" onclick="exportToExcel()">📊 Exportar a Excel</button>
                     <button class="btn btn-print btn-sm" onclick="printPreview()">🖨️ Vista previa</button>
                     <button class="btn btn-primary btn-sm" onclick="clearSelection()">✖ Limpiar selección</button>
-                    <button class="btn btn-warning btn-sm" onclick="copyGrade1ToAll()">📋 Copiar 1º a 2º y 3º</button>
                 </div>
             </div>
             
@@ -1491,6 +1526,7 @@ HEADER
                             <option value="3">3º Secundaria</option>
                         </select>
                     </div>
+                    <button class="btn btn-word btn-sm" onclick="exportPlaneacionWord()">📄 Exportar a Word</button>
                     <button class="btn btn-success btn-sm" onclick="savePlaneacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printPlaneacion()">🖨️ Imprimir</button>
                     <button class="btn btn-primary btn-sm" onclick="addPlaneacionSemana()">➕ Agregar Semana</button>
@@ -1641,6 +1677,27 @@ HEADER
     </div>
 
     <!-- ============================================================
+    PESTAÑA VERIFICACIÓN
+    ============================================================ -->
+    <div class="tab-content" id="tab-verificacion">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">🔍 Verificación: Dosificación vs Cronograma</span>
+                <button class="btn btn-primary btn-sm" onclick="verificarCorrespondencia()">🔄 Verificar ahora</button>
+            </div>
+            <div style="margin-bottom:10px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
+                <strong>📌 Instrucciones:</strong> Esta herramienta compara los proyectos de la dosificación con los proyectos del cronograma por grado.
+                <br>✅ <strong>Verde:</strong> Coinciden proyecto y sesiones
+                <br>🟠 <strong>Naranja:</strong> Proyecto en dosificación pero no en cronograma, o viceversa
+                <br>🔴 <strong>Rojo:</strong> Diferencia en el número de sesiones
+            </div>
+            <div id="verificacionContainer" class="verificacion-container">
+                <!-- Generado por JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
     PESTAÑA CONFIGURACIÓN
     ============================================================ -->
     <div class="tab-content" id="tab-config">
@@ -1699,6 +1756,7 @@ HEADER
             <div style="display:flex; gap:4px; flex-wrap:wrap;">
                 <button class="btn btn-excel" onclick="exportToExcel()">📊 Exportar a Excel</button>
                 <button class="btn btn-word" onclick="exportPlanWord()">📄 Exportar Plan Anual a Word</button>
+                <button class="btn btn-word" onclick="exportPlaneacionWord()">📄 Exportar Planeación a Word</button>
                 <button class="btn btn-outline" onclick="exportJSON()">📋 Exportar JSON</button>
                 <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">📂 Importar backup</button>
                 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSONFile(event)">
@@ -2005,28 +2063,28 @@ const DOSIFICACION_DATA = {
             {
                 nombre: 'I',
                 proyectos: [
-                    { nombre: '1. Primeros Pasos Digitales: Encendido, Hardware y Sistema Operativo', contenido: 'Herramientas, máquinas e instrumentos como extensión corporal.', pda: 'Explora las partes fundamentales del equipo de cómputo (hardware/software), aprende las técnicas adecuadas de encendido, apagado y cuidado de los dispositivos informáticos, e interactúa con la interfaz del sistema operativo.', sesiones: 13 },
-                    { nombre: '2. Mi Primer Documento Digital: Formato de Texto en Word', contenido: 'Comunicación y representación técnica.', pda: 'Utiliza procesadores de texto para redactar, dar formato (fuente, alineación, interlineado) y organizar documentos básicos que expresen ideas o proyectos escolares de manera clara y estructurada.', sesiones: 12 },
-                    { nombre: '3. Diseñando con Algoritmos: Diagramas de Flujo y Lógica', contenido: 'Pensamiento estratégico y creativo en la resolución de problemas.', pda: 'Comprende el concepto de algoritmo y representa procesos lógicos sencillos a través de diagramas de flujo para resolver problemas cotidianos e informáticos.', sesiones: 12 },
-                    { nombre: '4. Ciudadanía Digital Responsable: Navegación Segura en Internet', contenido: 'Factores que inciden en los procesos técnicos y el uso de la tecnología.', pda: 'Investiga y analiza las normas de seguridad digital, navegación ética en la red, protección de datos personales y prevención de riesgos en entornos virtuales.', sesiones: 12 }
+                    { nombre: 'Primeros Pasos Digitales: Encendido, Hardware y Sistema Operativo', contenido: 'Herramientas, máquinas e instrumentos como extensión corporal.', pda: 'Explora las partes fundamentales del equipo de cómputo (hardware/software), aprende las técnicas adecuadas de encendido, apagado y cuidado de los dispositivos informáticos, e interactúa con la interfaz del sistema operativo.', sesiones: 13 },
+                    { nombre: 'Mi Primer Documento Digital: Formato de Texto en Word', contenido: 'Comunicación y representación técnica.', pda: 'Utiliza procesadores de texto para redactar, dar formato (fuente, alineación, interlineado) y organizar documentos básicos que expresen ideas o proyectos escolares de manera clara y estructurada.', sesiones: 12 },
+                    { nombre: 'Diseñando con Algoritmos: Diagramas de Flujo y Lógica', contenido: 'Pensamiento estratégico y creativo en la resolución de problemas.', pda: 'Comprende el concepto de algoritmo y representa procesos lógicos sencillos a través de diagramas de flujo para resolver problemas cotidianos e informáticos.', sesiones: 12 },
+                    { nombre: 'Ciudadanía Digital Responsable: Navegación Segura en Internet', contenido: 'Factores que inciden en los procesos técnicos y el uso de la tecnología.', pda: 'Investiga y analiza las normas de seguridad digital, navegación ética en la red, protección de datos personales y prevención de riesgos en entornos virtuales.', sesiones: 12 }
                 ]
             },
             {
                 nombre: 'II',
                 proyectos: [
-                    { nombre: '5. Organizadores Visuales: Creación de Presentaciones Electrónicas', contenido: 'Comunicación y representación técnica para la divulgación de saberes.', pda: 'Diseña presentaciones diapositiva por diapositiva integrando texto, imágenes y tablas para exponer temas escolares, seleccionando recursos tipográficos y visuales pertinentes.', sesiones: 12 },
-                    { nombre: '6. Mi Primera Hoja de Cálculo: Tablas y Operaciones Básicas', contenido: 'Herramientas y tecnologías de la información para el cálculo y organización.', pda: 'Emplea hojas de cálculo para ingresar, ordenar y dar formato a datos, aplicando fórmulas matemáticas básicas (suma, promedio, resta) en situaciones cotidianas.', sesiones: 12 },
-                    { nombre: '7. Introducción al Dibujo y Diseño Vectorial Técnico', contenido: 'Materiales, procesos técnicos y representación gráfica digital.', pda: 'Utiliza software informático de diseño y edición de imágenes básicas para elaborar representaciones gráficas, logotipos e esquemas técnicos simples.', sesiones: 12 },
-                    { nombre: '8. Automatización Sencilla: Mi Primer Algoritmo en Bloques', contenido: 'Pensamiento computacional y lógica de programación.', pda: 'Construye secuencias de instrucciones empleando plataformas de programación por bloques (como Scratch) para animar personajes o resolver retos estructurados.', sesiones: 12 }
+                    { nombre: 'Organizadores Visuales: Creación de Presentaciones Electrónicas', contenido: 'Comunicación y representación técnica para la divulgación de saberes.', pda: 'Diseña presentaciones diapositiva por diapositiva integrando texto, imágenes y tablas para exponer temas escolares, seleccionando recursos tipográficos y visuales pertinentes.', sesiones: 12 },
+                    { nombre: 'Mi Primera Hoja de Cálculo: Tablas y Operaciones Básicas', contenido: 'Herramientas y tecnologías de la información para el cálculo y organización.', pda: 'Emplea hojas de cálculo para ingresar, ordenar y dar formato a datos, aplicando fórmulas matemáticas básicas (suma, promedio, resta) en situaciones cotidianas.', sesiones: 12 },
+                    { nombre: 'Introducción al Dibujo y Diseño Vectorial Técnico', contenido: 'Materiales, procesos técnicos y representación gráfica digital.', pda: 'Utiliza software informático de diseño y edición de imágenes básicas para elaborar representaciones gráficas, logotipos e esquemas técnicos simples.', sesiones: 12 },
+                    { nombre: 'Automatización Sencilla: Mi Primer Algoritmo en Bloques', contenido: 'Pensamiento computacional y lógica de programación.', pda: 'Construye secuencias de instrucciones empleando plataformas de programación por bloques (como Scratch) para animar personajes o resolver retos estructurados.', sesiones: 12 }
                 ]
             },
             {
                 nombre: 'III',
                 proyectos: [
-                    { nombre: '9. Explorando el Ciberespacio: Búsqueda y Evaluación de Información', contenido: 'Evaluación de sistemas informáticos y fuentes de información.', pda: 'Aplica criterios éticos y técnicos para buscar, seleccionar, filtrar y citar información verídica en buscadores web académicos y bases de datos.', sesiones: 12 },
-                    { nombre: '10. Edición Multimedia: Creación de Banners y Gráficos Visuales', contenido: 'Procesos técnicos de comunicación visual y diseño.', pda: 'Produce material gráfico digital publicitario o informativo (banners, carteles) aplicando principios de diseño, combinación de colores y edición de imágenes.', sesiones: 12 },
-                    { nombre: '11. Mantenimiento Preventivo Básico del Equipo de Cómputo', contenido: 'Mantenimiento, cuidado y conservación de sistemas técnicos.', pda: 'Reconoce la importancia del cuidado físico y lógico de las computadoras, aplicando normas de higiene, limpieza de periféricos y uso seguro de memorias de almacenamiento.', sesiones: 12 },
-                    { nombre: '12. Proyecto Integrador: Mi Bitácora Escolar Digital', contenido: 'Usos e implicaciones de la tecnología en la comunidad.', pda: 'Consolida las herramientas del ciclo escolar (procesador de texto, imágenes y hoja de cálculo) para crear una bitácora o reporte digital con solución a un problema comunitario.', sesiones: 12 }
+                    { nombre: 'Explorando el Ciberespacio: Búsqueda y Evaluación de Información', contenido: 'Evaluación de sistemas informáticos y fuentes de información.', pda: 'Aplica criterios éticos y técnicos para buscar, seleccionar, filtrar y citar información verídica en buscadores web académicos y bases de datos.', sesiones: 12 },
+                    { nombre: 'Edición Multimedia: Creación de Banners y Gráficos Visuales', contenido: 'Procesos técnicos de comunicación visual y diseño.', pda: 'Produce material gráfico digital publicitario o informativo (banners, carteles) aplicando principios de diseño, combinación de colores y edición de imágenes.', sesiones: 12 },
+                    { nombre: 'Mantenimiento Preventivo Básico del Equipo de Cómputo', contenido: 'Mantenimiento, cuidado y conservación de sistemas técnicos.', pda: 'Reconoce la importancia del cuidado físico y lógico de las computadoras, aplicando normas de higiene, limpieza de periféricos y uso seguro de memorias de almacenamiento.', sesiones: 12 },
+                    { nombre: 'Proyecto Integrador: Mi Bitácora Escolar Digital', contenido: 'Usos e implicaciones de la tecnología en la comunidad.', pda: 'Consolida las herramientas del ciclo escolar (procesador de texto, imágenes y hoja de cálculo) para crear una bitácora o reporte digital con solución a un problema comunitario.', sesiones: 12 }
                 ]
             }
         ]
@@ -2046,28 +2104,28 @@ const DOSIFICACION_DATA = {
             {
                 nombre: 'I',
                 proyectos: [
-                    { nombre: '1. Procesamiento Avanzado de Documentos e Informes Técnicos', contenido: 'Comunicación y representación técnica en documentos complejos.', pda: 'Integra tablas avanzadas, combinaciones de correspondencia, estilos, índices automáticos y encabezados organizados en procesadores de texto para la elaboración de reportes técnicos.', sesiones: 13 },
-                    { nombre: '2. Gestión de Datos y Funciones Condicionales en Excel', contenido: 'Procesamiento informático y análisis de información cuantitativa.', pda: 'Utiliza funciones lógicas y matemáticas en hojas de cálculo (SI, BUSCARV, promedios ponderados) y genera gráficos estadísticos para analizar datos del entorno escolar o social.', sesiones: 12 },
-                    { nombre: '3. Programación Estructurada y Variables con Bloques', contenido: 'Pensamiento computacional y desarrollo de algoritmos informáticos.', pda: 'Desarrolla programas empleando variables, condicionales (si... entonces) y bucles para resolver problemas matemáticos y simulaciones informáticas interactivas.', sesiones: 12 },
-                    { nombre: '4. Estructura Física e Interna de la Computadora (Hardware Interno)', contenido: 'Componentes, estructura y funcionamiento de los sistemas informáticos.', pda: 'Identifica el funcionamiento de los componentes internos (tarjeta madre, procesador, memoria RAM, disco duro) y comprende la arquitectura básica de un equipo de cómputo.', sesiones: 12 }
+                    { nombre: 'Procesamiento Avanzado de Documentos e Informes Técnicos', contenido: 'Comunicación y representación técnica en documentos complejos.', pda: 'Integra tablas avanzadas, combinaciones de correspondencia, estilos, índices automáticos y encabezados organizados en procesadores de texto para la elaboración de reportes técnicos.', sesiones: 13 },
+                    { nombre: 'Gestión de Datos y Funciones Condicionales en Excel', contenido: 'Procesamiento informático y análisis de información cuantitativa.', pda: 'Utiliza funciones lógicas y matemáticas en hojas de cálculo (SI, BUSCARV, promedios ponderados) y genera gráficos estadísticos para analizar datos del entorno escolar o social.', sesiones: 12 },
+                    { nombre: 'Programación Estructurada y Variables con Bloques', contenido: 'Pensamiento computacional y desarrollo de algoritmos informáticos.', pda: 'Desarrolla programas empleando variables, condicionales (si... entonces) y bucles para resolver problemas matemáticos y simulaciones informáticas interactivas.', sesiones: 12 },
+                    { nombre: 'Estructura Física e Interna de la Computadora (Hardware Interno)', contenido: 'Componentes, estructura y funcionamiento de los sistemas informáticos.', pda: 'Identifica el funcionamiento de los componentes internos (tarjeta madre, procesador, memoria RAM, disco duro) y comprende la arquitectura básica de un equipo de cómputo.', sesiones: 12 }
                 ]
             },
             {
                 nombre: 'II',
                 proyectos: [
-                    { nombre: '5. Redes de Computadoras y Comunicación Digital', contenido: 'Infraestructura de redes, conectividad y transmisión de datos.', pda: 'Explora la topología de redes de computadoras (LAN, WAN, Wi-Fi), los protocolos de comunicación e identifica los elementos necesarios para compartir recursos e información.', sesiones: 12 },
-                    { nombre: '6. Edición Digital de Fotografía y Diseño Institucional', contenido: 'Representación técnica y uso de software de diseño vectorial y bitmap.', pda: 'Aplica herramientas avanzadas de edición gráfica digital para retocar fotos, diseñar credenciales, banners y logotipos informativos con estándares de precisión técnica.', sesiones: 12 },
-                    { nombre: '7. Construcción de Páginas Web Estáticas (Fundamentos HTML)', contenido: 'Lenguajes de marcación y herramientas de desarrollo web.', pda: 'Comprende la estructura básica de una página web utilizando etiquetas HTML para organizar textos, imágenes, enlaces y listas en un sitio informativo simple.', sesiones: 12 },
-                    { nombre: '8. Edición de Audio y Locución: Proyecto de Podcast Escolar', contenido: 'Tecnologías de audio digital y medios interactivos de comunicación.', pda: 'Captura, edita y procesa archivos de audio digital (eliminación de ruido, cortes, mezcla de pistas) para la producción y publicación de un podcast educativo.', sesiones: 12 }
+                    { nombre: 'Redes de Computadoras y Comunicación Digital', contenido: 'Infraestructura de redes, conectividad y transmisión de datos.', pda: 'Explora la topología de redes de computadoras (LAN, WAN, Wi-Fi), los protocolos de comunicación e identifica los elementos necesarios para compartir recursos e información.', sesiones: 12 },
+                    { nombre: 'Edición Digital de Fotografía y Diseño Institucional', contenido: 'Representación técnica y uso de software de diseño vectorial y bitmap.', pda: 'Aplica herramientas avanzadas de edición gráfica digital para retocar fotos, diseñar credenciales, banners y logotipos informativos con estándares de precisión técnica.', sesiones: 12 },
+                    { nombre: 'Construcción de Páginas Web Estáticas (Fundamentos HTML)', contenido: 'Lenguajes de marcación y herramientas de desarrollo web.', pda: 'Comprende la estructura básica de una página web utilizando etiquetas HTML para organizar textos, imágenes, enlaces y listas en un sitio informativo simple.', sesiones: 12 },
+                    { nombre: 'Edición de Audio y Locución: Proyecto de Podcast Escolar', contenido: 'Tecnologías de audio digital y medios interactivos de comunicación.', pda: 'Captura, edita y procesa archivos de audio digital (eliminación de ruido, cortes, mezcla de pistas) para la producción y publicación de un podcast educativo.', sesiones: 12 }
                 ]
             },
             {
                 nombre: 'III',
                 proyectos: [
-                    { nombre: '9. Mantenimiento Preventivo y Correctivo Sólido del Sistema', contenido: 'Evaluación y mantenimiento de sistemas tecnológicos.', pda: 'Ejecuta tareas de optimización de sistemas operativos (desfragmentación, limpieza de archivos temporales, instalación de programas y antivirus) para mantener los equipos eficientes.', sesiones: 12 },
-                    { nombre: '10. Principios de Electrónica Digital y Circuitos Básicos', contenido: 'Procesos informáticos, energía y control en sistemas tecnológicos.', pda: 'Conoce los principios fundamentales de la electrónica (voltaje, corriente, resistencia, leds) y simula circuitos digitales sencillos para la automatización de procesos.', sesiones: 12 },
-                    { nombre: '11. Herramientas de Inteligencia Artificial para la Investigación', contenido: 'Uso ético y práctico de la Inteligencia Artificial en la sociedad.', pda: 'Explora herramientas de IA para la búsqueda de información, síntesis de textos y generación de ideas, evaluando sus aportes, limitaciones y dilemas éticos.', sesiones: 12 },
-                    { nombre: '12. Proyecto Comunitario: Desarrollo de un Portal Web Escolar', contenido: 'Innovación técnica y desarrollo de proyectos comunitarios.', pda: 'Colabora en el diseño y publicación de un sitio web integrador que solucione una necesidad de difusión o gestión de datos dentro del contexto escolar.', sesiones: 12 }
+                    { nombre: 'Mantenimiento Preventivo y Correctivo Sólido del Sistema', contenido: 'Evaluación y mantenimiento de sistemas tecnológicos.', pda: 'Ejecuta tareas de optimización de sistemas operativos (desfragmentación, limpieza de archivos temporales, instalación de programas y antivirus) para mantener los equipos eficientes.', sesiones: 12 },
+                    { nombre: 'Principios de Electrónica Digital y Circuitos Básicos', contenido: 'Procesos informáticos, energía y control en sistemas tecnológicos.', pda: 'Conoce los principios fundamentales de la electrónica (voltaje, corriente, resistencia, leds) y simula circuitos digitales sencillos para la automatización de procesos.', sesiones: 12 },
+                    { nombre: 'Herramientas de Inteligencia Artificial para la Investigación', contenido: 'Uso ético y práctico de la Inteligencia Artificial en la sociedad.', pda: 'Explora herramientas de IA para la búsqueda de información, síntesis de textos y generación de ideas, evaluando sus aportes, limitaciones y dilemas éticos.', sesiones: 12 },
+                    { nombre: 'Proyecto Comunitario: Desarrollo de un Portal Web Escolar', contenido: 'Innovación técnica y desarrollo de proyectos comunitarios.', pda: 'Colabora en el diseño y publicación de un sitio web integrador que solucione una necesidad de difusión o gestión de datos dentro del contexto escolar.', sesiones: 12 }
                 ]
             }
         ]
@@ -2087,28 +2145,28 @@ const DOSIFICACION_DATA = {
             {
                 nombre: 'I',
                 proyectos: [
-                    { nombre: '1. Lógica de Programación e Introducción a Lenguajes de Código', contenido: 'Lenguajes de programación y pensamiento computacional avanzado.', pda: 'Traduce diagramas de flujo a código en lenguajes de programación (como Python o JavaScript), utilizando sintaxis formal, funciones y estructuras de control.', sesiones: 13 },
-                    { nombre: '2. Diseño Web Interactivo: Maquetación con HTML5 y CSS3', contenido: 'Desarrollo web responsive e interfaces de usuario.', pda: 'Diseña y personaliza sitios web adaptativos empleando CSS para dar estilos, colores, tipografías y maquetación profesional a la estructura HTML5.', sesiones: 12 },
-                    { nombre: '3. Bases de Datos: Estructuración y Consultas Básicas', contenido: 'Sistemas de gestión de bases de datos e información masiva.', pda: 'Diseña tablas, define campos y claves primarias, y realiza consultas sencillas para organizar, buscar y gestionar información en bases de datos relacionales.', sesiones: 12 },
-                    { nombre: '4. Diagnóstico de Fallas Físicas y Reparación de Laptops', contenido: 'Mantenimiento correctivo y diagnóstico en hardware informático.', pda: 'Diagnostica problemas comunes en laptops y computadoras de escritorio (pantalla, almacenamiento, sobrecalentamiento) y aplica procedimientos de ensamblado e higienización técnica.', sesiones: 12 }
+                    { nombre: 'Lógica de Programación e Introducción a Lenguajes de Código', contenido: 'Lenguajes de programación y pensamiento computacional avanzado.', pda: 'Traduce diagramas de flujo a código en lenguajes de programación (como Python o JavaScript), utilizando sintaxis formal, funciones y estructuras de control.', sesiones: 13 },
+                    { nombre: 'Diseño Web Interactivo: Maquetación con HTML5 y CSS3', contenido: 'Desarrollo web responsive e interfaces de usuario.', pda: 'Diseña y personaliza sitios web adaptativos empleando CSS para dar estilos, colores, tipografías y maquetación profesional a la estructura HTML5.', sesiones: 12 },
+                    { nombre: 'Bases de Datos: Estructuración y Consultas Básicas', contenido: 'Sistemas de gestión de bases de datos e información masiva.', pda: 'Diseña tablas, define campos y claves primarias, y realiza consultas sencillas para organizar, buscar y gestionar información en bases de datos relacionales.', sesiones: 12 },
+                    { nombre: 'Diagnóstico de Fallas Físicas y Reparación de Laptops', contenido: 'Mantenimiento correctivo y diagnóstico en hardware informático.', pda: 'Diagnostica problemas comunes en laptops y computadoras de escritorio (pantalla, almacenamiento, sobrecalentamiento) y aplica procedimientos de ensamblado e higienización técnica.', sesiones: 12 }
                 ]
             },
             {
                 nombre: 'II',
                 proyectos: [
-                    { nombre: '5. Programación Web Dinámica e Interacción con el Usuario', contenido: 'Desarrollo de aplicaciones web cliente-servidor.', pda: 'Incorpora scripts interactivos que respondan a eventos del usuario (botones, formularios, validación de datos) para crear aplicaciones web funcionales.', sesiones: 12 },
-                    { nombre: '6. Robótica Educativa y Microcontroladores (Arduino)', contenido: 'Integración de programación, electrónica y robótica.', pda: 'Programa microcontroladores para interactuar con sensores (luz, temperatura, distancia) y actuadores (motores, leds), automatizando un prototipo físico.', sesiones: 12 },
-                    { nombre: '7. Seguridad Informática, Criptografía y Protección de Redes', contenido: 'Ciberseguridad, encriptación y mitigación de vulnerabilidades.', pda: 'Analiza los tipos de malware, ataques informáticos comunes y aplica técnicas de encriptación, contraseñas seguras y configuración de cortafuegos para proteger sistemas.', sesiones: 12 },
-                    { nombre: '8. Edición de Video y Producción Audiovisual Digital', contenido: 'Lenguaje audiovisual, edición digital y difusión multimedia.', pda: 'Produce, edita y exporta videos educativos con efectos, transiciones y pistas de audio, optimizando los formatos para plataformas de difusión en internet.', sesiones: 12 }
+                    { nombre: 'Programación Web Dinámica e Interacción con el Usuario', contenido: 'Desarrollo de aplicaciones web cliente-servidor.', pda: 'Incorpora scripts interactivos que respondan a eventos del usuario (botones, formularios, validación de datos) para crear aplicaciones web funcionales.', sesiones: 12 },
+                    { nombre: 'Robótica Educativa y Microcontroladores (Arduino)', contenido: 'Integración de programación, electrónica y robótica.', pda: 'Programa microcontroladores para interactuar con sensores (luz, temperatura, distancia) y actuadores (motores, leds), automatizando un prototipo físico.', sesiones: 12 },
+                    { nombre: 'Seguridad Informática, Criptografía y Protección de Redes', contenido: 'Ciberseguridad, encriptación y mitigación de vulnerabilidades.', pda: 'Analiza los tipos de malware, ataques informáticos comunes y aplica técnicas de encriptación, contraseñas seguras y configuración de cortafuegos para proteger sistemas.', sesiones: 12 },
+                    { nombre: 'Edición de Video y Producción Audiovisual Digital', contenido: 'Lenguaje audiovisual, edición digital y difusión multimedia.', pda: 'Produce, edita y exporta videos educativos con efectos, transiciones y pistas de audio, optimizando los formatos para plataformas de difusión en internet.', sesiones: 12 }
                 ]
             },
             {
                 nombre: 'III',
                 proyectos: [
-                    { nombre: '9. Modelado 3D e Impresión Digital para Proyectos', contenido: 'Sistemas CAD (Diseño Asistido por Computadora) y manufactura digital.', pda: 'Diseña objetos y piezas tridimensionales mediante software de modelado 3D, preparando los archivos para simulación o fabricación digital.', sesiones: 12 },
-                    { nombre: '10. Aplicación de Inteligencia Artificial y Automatización', contenido: 'Automatización de procesos e Inteligencia Artificial en proyectos.', pda: 'Integra modelos de IA (procesamiento de lenguaje o visión por computadora) e instrumentos de automatización para resolver tareas repetitivas o analizar datos.', sesiones: 12 },
-                    { nombre: '11. Diagnóstico, Mantenimiento y Liberación de Telefónica Celular', contenido: 'Sistemas operativos móviles, arquitectura y soporte técnico.', pda: 'Reconoce los componentes de la tecnología móvil, métodos de respaldo de software, restauración del sistema operativo y mantenimiento preventivo en dispositivos móviles.', sesiones: 12 },
-                    { nombre: '12. Proyecto Integrador de Innovación Tecnológica Escolar', contenido: 'Innovación técnica, desarrollo sustentable y evaluación de proyectos.', pda: 'Desarrolla un sistema o prototipo tecnológico integral (sitio web, app, o sistema automatizado) que dé respuesta a un problema social, productivo o educativo de la comunidad.', sesiones: 12 }
+                    { nombre: 'Modelado 3D e Impresión Digital para Proyectos', contenido: 'Sistemas CAD (Diseño Asistido por Computadora) y manufactura digital.', pda: 'Diseña objetos y piezas tridimensionales mediante software de modelado 3D, preparando los archivos para simulación o fabricación digital.', sesiones: 12 },
+                    { nombre: 'Aplicación de Inteligencia Artificial y Automatización', contenido: 'Automatización de procesos e Inteligencia Artificial en proyectos.', pda: 'Integra modelos de IA (procesamiento de lenguaje o visión por computadora) e instrumentos de automatización para resolver tareas repetitivas o analizar datos.', sesiones: 12 },
+                    { nombre: 'Diagnóstico, Mantenimiento y Liberación de Telefónica Celular', contenido: 'Sistemas operativos móviles, arquitectura y soporte técnico.', pda: 'Reconoce los componentes de la tecnología móvil, métodos de respaldo de software, restauración del sistema operativo y mantenimiento preventivo en dispositivos móviles.', sesiones: 12 },
+                    { nombre: 'Proyecto Integrador de Innovación Tecnológica Escolar', contenido: 'Innovación técnica, desarrollo sustentable y evaluación de proyectos.', pda: 'Desarrolla un sistema o prototipo tecnológico integral (sitio web, app, o sistema automatizado) que dé respuesta a un problema social, productivo o educativo de la comunidad.', sesiones: 12 }
                 ]
             }
         ]
@@ -2918,6 +2976,138 @@ function exportPlanWord() {
     document.body.removeChild(link);
     setTimeout(() => URL.revokeObjectURL(link.href), 1000);
     showToast('📄 Plan Anual exportado a Word (.doc)');
+}
+
+// ============================================================
+// EXPORTAR PLANEACIÓN SEMANAL A WORD
+// ============================================================
+function exportPlaneacionWord() {
+    const grade = document.getElementById('planeacionGrade').value;
+    const container = document.getElementById('planeacionContainer');
+    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
+    const data = planeacionData[grade] || [];
+    
+    if (data.length === 0) {
+        showToast('⚠️ No hay planeación para exportar');
+        return;
+    }
+    
+    let tablaHtml = `
+    <table border="1" cellpadding="4" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10pt; font-family:'Times New Roman', Times, serif;">
+        <thead>
+            <tr style="background-color:#00467F; color:white;">
+                <th style="width:12%; padding:4px;">PERIODO</th>
+                <th style="width:28%; padding:4px;">ACTIVIDADES</th>
+                <th style="width:20%; padding:4px;">RECURSOS</th>
+                <th style="width:28%; padding:4px;">PRODUCTO ESPERADO</th>
+                <th style="width:12%; padding:4px;">SESIONES</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    data.forEach((item, index) => {
+        const sesiones = index === 0 ? 2 : 2;
+        tablaHtml += `
+            <tr>
+                <td style="padding:4px; vertical-align:top;">${item.periodo || ''}</td>
+                <td style="padding:4px; vertical-align:top;">${item.actividades || ''}</td>
+                <td style="padding:4px; vertical-align:top;">${item.recursos || ''}</td>
+                <td style="padding:4px; vertical-align:top;">${item.producto || ''}</td>
+                <td style="padding:4px; vertical-align:top; text-align:center;">${sesiones}</td>
+            </tr>`;
+    });
+    
+    // Calcular total de sesiones
+    const totalSesiones = data.length * 2;
+    
+    tablaHtml += `
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="padding:6px; text-align:right; font-weight:700; background-color:#E6F0FA;">TOTAL DE SESIONES</td>
+                <td style="padding:6px; text-align:center; font-weight:700; background-color:#E6F0FA;">${totalSesiones}</td>
+            </tr>
+        </tfoot>
+    </table>`;
+    
+    const html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+          xmlns:w="urn:schemas-microsoft-com:office:word" 
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <title>Planeación Semanal - Informática ${gradeLabel} Grado</title>
+        <!--[if gte mso 9]>
+        <xml>
+            <w:WordDocument>
+                <w:View>Print</w:View>
+            </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
+            h1 { text-align: center; font-size: 16pt; font-weight: bold; }
+            .header-info { text-align: center; font-size: 11pt; margin-bottom: 20px; }
+            .header-info p { margin: 2px 0; }
+            table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
+            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+            .signature-row { text-align: center; margin-top: 30px; }
+            .signature-block { display: inline-block; width: 30%; text-align: center; }
+            .signature-block strong { display: block; }
+            .signature-name { font-weight: 600; font-size: 11pt; }
+            .signature-title { font-size: 9pt; color: #555; }
+            .footer { text-align: center; margin-top: 20px; font-weight: 500; }
+    `;
+    
+    html += `
+        </style>
+    </head>
+    <body>
+        <h1>PLANEACIÓN SEMANAL - INFORMÁTICA ${gradeLabel} GRADO</h1>
+        <div class="header-info">
+            <p><strong>Docente:</strong> ${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</p>
+            <p><strong>Asignatura:</strong> Informática ${gradeLabel} Grupo: ______</p>
+            <p><strong>Ciclo Escolar:</strong> ${config.schoolCycle || '2026-2027'}</p>
+            <p><strong>Número de Sesiones:</strong> ${totalSesiones}</p>
+            <p><strong>Periodo:</strong> 31 de agosto al 04 de septiembre de 2026</p>
+            <p><strong>Escuela:</strong> ${config.schoolName || 'Escuela Secundaria General'}</p>
+        </div>
+        
+        <h2 style="text-align:center; font-size:13pt; margin-top:15px;">SECUENCIA DE ACTIVIDADES SEMANALES</h2>
+        
+        ${tablaHtml}
+        
+        <div class="footer">Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026</div>
+        
+        <div class="signature-row">
+            <div class="signature-block">
+                <strong>Elaboró</strong>
+                <div class="signature-name">${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</div>
+                <div class="signature-title">Titular de Informática</div>
+            </div>
+            <div class="signature-block">
+                <strong>Revisó</strong>
+                <div class="signature-name">Subdirector Turno Mixto</div>
+            </div>
+            <div class="signature-block">
+                <strong>Vo. Bo.</strong>
+                <div class="signature-name">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
+                <div class="signature-title">Subdirector encargado de la dirección</div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+    
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Planeacion_Semanal_Informatica_${gradeLabel}_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    showToast('📄 Planeación exportada a Word (.doc)');
 }
 
 // ============================================================
@@ -3918,43 +4108,6 @@ function updateSelectionInfo() {
 }
 
 // ============================================================
-// COPIAR DATOS DE 1º A 2º Y 3º
-// ============================================================
-function copyGrade1ToAll() {
-    if (!confirm('¿Copiar todas las actividades de 1º Grado a 2º y 3º Grado? Se sobrescribirán las existentes.')) return;
-    
-    const grade1Activities = activities.filter(a => {
-        const grades = getGradesForActivity(a.grade);
-        return grades.includes(1);
-    });
-    
-    if (grade1Activities.length === 0) {
-        showToast('⚠️ No hay actividades en 1º Grado para copiar');
-        return;
-    }
-    
-    const toRemove = activities.filter(a => {
-        const grades = getGradesForActivity(a.grade);
-        return grades.includes(2) || grades.includes(3);
-    });
-    for (const r of toRemove) {
-        const idx = activities.indexOf(r);
-        if (idx >= 0) activities.splice(idx, 1);
-    }
-    
-    for (const act of grade1Activities) {
-        const act2 = { ...act, grade: 2 };
-        activities.push(act2);
-        const act3 = { ...act, grade: 3 };
-        activities.push(act3);
-    }
-    
-    saveActivities();
-    renderCronograma();
-    showToast(`✅ Copiadas ${grade1Activities.length} actividades de 1º a 2º y 3º grado`);
-}
-
-// ============================================================
 // FUNCIONES DE GESTIÓN DE FECHAS (UI)
 // ============================================================
 function renderFechasUI() {
@@ -4114,6 +4267,135 @@ function aplicarColores() {
     
     renderCronograma();
     showToast('🎨 Colores aplicados');
+}
+
+// ============================================================
+// VERIFICACIÓN: DOSIFICACIÓN VS CRONOGRAMA
+// ============================================================
+function verificarCorrespondencia() {
+    const container = document.getElementById('verificacionContainer');
+    const grades = [1, 2, 3];
+    const gradeLabels = { 1: '1º Grado', 2: '2º Grado', 3: '3º Grado' };
+    
+    let html = `<table class="verificacion-table">
+        <thead>
+            <tr>
+                <th>Grado</th>
+                <th>Proyecto (Dosificación)</th>
+                <th>Sesiones (Dosificación)</th>
+                <th>Proyecto (Cronograma)</th>
+                <th>Sesiones (Cronograma)</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    for (const grade of grades) {
+        const data = dosificacionData[grade];
+        if (!data) continue;
+        
+        // Obtener todos los proyectos de la dosificación
+        const proyectosDosificacion = [];
+        for (const trim of data.trimestres) {
+            for (const proj of trim.proyectos) {
+                proyectosDosificacion.push({
+                    nombre: proj.nombre,
+                    sesiones: parseInt(proj.sesiones) || 0,
+                    trimestre: trim.nombre
+                });
+            }
+        }
+        
+        // Obtener proyectos del cronograma para este grado
+        const proyectosCronograma = [];
+        const activitiesGrade = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(grade) && isProject(a.type);
+        });
+        
+        // Agrupar por nombre de proyecto y contar sesiones
+        const proyectoMap = {};
+        for (const act of activitiesGrade) {
+            if (!proyectoMap[act.activity]) {
+                proyectoMap[act.activity] = 0;
+            }
+            proyectoMap[act.activity]++;
+        }
+        
+        for (const [nombre, sesiones] of Object.entries(proyectoMap)) {
+            proyectosCronograma.push({ nombre, sesiones });
+        }
+        
+        // Comparar
+        const dosifNombres = proyectosDosificacion.map(p => p.nombre);
+        const cronoNombres = proyectosCronograma.map(p => p.nombre);
+        
+        // 1. Proyectos que están en dosificación y en cronograma
+        for (const proj of proyectosDosificacion) {
+            const cronoMatch = proyectosCronograma.find(p => p.nombre === proj.nombre);
+            let status = '';
+            let statusClass = '';
+            
+            if (cronoMatch) {
+                const sesionesMatch = proj.sesiones === cronoMatch.sesiones;
+                if (sesionesMatch) {
+                    status = '✅ Coinciden';
+                    statusClass = 'status-ok';
+                } else {
+                    status = `⚠️ Sesiones difieren (Dosif: ${proj.sesiones}, Crono: ${cronoMatch.sesiones})`;
+                    statusClass = 'status-error';
+                }
+                html += `<tr>
+                    <td><strong>${gradeLabels[grade]}</strong></td>
+                    <td>${proj.nombre}</td>
+                    <td style="text-align:center;">${proj.sesiones}</td>
+                    <td>${cronoMatch.nombre}</td>
+                    <td style="text-align:center;">${cronoMatch.sesiones}</td>
+                    <td class="${statusClass}">${status}</td>
+                </tr>`;
+            } else {
+                html += `<tr>
+                    <td><strong>${gradeLabels[grade]}</strong></td>
+                    <td>${proj.nombre}</td>
+                    <td style="text-align:center;">${proj.sesiones}</td>
+                    <td style="color:#DC3545;">❌ No encontrado</td>
+                    <td style="text-align:center;">-</td>
+                    <td class="status-missing">❌ Faltante en cronograma</td>
+                </tr>`;
+            }
+        }
+        
+        // 2. Proyectos que están en cronograma pero NO en dosificación
+        for (const proj of proyectosCronograma) {
+            const dosifMatch = proyectosDosificacion.find(p => p.nombre === proj.nombre);
+            if (!dosifMatch) {
+                html += `<tr>
+                    <td><strong>${gradeLabels[grade]}</strong></td>
+                    <td style="color:#FF8C00;">${proj.nombre} (extra)</td>
+                    <td style="text-align:center;">-</td>
+                    <td>${proj.nombre}</td>
+                    <td style="text-align:center;">${proj.sesiones}</td>
+                    <td class="status-extra">🟠 Extra en cronograma</td>
+                </tr>`;
+            }
+        }
+        
+        // Separador entre grados
+        html += `<tr style="background-color:var(--bg);"><td colspan="6" style="text-align:center; font-weight:700; padding:6px;">━━━ ${gradeLabels[grade]} ━━━</td></tr>`;
+    }
+    
+    html += `
+        </tbody>
+    </table>
+    <div style="margin-top:12px; padding:10px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
+        <strong>📌 Resumen de estados:</strong>
+        <br>✅ <strong>Coinciden:</strong> El proyecto existe en ambos lados y las sesiones coinciden.
+        <br>🔴 <strong>Faltante en cronograma:</strong> El proyecto está en la dosificación pero no en el cronograma.
+        <br>🟠 <strong>Extra en cronograma:</strong> El proyecto está en el cronograma pero no en la dosificación.
+        <br>⚠️ <strong>Sesiones difieren:</strong> El número de sesiones no coincide.
+    </div>`;
+    
+    container.innerHTML = html;
 }
 
 // ============================================================
@@ -4454,6 +4736,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         if (tabId === 'dosificacion') renderDosificacion();
         if (tabId === 'planeacion') renderPlaneacion();
         if (tabId === 'fechas') renderFechasUI();
+        if (tabId === 'verificacion') verificarCorrespondencia();
         if (tabId === 'config') {
             document.getElementById('schoolName').value = config.schoolName || '';
             document.getElementById('schoolCycle').value = config.schoolCycle || '';
@@ -4475,6 +4758,7 @@ renderPlan();
 renderDosificacion();
 renderPlaneacion();
 renderFechasUI();
+verificarCorrespondencia();
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeModal(); closeBulkModal(); clearSelection(); }
