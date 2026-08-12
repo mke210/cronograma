@@ -1258,6 +1258,41 @@
             flex-wrap: wrap;
         }
 
+        /* ============================================================
+           ESTILOS PARA VERIFICACIÓN
+           ============================================================ */
+        .verificacion-container {
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+        .verificacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.65rem;
+            background: var(--card-bg);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .verificacion-table th,
+        .verificacion-table td {
+            border: 1px solid var(--border);
+            padding: 4px 6px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .verificacion-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.65rem;
+        }
+        .verificacion-table .status-ok { color: #28A745; font-weight: 700; }
+        .verificacion-table .status-warning { color: #FF8C00; font-weight: 700; }
+        .verificacion-table .status-error { color: #DC3545; font-weight: 700; }
+        .verificacion-table .status-missing { color: #DC3545; font-weight: 700; }
+        .verificacion-table .status-extra { color: #FF8C00; font-weight: 700; }
+
         @media (max-width: 768px) {
             body { padding: 6px; }
             .header { padding: 8px 12px; flex-direction: column; align-items: stretch; }
@@ -1348,41 +1383,6 @@
             .grid-cell.trimestre-header { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .grid-cell.month-header { background: #28A745 !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
-
-        /* ============================================================
-           ESTILOS PARA VERIFICACIÓN
-           ============================================================ */
-        .verificacion-container {
-            overflow-x: auto;
-            padding: 4px 0;
-        }
-        .verificacion-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.65rem;
-            background: var(--card-bg);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .verificacion-table th,
-        .verificacion-table td {
-            border: 1px solid var(--border);
-            padding: 4px 6px;
-            text-align: left;
-            vertical-align: top;
-        }
-        .verificacion-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            text-align: center;
-            font-size: 0.65rem;
-        }
-        .verificacion-table .status-ok { color: #28A745; font-weight: 700; }
-        .verificacion-table .status-warning { color: #FF8C00; font-weight: 700; }
-        .verificacion-table .status-error { color: #DC3545; font-weight: 700; }
-        .verificacion-table .status-missing { color: #DC3545; font-weight: 700; }
-        .verificacion-table .status-extra { color: #FF8C00; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -1501,6 +1501,7 @@ HEADER
                             <option value="3">3º Secundaria</option>
                         </select>
                     </div>
+                    <button class="btn btn-word btn-sm" onclick="exportDosificacionWord()">📄 Exportar a Word</button>
                     <button class="btn btn-implement btn-sm" onclick="implementarDosificacion()">📌 Implementar en Cronograma</button>
                     <button class="btn btn-success btn-sm" onclick="saveDosificacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
@@ -1757,6 +1758,7 @@ HEADER
                 <button class="btn btn-excel" onclick="exportToExcel()">📊 Exportar a Excel</button>
                 <button class="btn btn-word" onclick="exportPlanWord()">📄 Exportar Plan Anual a Word</button>
                 <button class="btn btn-word" onclick="exportPlaneacionWord()">📄 Exportar Planeación a Word</button>
+                <button class="btn btn-word" onclick="exportDosificacionWord()">📄 Exportar Dosificación a Word</button>
                 <button class="btn btn-outline" onclick="exportJSON()">📋 Exportar JSON</button>
                 <button class="btn btn-outline" onclick="document.getElementById('importFile').click()">📂 Importar backup</button>
                 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSONFile(event)">
@@ -2979,6 +2981,146 @@ function exportPlanWord() {
 }
 
 // ============================================================
+// EXPORTAR DOSIFICACIÓN A WORD
+// ============================================================
+function exportDosificacionWord() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
+    
+    if (!data) {
+        showToast('⚠️ No hay datos de dosificación para exportar');
+        return;
+    }
+    
+    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
+    
+    let tablaHtml = `
+    <table border="1" cellpadding="4" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9pt; font-family:'Times New Roman', Times, serif;">
+        <thead>
+            <tr style="background-color:#00467F; color:white;">
+                <th style="width:6%; padding:4px; text-align:center;">TRIMESTRE</th>
+                <th style="width:24%; padding:4px;">PROYECTO</th>
+                <th style="width:20%; padding:4px;">CONTENIDO</th>
+                <th style="width:40%; padding:4px;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
+                <th style="width:10%; padding:4px; text-align:center;">SESIONES</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    let totalSesiones = 0;
+    let trimCount = 0;
+    
+    for (const trim of data.trimestres) {
+        trimCount++;
+        let firstRow = true;
+        const mesesValue = data.meses ? data.meses[trim.nombre] : 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE';
+        
+        for (const proyecto of trim.proyectos) {
+            totalSesiones += parseInt(proyecto.sesiones) || 0;
+            const rowspan = firstRow ? trim.proyectos.length : 1;
+            
+            tablaHtml += `
+            <tr>
+                ${firstRow ? `<td rowspan="${rowspan}" style="padding:4px; text-align:center; vertical-align:middle; background-color:#E6F0FA; font-weight:700; font-size:8pt;">
+                    <div>${trim.nombre}</div>
+                    <div style="font-weight:400; font-size:7pt; color:#555;">${mesesValue.replace(/<br>/g, ' ')}</div>
+                </td>` : ''}
+                <td style="padding:4px; vertical-align:top; font-weight:600; color:#6C5CE7;">${proyecto.nombre}</td>
+                <td style="padding:4px; vertical-align:top;">${proyecto.contenido}</td>
+                <td style="padding:4px; vertical-align:top;">${proyecto.pda}</td>
+                <td style="padding:4px; text-align:center; vertical-align:middle; font-weight:600;">${proyecto.sesiones}</td>
+            </tr>`;
+            firstRow = false;
+        }
+    }
+    
+    tablaHtml += `
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="padding:6px; text-align:right; font-weight:700; background-color:#E6F0FA;">TOTAL DE SESIONES ANUALES</td>
+                <td style="padding:6px; text-align:center; font-weight:700; background-color:#E6F0FA;">${totalSesiones}</td>
+            </tr>
+        </tfoot>
+    </table>`;
+    
+    const html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+          xmlns:w="urn:schemas-microsoft-com:office:word" 
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <title>Dosificación - Informática ${gradeLabel} Grado</title>
+        <!--[if gte mso 9]>
+        <xml>
+            <w:WordDocument>
+                <w:View>Print</w:View>
+            </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; margin: 40px; }
+            h1 { text-align: center; font-size: 14pt; font-weight: bold; }
+            .header-info { text-align: center; font-size: 10pt; margin-bottom: 15px; }
+            .header-info p { margin: 2px 0; }
+            table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
+            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+            .signature-row { text-align: center; margin-top: 25px; }
+            .signature-block { display: inline-block; width: 30%; text-align: center; }
+            .signature-block strong { display: block; }
+            .signature-name { font-weight: 600; font-size: 10pt; }
+            .signature-title { font-size: 8pt; color: #555; }
+            .footer { text-align: center; margin-top: 15px; font-weight: 500; font-size: 10pt; }
+    `;
+    
+    html += `
+        </style>
+    </head>
+    <body>
+        <h1>${data.titulo}</h1>
+        <div class="header-info">
+            <p><strong>Nombre de la Escuela:</strong> ${data.escuela}</p>
+            <p><strong>Nombre del Docente:</strong> ${data.docente}</p>
+            <p><strong>Grado y Grupo:</strong> ${data.grado}</p>
+            <p><strong>Ciclo Escolar:</strong> ${data.ciclo}</p>
+        </div>
+        
+        ${tablaHtml}
+        
+        <div class="footer">Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026</div>
+        
+        <div class="signature-row">
+            <div class="signature-block">
+                <strong>Elaboró</strong>
+                <div class="signature-name">${data.docente}</div>
+                <div class="signature-title">Titular de Informática</div>
+            </div>
+            <div class="signature-block">
+                <strong>Revisó</strong>
+                <div class="signature-name">Subdirector Turno Mixto</div>
+            </div>
+            <div class="signature-block">
+                <strong>Vo. Bo.</strong>
+                <div class="signature-name">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
+                <div class="signature-title">Subdirector encargado de la dirección</div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+    
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Dosificacion_Informatica_${gradeLabel}_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    showToast('📄 Dosificación exportada a Word (.doc)');
+}
+
+// ============================================================
 // EXPORTAR PLANEACIÓN SEMANAL A WORD
 // ============================================================
 function exportPlaneacionWord() {
@@ -3017,7 +3159,6 @@ function exportPlaneacionWord() {
             </tr>`;
     });
     
-    // Calcular total de sesiones
     const totalSesiones = data.length * 2;
     
     tablaHtml += `
@@ -4294,7 +4435,6 @@ function verificarCorrespondencia() {
         const data = dosificacionData[grade];
         if (!data) continue;
         
-        // Obtener todos los proyectos de la dosificación
         const proyectosDosificacion = [];
         for (const trim of data.trimestres) {
             for (const proj of trim.proyectos) {
@@ -4306,14 +4446,12 @@ function verificarCorrespondencia() {
             }
         }
         
-        // Obtener proyectos del cronograma para este grado
         const proyectosCronograma = [];
         const activitiesGrade = activities.filter(a => {
             const gradesAct = getGradesForActivity(a.grade);
             return gradesAct.includes(grade) && isProject(a.type);
         });
         
-        // Agrupar por nombre de proyecto y contar sesiones
         const proyectoMap = {};
         for (const act of activitiesGrade) {
             if (!proyectoMap[act.activity]) {
@@ -4326,11 +4464,9 @@ function verificarCorrespondencia() {
             proyectosCronograma.push({ nombre, sesiones });
         }
         
-        // Comparar
         const dosifNombres = proyectosDosificacion.map(p => p.nombre);
         const cronoNombres = proyectosCronograma.map(p => p.nombre);
         
-        // 1. Proyectos que están en dosificación y en cronograma
         for (const proj of proyectosDosificacion) {
             const cronoMatch = proyectosCronograma.find(p => p.nombre === proj.nombre);
             let status = '';
@@ -4365,7 +4501,6 @@ function verificarCorrespondencia() {
             }
         }
         
-        // 2. Proyectos que están en cronograma pero NO en dosificación
         for (const proj of proyectosCronograma) {
             const dosifMatch = proyectosDosificacion.find(p => p.nombre === proj.nombre);
             if (!dosifMatch) {
@@ -4380,7 +4515,6 @@ function verificarCorrespondencia() {
             }
         }
         
-        // Separador entre grados
         html += `<tr style="background-color:var(--bg);"><td colspan="6" style="text-align:center; font-weight:700; padding:6px;">━━━ ${gradeLabels[grade]} ━━━</td></tr>`;
     }
     
@@ -4777,8 +4911,7 @@ document.getElementById('primaryColor').addEventListener('input', function() {
     document.documentElement.style.setProperty('--primary-dark', adjustColor(this.value, -20));
 });
 
-// Sincronizar colores con los campos hex
-document.getElementById('colorProyecto').addEventListener('input', function() {
+// Sincronizar colores con los campos hexdocument.getElementById('colorProyecto').addEventListener('input', function() {
     document.getElementById('colorProyectoHex').value = this.value;
 });
 document.getElementById('colorProyectoHex').addEventListener('input', function() {
