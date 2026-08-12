@@ -1508,6 +1508,9 @@
                     <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
                 </div>
             </div>
+            <div style="margin:0 14px 8px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.72rem; color:var(--text-secondary);">
+                <strong>📌 "Implementar en Cronograma":</strong> cada tema (proyecto) toma tantos días hábiles como indique su columna de <strong>Sesiones</strong>, saltando automáticamente sábados, domingos, días festivos, vacaciones y cualquier campo ya ocupado (por ejemplo fechas de CTE). El siguiente tema continúa justo donde terminó el anterior. Si un tema no alcanza a completar sus sesiones dentro del calendario disponible, ajusta el número de sesiones en la columna correspondiente.
+            </div>
             <div id="dosificacionContainer" class="dosificacion-container"></div>
         </div>
     </div>
@@ -3487,15 +3490,12 @@ function implementarDosificacion() {
         return;
     }
     
-    const trimestreMap = {
-        1: { months: [9, 10, 11], startDay: 1 },
-        2: { months: [12, 1, 2, 3], startDay: 1 },
-        3: { months: [4, 5, 6, 7], startDay: 1 }
-    };
-    
     let count = 0;
+    let omitidos = 0;
     const gradeNum = parseInt(grade);
     
+    // 1. Limpiar únicamente las celdas que ya pertenecían a los proyectos de esta dosificación
+    //    (así se puede re-ejecutar sin duplicar, pero sin tocar CTE, festivos ni otros proyectos)
     for (const trim of data.trimestres) {
         for (const proyecto of trim.proyectos) {
             const toRemove = activities.filter(a => {
@@ -3509,62 +3509,58 @@ function implementarDosificacion() {
         }
     }
     
+    // 2. Fecha de arranque de cada trimestre (el primer proyecto comienza aquí; los siguientes
+    //    retoman justo donde terminó el anterior, sin fechas fijas por proyecto)
     const trimStartDates = {
-        1: ['2026-09-01', '2026-09-17', '2026-10-05', '2026-10-21'],
-        2: ['2026-12-01', '2026-12-17', '2027-01-12', '2027-01-28'],
-        3: ['2027-04-05', '2027-04-21', '2027-05-10', '2027-05-26']
+        1: '2026-09-01',
+        2: '2026-12-01',
+        3: '2027-04-05'
     };
     
     let trimIndex = 0;
     for (const trim of data.trimestres) {
         trimIndex++;
-        const startDates = trimStartDates[trimIndex] || trimStartDates[1];
+        const inicioTrim = trimStartDates[trimIndex] || trimStartDates[1];
+        const parts0 = inicioTrim.split('-').map(Number);
+        
+        // Cursor continuo dentro del trimestre: se comparte entre proyectos consecutivos
+        let month = parts0[1];
+        let day = parts0[2];
+        let year = parts0[0];
         
         for (const proyecto of trim.proyectos) {
             const sesiones = parseInt(proyecto.sesiones) || 12;
-            const projIndex = trim.proyectos.indexOf(proyecto);
-            
-            let fechaInicio = proyecto.fechaInicio || startDates[projIndex] || '2026-09-01';
-            const parts = fechaInicio.split('-').map(Number);
-            let month = parts[1];
-            let day = parts[2];
-            let year = parts[0];
-            
             let diasAsignados = 0;
-            let maxIter = 500;
+            let maxIter = 800;
             
             while (diasAsignados < sesiones && maxIter > 0) {
                 maxIter--;
+                
+                // Solo cuenta días hábiles (no fin de semana, no festivo, no vacación)
                 if (isDiaHabil(month, day, year)) {
-                    const existingIdx = activities.findIndex(a => {
+                    // Si el campo del cronograma ya está ocupado (CTE, evaluación, otro proyecto, etc.)
+                    // se respeta y se avanza al siguiente día sin sobrescribirlo
+                    const ocupado = activities.some(a => {
                         const gradesAct = getGradesForActivity(a.grade);
                         return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
                     });
                     
-                    if (existingIdx >= 0) {
-                        activities[existingIdx] = { 
-                            grade: gradeNum, 
-                            month: month, 
-                            day: day, 
-                            activity: proyecto.nombre, 
-                            type: 'proyecto', 
-                            duration: sesiones, 
-                            unit: 'days' 
-                        };
-                    } else {
-                        activities.push({ 
-                            grade: gradeNum, 
-                            month: month, 
-                            day: day, 
-                            activity: proyecto.nombre, 
-                            type: 'proyecto', 
-                            duration: sesiones, 
-                            unit: 'days' 
+                    if (!ocupado) {
+                        activities.push({
+                            grade: gradeNum,
+                            month, day,
+                            activity: proyecto.nombre,
+                            type: 'proyecto',
+                            duration: sesiones,
+                            unit: 'days'
                         });
+                        diasAsignados++;
+                        count++;
+                    } else {
+                        omitidos++;
                     }
-                    diasAsignados++;
-                    count++;
                 }
+                
                 day++;
                 const daysInMonth = getDaysInMonth(month);
                 if (day > daysInMonth) {
@@ -3573,12 +3569,16 @@ function implementarDosificacion() {
                     if (month > 12) { month = 1; year++; }
                 }
             }
+            // El cursor queda apuntando justo al día siguiente del último día asignado:
+            // el próximo proyecto retoma desde ahí (sin huecos ni fechas fijas).
         }
     }
     
     saveActivities();
     renderCronograma();
-    showToast(`✅ Implementados ${count} días de actividades para ${data.grado}`);
+    let msg = `✅ Implementados ${count} días de actividades para ${data.grado}`;
+    if (omitidos > 0) msg += ` · ${omitidos} días ocupados se omitieron automáticamente`;
+    showToast(msg);
 }
 
 // ============================================================
