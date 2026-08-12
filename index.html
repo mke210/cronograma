@@ -33,6 +33,7 @@
             --color-proyecto: #6C5CE7;
             --color-evaluacion: #FF6B6B;
             --color-result-hover: #E8F0FE;
+            --color-festivo-cell: #DC3545;
         }
 
         [data-theme="dark"] {
@@ -55,6 +56,7 @@
             --color-proyecto: #4A3A8A;
             --color-evaluacion: #CC4444;
             --color-result-hover: #2A3A5A;
+            --color-festivo-cell: #8B1A1A;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -705,12 +707,8 @@
             background: var(--primary-light);
         }
         .grid-cell.weekend {
-            background: var(--color-weekend);
             cursor: not-allowed;
             opacity: 0.6;
-        }
-        .grid-cell.weekend:hover {
-            background: var(--color-weekend);
         }
         .grid-cell.weekend .activity {
             cursor: not-allowed;
@@ -719,6 +717,16 @@
         .grid-cell.weekend .activity:hover {
             transform: none;
             border-color: transparent;
+        }
+        .grid-cell.festivo-cell {
+            background: var(--color-festivo-cell) !important;
+            opacity: 0.85;
+            cursor: not-allowed;
+        }
+        .grid-cell.vacacion-cell {
+            background: var(--color-vacacion) !important;
+            opacity: 0.75;
+            cursor: not-allowed;
         }
 
         .grid-cell .activity {
@@ -1387,14 +1395,8 @@
 </head>
 <body>
 
-<!-- ============================================================
-TOAST
-============================================================ -->
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================
-HEADER
-============================================================ -->
 <div class="app-container">
     <header class="header">
         <div class="header-title">
@@ -1407,9 +1409,6 @@ HEADER
         </div>
     </header>
 
-    <!-- ============================================================
-    TABS
-    ============================================================ -->
     <nav class="tabs" id="tabNav">
         <button class="tab-btn active" data-tab="cronograma">📅 Cronograma</button>
         <button class="tab-btn" data-tab="plan">📋 Plan Anual</button>
@@ -1460,6 +1459,7 @@ HEADER
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-proyecto);"></span> Proyecto / Tema</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-selected);"></span> Seleccionado</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-weekend); border:1px solid #ccc;"></span> Fin de semana</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-festivo-cell);"></span> Día festivo</span>
             </div>
 
             <div class="cronograma-wrapper" id="cronogramaContainer"></div>
@@ -1556,7 +1556,6 @@ HEADER
                 Los cambios se aplican al cronograma seleccionando el grado deseado.
             </div>
 
-            <!-- Selector de grado -->
             <div class="fechas-selector-grado">
                 <label>Aplicar cambios a:</label>
                 <select id="fechasGradoTarget">
@@ -1566,10 +1565,10 @@ HEADER
                     <option value="all">🌐 Todos los grados</option>
                 </select>
                 <button class="btn btn-primary btn-sm" onclick="aplicarFechasSeleccionadas()">📌 Aplicar</button>
+                <button class="btn btn-danger btn-sm" onclick="limpiarActividadesEnFestivos()">🗑️ Limpiar festivos</button>
             </div>
 
             <div class="fechas-grid">
-                <!-- Fechas de Inicio y Fin -->
                 <div class="card-mini">
                     <h4>📅 Inicio y Fin de Curso</h4>
                     <div class="form-group">
@@ -1590,41 +1589,34 @@ HEADER
                     </div>
                 </div>
 
-                <!-- Días Festivos -->
                 <div class="card-mini">
                     <h4>🔴 Días Festivos / Suspensión</h4>
                     <div class="form-group" style="display:flex; gap:4px; flex-wrap:wrap;">
                         <input type="date" id="festivoNuevo" value="2026-09-16">
                         <button class="btn btn-success btn-sm" onclick="agregarFestivo()">➕ Agregar</button>
                     </div>
-                    <div class="fechas-list" id="listaFestivos">
-                        <!-- Generado por JS -->
-                    </div>
+                    <div class="fechas-list" id="listaFestivos"></div>
                     <div class="fechas-actions">
                         <button class="btn btn-danger btn-sm" onclick="limpiarFestivos()">🗑️ Limpiar todos</button>
                     </div>
                 </div>
 
-                <!-- Vacaciones -->
                 <div class="card-mini">
                     <h4>🟡 Vacaciones / Recesos</h4>
                     <div class="form-group" style="display:flex; gap:4px; flex-wrap:wrap;">
                         <input type="date" id="vacacionNuevo" value="2026-12-21">
                         <button class="btn btn-success btn-sm" onclick="agregarVacacion()">➕ Agregar</button>
                     </div>
-                    <div class="fechas-list" id="listaVacaciones">
-                        <!-- Generado por JS -->
-                    </div>
+                    <div class="fechas-list" id="listaVacaciones"></div>
                     <div class="fechas-actions">
                         <button class="btn btn-danger btn-sm" onclick="limpiarVacaciones()">🗑️ Limpiar todas</button>
                     </div>
                 </div>
 
-                <!-- Colores -->
                 <div class="card-mini">
                     <h4>🎨 Colores</h4>
                     <div class="form-group">
-                        <label>Color de proyectos (clic derecho sobre proyecto para cambiarlo)</label>
+                        <label>Color de proyectos</label>
                         <div style="display:flex; gap:8px; align-items:center;">
                             <input type="color" id="colorProyecto" value="#6C5CE7">
                             <input type="text" id="colorProyectoHex" value="#6C5CE7" style="width:80px; font-size:0.7rem;">
@@ -1655,7 +1647,6 @@ HEADER
                     <button class="btn btn-primary btn-sm" onclick="aplicarColores()" style="margin-top:4px;">🎨 Aplicar todos</button>
                 </div>
 
-                <!-- Eventos adicionales -->
                 <div class="card-mini">
                     <h4>📝 Eventos Adicionales</h4>
                     <div class="form-group">
@@ -1666,9 +1657,7 @@ HEADER
                             <button class="btn btn-success btn-sm" onclick="agregarEventoPersonalizado()">➕ Agregar</button>
                         </div>
                     </div>
-                    <div class="fechas-list" id="listaEventos">
-                        <!-- Generado por JS -->
-                    </div>
+                    <div class="fechas-list" id="listaEventos"></div>
                     <div class="fechas-actions">
                         <button class="btn btn-danger btn-sm" onclick="limpiarEventos()">🗑️ Limpiar todos</button>
                     </div>
@@ -1692,9 +1681,7 @@ HEADER
                 <br>🟠 <strong>Naranja:</strong> Proyecto en dosificación pero no en cronograma, o viceversa
                 <br>🔴 <strong>Rojo:</strong> Diferencia en el número de sesiones
             </div>
-            <div id="verificacionContainer" class="verificacion-container">
-                <!-- Generado por JavaScript -->
-            </div>
+            <div id="verificacionContainer" class="verificacion-container"></div>
         </div>
     </div>
 
@@ -1791,26 +1778,21 @@ MENÚ CONTEXTUAL PARA COLORES
 <!-- ============================================================
 MODALES
 ============================================================ -->
-<!-- Modal Edición -->
 <div class="modal-overlay" id="activityModal">
     <div class="modal">
         <h3 id="modalTitle">✏️ Editar Actividad</h3>
-        
         <div class="info-text" id="modalInfo">
             <span id="fechaInfo">📅 Selecciona una fecha</span>
             <span class="weekday-badge" id="weekdayBadge">Lunes</span>
         </div>
-        
         <div class="info-text" id="rangeInfo" style="background:var(--color-proyecto); color:white; display:none;">
             <span>📌 Rango: <span id="rangoTexto" class="range-info" style="color:white;">Del 15 al 27 de agosto</span></span>
             <span id="diasTotales" style="font-weight:bold;">13 días</span>
         </div>
-        
         <div id="modalConflictAlert" class="alert-conflict" style="display:none;">
             ⚠️ ¡Conflicto! Ya existe una actividad en esta fecha y grado. 
             <button class="btn btn-sm btn-outline" onclick="confirmOverwrite()" style="margin-left:4px;">Sobrescribir</button>
         </div>
-        
         <div class="form-group">
             <label>📚 Grado(s)</label>
             <select id="editGrade">
@@ -1820,7 +1802,6 @@ MODALES
                 <option value="3">3º Grado</option>
             </select>
         </div>
-        
         <div class="form-row">
             <div class="form-group">
                 <label>Mes de inicio</label>
@@ -1844,7 +1825,6 @@ MODALES
                 <input type="number" id="editDay" min="1" max="31" value="1" onchange="updateFechaInfo()" oninput="updateFechaInfo()">
             </div>
         </div>
-        
         <div class="form-group">
             <label>📏 Duración (espacios a la derecha)</label>
             <div class="form-row-3">
@@ -1855,12 +1835,10 @@ MODALES
                 </select>
             </div>
         </div>
-        
         <div class="form-group">
             <label>📝 Actividad / Tema / Proyecto</label>
             <input type="text" id="editActivity" placeholder="Ej. Proyecto de electrónica" autofocus>
         </div>
-        
         <div class="form-group">
             <label>🎨 Tipo</label>
             <select id="editType">
@@ -1877,7 +1855,6 @@ MODALES
                 <option value="evaluacion">📝 Evaluación</option>
             </select>
         </div>
-        
         <div class="modal-actions">
             <button class="btn btn-danger" id="deleteBtn" style="display:none;" onclick="deleteActivity()">🗑️ Eliminar todo el proyecto</button>
             <button class="btn btn-outline" onclick="closeModal()">❌ Cancelar</button>
@@ -1886,7 +1863,6 @@ MODALES
     </div>
 </div>
 
-<!-- Modal Bulk -->
 <div class="modal-overlay" id="bulkModal">
     <div class="modal">
         <h3>📊 Asignar tema a <span id="bulkCount">0</span> celdas</h3>
@@ -2398,99 +2374,8 @@ const PALETA_COLORES = [
 
 let indiceColorActual = 0;
 
-function obtenerColorProyecto(nombreProyecto) {
-    if (!nombreProyecto) return PALETA_COLORES[0];
-    if (coloresProyectos[nombreProyecto]) {
-        return coloresProyectos[nombreProyecto];
-    }
-    const color = PALETA_COLORES[indiceColorActual % PALETA_COLORES.length];
-    coloresProyectos[nombreProyecto] = color;
-    indiceColorActual++;
-    localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
-    localStorage.setItem('cronograma_indice_color', String(indiceColorActual));
-    return color;
-}
-
-function cambiarColorProyecto(nombreProyecto, nuevoColor) {
-    if (!nombreProyecto) return;
-    coloresProyectos[nombreProyecto] = nuevoColor;
-    localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
-    renderCronograma();
-    showToast(`🎨 Color de "${nombreProyecto}" actualizado`);
-}
-
-function cargarColoresProyectos() {
-    const saved = localStorage.getItem('cronograma_colores_proyectos');
-    if (saved) {
-        try {
-            coloresProyectos = JSON.parse(saved);
-            const usedColors = Object.values(coloresProyectos);
-            indiceColorActual = 0;
-            for (const c of PALETA_COLORES) {
-                if (!usedColors.includes(c)) break;
-                indiceColorActual++;
-            }
-        } catch(e) {}
-    }
-    const colorEval = localStorage.getItem('cronograma_color_evaluacion');
-    if (colorEval) {
-        document.documentElement.style.setProperty('--color-evaluacion', colorEval);
-    }
-}
-
-function aplicarColorEvaluacion() {
-    const color = document.getElementById('colorEvaluacion').value;
-    document.documentElement.style.setProperty('--color-evaluacion', color);
-    localStorage.setItem('cronograma_color_evaluacion', color);
-    document.getElementById('colorEvaluacionHex').value = color;
-    renderCronograma();
-    showToast('🎨 Color de evaluación actualizado');
-}
-
 // ============================================================
-// FUNCIONES DEL MENÚ CONTEXTUAL DE COLORES
-// ============================================================
-function abrirMenuColor(event, nombreProyecto) {
-    event.preventDefault();
-    if (!nombreProyecto) return;
-    proyectoColorMenu = nombreProyecto;
-    const overlay = document.getElementById('colorMenuOverlay');
-    document.getElementById('colorMenuProyecto').textContent = nombreProyecto;
-    const colorActual = coloresProyectos[nombreProyecto] || '#6C5CE7';
-    document.getElementById('colorMenuPicker').value = colorActual;
-    document.getElementById('colorMenuHex').value = colorActual;
-    
-    const paleta = document.getElementById('colorMenuPaleta');
-    paleta.innerHTML = '';
-    PALETA_COLORES.forEach(c => {
-        const swatch = document.createElement('div');
-        swatch.className = 'color-swatch';
-        swatch.style.background = c;
-        swatch.onclick = function() {
-            document.getElementById('colorMenuPicker').value = c;
-            document.getElementById('colorMenuHex').value = c;
-        };
-        paleta.appendChild(swatch);
-    });
-    
-    overlay.classList.add('show');
-}
-
-function aplicarColorDesdeMenu() {
-    const color = document.getElementById('colorMenuPicker').value;
-    cambiarColorProyecto(proyectoColorMenu, color);
-    cerrarMenuColor();
-}
-
-function cerrarMenuColor(e) {
-    if (e && e.target && e.target.id !== 'colorMenuOverlay') {
-        if (!e.target.closest('.color-menu')) return;
-    }
-    document.getElementById('colorMenuOverlay').classList.remove('show');
-}
-
-// ============================================================
-// FUNCIONES DE FECHA
+// FUNCIONES DE FECHA (GLOBALES)
 // ============================================================
 let fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
 let fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
@@ -2547,26 +2432,67 @@ function getTrimestreMonths(trimestre) {
     return [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
 }
 
+// ============================================================
+// FUNCIÓN isDiaHabil - CORREGIDA
+// ============================================================
 function isDiaHabil(month, day, year) {
+    // 1. Verificar fin de semana
     if (isWeekend(month, day, year)) return false;
+    
+    // 2. Verificar si es festivo
     const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     if (fechasFestivos.includes(fechaStr)) return false;
+    
+    // 3. Verificar si es vacación
     if (fechasVacaciones.includes(fechaStr)) return false;
+    
     return true;
 }
 
 // ============================================================
-// FUNCIONES DE CARGA Y GUARDADO
+// FUNCIONES DE CARGA Y GUARDADO - CORREGIDAS
 // ============================================================
+function loadFechas() {
+    try {
+        const savedFestivos = localStorage.getItem('cronograma_festivos');
+        if (savedFestivos) {
+            fechasFestivos = JSON.parse(savedFestivos);
+            console.log('✅ Festivos cargados:', fechasFestivos);
+        }
+        
+        const savedVacaciones = localStorage.getItem('cronograma_vacaciones');
+        if (savedVacaciones) {
+            fechasVacaciones = JSON.parse(savedVacaciones);
+            console.log('✅ Vacaciones cargadas:', fechasVacaciones);
+        }
+        
+        const savedEventos = localStorage.getItem('cronograma_eventos');
+        if (savedEventos) {
+            eventosPersonalizados = JSON.parse(savedEventos);
+        }
+    } catch(e) {
+        console.error('❌ Error al cargar fechas:', e);
+    }
+}
+
+function saveFechas() {
+    try {
+        localStorage.setItem('cronograma_festivos', JSON.stringify(fechasFestivos));
+        localStorage.setItem('cronograma_vacaciones', JSON.stringify(fechasVacaciones));
+        localStorage.setItem('cronograma_eventos', JSON.stringify(eventosPersonalizados));
+        localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+        localStorage.setItem('cronograma_indice_color', String(indiceColorActual));
+        console.log('✅ Fechas guardadas correctamente');
+        console.log('🔴 Festivos:', fechasFestivos);
+        console.log('🟡 Vacaciones:', fechasVacaciones);
+    } catch(e) {
+        console.error('❌ Error al guardar fechas:', e);
+    }
+}
+
 function loadData() {
-    const savedFestivos = localStorage.getItem('cronograma_festivos');
-    if (savedFestivos) try { fechasFestivos = JSON.parse(savedFestivos); } catch(e) {}
-    
-    const savedVacaciones = localStorage.getItem('cronograma_vacaciones');
-    if (savedVacaciones) try { fechasVacaciones = JSON.parse(savedVacaciones); } catch(e) {}
-    
-    const savedEventos = localStorage.getItem('cronograma_eventos');
-    if (savedEventos) try { eventosPersonalizados = JSON.parse(savedEventos); } catch(e) {}
+    // Cargar fechas primero
+    loadFechas();
 
     const savedPlan = localStorage.getItem('cronograma_plan');
     if (savedPlan) {
@@ -2606,7 +2532,24 @@ function loadData() {
         planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
     }
 
-    cargarColoresProyectos();
+    // Cargar colores de proyectos
+    const savedColores = localStorage.getItem('cronograma_colores_proyectos');
+    if (savedColores) {
+        try {
+            coloresProyectos = JSON.parse(savedColores);
+            const usedColors = Object.values(coloresProyectos);
+            indiceColorActual = 0;
+            for (const c of PALETA_COLORES) {
+                if (!usedColors.includes(c)) break;
+                indiceColorActual++;
+            }
+        } catch(e) {}
+    }
+    
+    const colorEval = localStorage.getItem('cronograma_color_evaluacion');
+    if (colorEval) {
+        document.documentElement.style.setProperty('--color-evaluacion', colorEval);
+    }
 
     applyTheme(config.theme || 'light');
     document.documentElement.style.setProperty('--primary', config.primaryColor || '#00467F');
@@ -2623,12 +2566,6 @@ function loadData() {
     document.getElementById('schoolBadge').textContent = config.schoolName ? `${config.schoolName} · ${config.schoolCycle || ''}` : 'Configurar escuela ⚙️';
     
     renderFechasUI();
-}
-
-function saveFechas() {
-    localStorage.setItem('cronograma_festivos', JSON.stringify(fechasFestivos));
-    localStorage.setItem('cronograma_vacaciones', JSON.stringify(fechasVacaciones));
-    localStorage.setItem('cronograma_eventos', JSON.stringify(eventosPersonalizados));
 }
 
 function saveActivities() { localStorage.setItem('cronograma_activities', JSON.stringify(activities)); }
@@ -2654,928 +2591,285 @@ function saveConfig() {
     showToast('✅ Configuración guardada');
 }
 
-function savePlaneacion() {
-    const grade = document.getElementById('planeacionGrade').value;
-    const container = document.getElementById('planeacionContainer');
-    const rows = container.querySelectorAll('.planeacion-row');
-    const data = [];
-    
-    rows.forEach(row => {
-        const periodo = row.querySelector('.editable-periodo')?.value || '';
-        const actividades = row.querySelector('.editable-actividades')?.value || '';
-        const recursos = row.querySelector('.editable-recursos')?.value || '';
-        const producto = row.querySelector('.editable-producto')?.value || '';
-        data.push({ periodo, actividades, recursos, producto });
+// ============================================================
+// FUNCIONES DE GESTIÓN DE FECHAS - CORREGIDAS
+// ============================================================
+function renderFechasUI() {
+    const listaFestivos = document.getElementById('listaFestivos');
+    listaFestivos.innerHTML = '';
+    fechasFestivos.sort().forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        const fecha = new Date(f + 'T00:00:00');
+        div.innerHTML = `
+            <span class="fecha-label">🔴 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarFestivo('${f}')">✖</button>
+        `;
+        listaFestivos.appendChild(div);
     });
     
-    planeacionData[grade] = data;
-    localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
-    showToast('✅ Planeación guardada');
-}
-
-function addPlaneacionSemana() {
-    const grade = document.getElementById('planeacionGrade').value;
-    if (!planeacionData[grade]) planeacionData[grade] = [];
-    planeacionData[grade].push({
-        periodo: 'Nueva semana',
-        actividades: 'Descripción de actividades...',
-        recursos: 'Recursos necesarios...',
-        producto: 'Producto esperado...'
+    const listaVacaciones = document.getElementById('listaVacaciones');
+    listaVacaciones.innerHTML = '';
+    fechasVacaciones.sort().forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        const fecha = new Date(f + 'T00:00:00');
+        div.innerHTML = `
+            <span class="fecha-label">🟡 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarVacacion('${f}')">✖</button>
+        `;
+        listaVacaciones.appendChild(div);
     });
-    localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
-    renderPlaneacion();
-    showToast('➕ Nueva semana agregada');
+    
+    const listaEventos = document.getElementById('listaEventos');
+    listaEventos.innerHTML = '';
+    eventosPersonalizados.forEach((e, i) => {
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        const fecha = new Date(e.fecha + 'T00:00:00');
+        div.innerHTML = `
+            <span class="fecha-label">📝 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}: ${e.nombre}</span>
+            <button class="btn btn-danger btn-sm" onclick="eliminarEvento(${i})">✖</button>
+        `;
+        listaEventos.appendChild(div);
+    });
 }
 
-function deletePlaneacionRow(btn) {
-    const row = btn.closest('.planeacion-row');
-    if (!row) return;
-    if (!confirm('¿Eliminar esta semana de planeación?')) return;
-    const grade = document.getElementById('planeacionGrade').value;
-    const index = parseInt(row.dataset.index);
-    if (!isNaN(index) && planeacionData[grade] && planeacionData[grade].length > index) {
-        planeacionData[grade].splice(index, 1);
-        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
-        renderPlaneacion();
-        showToast('🗑️ Semana eliminada');
+function agregarFestivo() {
+    const input = document.getElementById('festivoNuevo');
+    const fecha = input.value;
+    if (!fecha) { 
+        showToast('⚠️ Selecciona una fecha'); 
+        return; 
     }
+    if (fechasFestivos.includes(fecha)) { 
+        showToast('⚠️ Ya está en la lista'); 
+        return; 
+    }
+    fechasFestivos.push(fecha);
+    saveFechas();
+    renderFechasUI();
+    renderCronograma();
+    showToast(`✅ Festivo agregado: ${fecha}`);
 }
 
-function resetData() {
-    if (confirm('¿Restaurar datos de fábrica?')) {
-        planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
-        activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
-        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-        dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
-        planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
-        fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
-        fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
-        eventosPersonalizados = [];
-        coloresProyectos = {};
-        indiceColorActual = 0;
+function eliminarFestivo(fecha) {
+    const idx = fechasFestivos.indexOf(fecha);
+    if (idx >= 0) {
+        fechasFestivos.splice(idx, 1);
         saveFechas();
-        localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
-        localStorage.setItem('cronograma_indice_color', '0');
-        localStorage.removeItem('cronograma_color_evaluacion');
-        document.documentElement.style.setProperty('--color-evaluacion', '#FF6B6B');
-        localStorage.setItem('cronograma_plan', JSON.stringify(planData));
-        saveActivities();
-        saveConfig();
-        localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
-        renderPlan();
-        renderCronograma();
-        renderDosificacion();
-        renderPlaneacion();
         renderFechasUI();
-        showToast('🔄 Datos restaurados');
+        renderCronograma();
+        showToast('🗑️ Festivo eliminado');
     }
 }
 
-// ============================================================
-// RENDERIZADO DEL PLAN ANUAL
-// ============================================================
-function renderPlan() {
-    const container = document.getElementById('planContainer');
-    const data = planData;
-    
-    let html = `
-    <h1>${data.titulo}</h1>
-    <div class="subtitle">Materia: ${data.materia} | Nivel ${data.nivel} | Ciclo Escolar ${data.ciclo}</div>
-    `;
-    
-    for (const dim of data.dimensiones) {
-        html += `
-        <div class="dimension-title">${dim.nombre}</div>
-        <div class="dimension-subtitle">${dim.enfoque}</div>
-        <table class="plan-table">
-            <thead>
-                <tr>
-                    <th style="width:20%;">METAS</th>
-                    <th style="width:40%;">ACCIONES ESTRATÉGICAS</th>
-                    <th style="width:15%;">PERIODO DE REALIZACIÓN</th>
-                    <th style="width:25%;">RECURSOS NECESARIOS</th>
-                </tr>
-            </thead>
-            <tbody>`;
-        
-        for (const meta of dim.metas) {
-            const accionesHtml = meta.acciones.map(a => 
-                `<textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'acciones', ${meta.acciones.indexOf(a)}, this.value)">${a}</textarea>`
-            ).join('<br>');
-            
-            html += `
-            <tr>
-                <td>
-                    <textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'meta', 0, this.value)" style="font-weight:600;">${meta.meta}</textarea>
-                </td>
-                <td>${accionesHtml}</td>
-                <td>
-                    <textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'periodo', 0, this.value)">${meta.periodo}</textarea>
-                </td>
-                <td>
-                    <textarea class="editable-textarea" onchange="updatePlanMeta('${dim.nombre}', '${meta.meta}', 'recursos', 0, this.value)">${meta.recursos}</textarea>
-                </td>
-            </tr>`;
-        }
-        
-        html += `
-            </tbody>
-        </table>`;
-    }
-    
-    html += `
-    <div style="text-align:center; margin-top:10px; font-weight:500;">${data.fecha}</div>
-    
-    <div class="plan-footer">
-        <div class="signature-block">
-            <strong>Elaboró</strong>
-            <input type="text" class="editable-input" value="${data.elaboro}" 
-                   onchange="updatePlanField('elaboro', this.value)" 
-                   style="font-weight:600; text-align:center; font-size:0.85rem;">
-            <input type="text" class="editable-title" value="${data.elaboroTitulo}" 
-                   onchange="updatePlanField('elaboroTitulo', this.value)">
-        </div>
-        <div class="signature-block">
-            <strong>Revisó</strong>
-            <input type="text" class="editable-input" value="${data.reviso}" 
-                   onchange="updatePlanField('reviso', this.value)" 
-                   style="font-weight:600; text-align:center; font-size:0.85rem;">
-        </div>
-        <div class="signature-block">
-            <strong>Vo. Bo.</strong>
-            <input type="text" class="editable-input" value="${data.voBo}" 
-                   onchange="updatePlanField('voBo', this.value)" 
-                   style="font-weight:600; text-align:center; font-size:0.85rem;">
-            <input type="text" class="editable-title" value="${data.voBoTitulo}" 
-                   onchange="updatePlanField('voBoTitulo', this.value)">
-        </div>
-    </div>`;
-    
-    container.innerHTML = html;
+function limpiarFestivos() {
+    if (!confirm('¿Eliminar todos los días festivos?')) return;
+    fechasFestivos = [];
+    saveFechas();
+    renderFechasUI();
+    renderCronograma();
+    showToast('🗑️ Festivos eliminados');
 }
 
-function updatePlanField(field, value) {
-    planData[field] = value;
-    localStorage.setItem('cronograma_plan', JSON.stringify(planData));
+function agregarVacacion() {
+    const input = document.getElementById('vacacionNuevo');
+    const fecha = input.value;
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    if (fechasVacaciones.includes(fecha)) { showToast('⚠️ Ya está en la lista'); return; }
+    fechasVacaciones.push(fecha);
+    saveFechas();
+    renderFechasUI();
+    renderCronograma();
+    showToast('✅ Vacación agregada');
 }
 
-function updatePlanMeta(dimNombre, metaText, field, index, value) {
-    const dim = planData.dimensiones.find(d => d.nombre === dimNombre);
-    if (!dim) return;
-    const meta = dim.metas.find(m => m.meta === metaText);
-    if (!meta) return;
-    
-    if (field === 'meta') {
-        meta.meta = value;
-    } else if (field === 'acciones') {
-        meta.acciones[index] = value;
-    } else if (field === 'periodo') {
-        meta.periodo = value;
-    } else if (field === 'recursos') {
-        meta.recursos = value;
-    }
-    localStorage.setItem('cronograma_plan', JSON.stringify(planData));
-}
-
-function printPlan() {
-    const content = document.getElementById('planContainer');
-    const printWindow = window.open('', '_blank', 'width=900,height=700');
-    if (!printWindow) {
-        showToast('⚠️ Permite ventanas emergentes para imprimir');
-        return;
-    }
-    const styles = document.querySelector('style').innerHTML;
-    printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Plan Anual - Informática</title>
-            <style>
-                ${styles}
-                body { padding: 20px; background: white; }
-                .plan-container { border: none; padding: 10px; background: white; }
-                .plan-table th { background: #00467F !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                .plan-table td { background: white !important; }
-                .editable-text, .editable-textarea, .editable-input, .editable-title {
-                    background: transparent !important;
-                    border: none !important;
-                    box-shadow: none !important;
-                    pointer-events: none;
-                }
-                .plan-actions, .header, .tabs, .tab-btn, .theme-toggle, .toast, .btn, .card-header .btn-group, .selection-info { display: none !important; }
-                .plan-container .dimension-title { color: #00467F !important; border-bottom-color: #00467F !important; }
-                .card { box-shadow: none; border: none; padding: 0; }
-            </style>
-        </head>
-        <body>
-            ${content.innerHTML}
-            <script>
-                window.print();
-            <\/script>
-        </body>
-        </html>
-    `);
-    printWindow.document.close();
-}
-
-// ============================================================
-// EXPORTAR PLAN A WORD
-// ============================================================
-function exportPlanWord() {
-    const content = document.getElementById('planContainer');
-    const data = planData;
-    
-    let html = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
-          xmlns:w="urn:schemas-microsoft-com:office:word" 
-          xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-        <meta charset="UTF-8">
-        <title>Plan Anual - Informática</title>
-        <style>
-            body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
-            h1 { text-align: center; font-size: 18pt; font-weight: bold; }
-            .subtitle { text-align: center; font-size: 14pt; margin-bottom: 20px; }
-            .dimension-title { font-size: 14pt; font-weight: bold; margin-top: 20px; color: #00467F; border-bottom: 2px solid #00467F; padding-bottom: 5px; }
-            .dimension-subtitle { font-size: 11pt; font-style: italic; margin-bottom: 10px; }
-            table { width: 100%; border-collapse: collapse; font-size: 10pt; margin-bottom: 20px; }
-            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
-            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
-            .footer { text-align: center; margin-top: 20px; font-weight: 500; }
-            .signature-block { text-align: center; margin-top: 30px; display: inline-block; width: 30%; }
-            .signature-block strong { display: block; }
-            .signature-name { font-weight: 600; font-size: 11pt; }
-            .signature-title { font-size: 9pt; color: #555; }
-            .signature-row { text-align: center; margin-top: 20px; }
-            .signature-row div { display: inline-block; width: 30%; }
-        </style>
-    </head>
-    <body>
-        <h1>${data.titulo}</h1>
-        <div class="subtitle">Materia: ${data.materia} | Nivel ${data.nivel} | Ciclo Escolar ${data.ciclo}</div>
-    `;
-    
-    for (const dim of data.dimensiones) {
-        html += `
-        <div class="dimension-title">${dim.nombre}</div>
-        <div class="dimension-subtitle">${dim.enfoque}</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width:20%;">METAS</th>
-                    <th style="width:40%;">ACCIONES ESTRATÉGICAS</th>
-                    <th style="width:15%;">PERIODO DE REALIZACIÓN</th>
-                    <th style="width:25%;">RECURSOS NECESARIOS</th>
-                </tr>
-            </thead>
-            <tbody>`;
-        
-        for (const meta of dim.metas) {
-            const accionesText = meta.acciones.join('<br>');
-            html += `
-            <tr>
-                <td style="font-weight:600;">${meta.meta}</td>
-                <td>${accionesText}</td>
-                <td>${meta.periodo}</td>
-                <td>${meta.recursos.replace(/\n/g, '<br>')}</td>
-            </tr>`;
-        }
-        
-        html += `
-            </tbody>
-        </table>`;
-    }
-    
-    html += `
-    <div class="footer">${data.fecha}</div>
-    
-    <div class="signature-row">
-        <div class="signature-block">
-            <strong>Elaboró</strong>
-            <div class="signature-name">${data.elaboro}</div>
-            <div class="signature-title">${data.elaboroTitulo}</div>
-        </div>
-        <div class="signature-block">
-            <strong>Revisó</strong>
-            <div class="signature-name">${data.reviso}</div>
-        </div>
-        <div class="signature-block">
-            <strong>Vo. Bo.</strong>
-            <div class="signature-name">${data.voBo}</div>
-            <div class="signature-title">${data.voBoTitulo}</div>
-        </div>
-    </div>
-    </body>
-    </html>`;
-    
-    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `Plan_Anual_Informatica_${new Date().toISOString().slice(0,10)}.doc`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    showToast('📄 Plan Anual exportado a Word (.doc)');
-}
-
-// ============================================================
-// EXPORTAR DOSIFICACIÓN A WORD
-// ============================================================
-function exportDosificacionWord() {
-    const grade = document.getElementById('dosificacionGrade').value;
-    const data = dosificacionData[grade];
-    
-    if (!data) {
-        showToast('⚠️ No hay datos de dosificación para exportar');
-        return;
-    }
-    
-    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
-    
-    let tablaHtml = `
-    <table border="1" cellpadding="4" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9pt; font-family:'Times New Roman', Times, serif;">
-        <thead>
-            <tr style="background-color:#00467F; color:white;">
-                <th style="width:6%; padding:4px; text-align:center;">TRIMESTRE</th>
-                <th style="width:24%; padding:4px;">PROYECTO</th>
-                <th style="width:20%; padding:4px;">CONTENIDO</th>
-                <th style="width:40%; padding:4px;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
-                <th style="width:10%; padding:4px; text-align:center;">SESIONES</th>
-            </tr>
-        </thead>
-        <tbody>`;
-    
-    let totalSesiones = 0;
-    let trimCount = 0;
-    
-    for (const trim of data.trimestres) {
-        trimCount++;
-        let firstRow = true;
-        const mesesValue = data.meses ? data.meses[trim.nombre] : 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE';
-        
-        for (const proyecto of trim.proyectos) {
-            totalSesiones += parseInt(proyecto.sesiones) || 0;
-            const rowspan = firstRow ? trim.proyectos.length : 1;
-            
-            tablaHtml += `
-            <tr>
-                ${firstRow ? `<td rowspan="${rowspan}" style="padding:4px; text-align:center; vertical-align:middle; background-color:#E6F0FA; font-weight:700; font-size:8pt;">
-                    <div>${trim.nombre}</div>
-                    <div style="font-weight:400; font-size:7pt; color:#555;">${mesesValue.replace(/<br>/g, ' ')}</div>
-                </td>` : ''}
-                <td style="padding:4px; vertical-align:top; font-weight:600; color:#6C5CE7;">${proyecto.nombre}</td>
-                <td style="padding:4px; vertical-align:top;">${proyecto.contenido}</td>
-                <td style="padding:4px; vertical-align:top;">${proyecto.pda}</td>
-                <td style="padding:4px; text-align:center; vertical-align:middle; font-weight:600;">${proyecto.sesiones}</td>
-            </tr>`;
-            firstRow = false;
-        }
-    }
-    
-    tablaHtml += `
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" style="padding:6px; text-align:right; font-weight:700; background-color:#E6F0FA;">TOTAL DE SESIONES ANUALES</td>
-                <td style="padding:6px; text-align:center; font-weight:700; background-color:#E6F0FA;">${totalSesiones}</td>
-            </tr>
-        </tfoot>
-    </table>`;
-    
-    const html = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
-          xmlns:w="urn:schemas-microsoft-com:office:word" 
-          xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-        <meta charset="UTF-8">
-        <title>Dosificación - Informática ${gradeLabel} Grado</title>
-        <!--[if gte mso 9]>
-        <xml>
-            <w:WordDocument>
-                <w:View>Print</w:View>
-            </w:WordDocument>
-        </xml>
-        <![endif]-->
-        <style>
-            body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; margin: 40px; }
-            h1 { text-align: center; font-size: 14pt; font-weight: bold; }
-            .header-info { text-align: center; font-size: 10pt; margin-bottom: 15px; }
-            .header-info p { margin: 2px 0; }
-            table { width: 100%; border-collapse: collapse; font-size: 9pt; }
-            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
-            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
-            .signature-row { text-align: center; margin-top: 25px; }
-            .signature-block { display: inline-block; width: 30%; text-align: center; }
-            .signature-block strong { display: block; }
-            .signature-name { font-weight: 600; font-size: 10pt; }
-            .signature-title { font-size: 8pt; color: #555; }
-            .footer { text-align: center; margin-top: 15px; font-weight: 500; font-size: 10pt; }
-    `;
-    
-    html += `
-        </style>
-    </head>
-    <body>
-        <h1>${data.titulo}</h1>
-        <div class="header-info">
-            <p><strong>Nombre de la Escuela:</strong> ${data.escuela}</p>
-            <p><strong>Nombre del Docente:</strong> ${data.docente}</p>
-            <p><strong>Grado y Grupo:</strong> ${data.grado}</p>
-            <p><strong>Ciclo Escolar:</strong> ${data.ciclo}</p>
-        </div>
-        
-        ${tablaHtml}
-        
-        <div class="footer">Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026</div>
-        
-        <div class="signature-row">
-            <div class="signature-block">
-                <strong>Elaboró</strong>
-                <div class="signature-name">${data.docente}</div>
-                <div class="signature-title">Titular de Informática</div>
-            </div>
-            <div class="signature-block">
-                <strong>Revisó</strong>
-                <div class="signature-name">Subdirector Turno Mixto</div>
-            </div>
-            <div class="signature-block">
-                <strong>Vo. Bo.</strong>
-                <div class="signature-name">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
-                <div class="signature-title">Subdirector encargado de la dirección</div>
-            </div>
-        </div>
-    </body>
-    </html>`;
-    
-    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `Dosificacion_Informatica_${gradeLabel}_${new Date().toISOString().slice(0,10)}.doc`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    showToast('📄 Dosificación exportada a Word (.doc)');
-}
-
-// ============================================================
-// EXPORTAR PLANEACIÓN SEMANAL A WORD
-// ============================================================
-function exportPlaneacionWord() {
-    const grade = document.getElementById('planeacionGrade').value;
-    const container = document.getElementById('planeacionContainer');
-    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
-    const data = planeacionData[grade] || [];
-    
-    if (data.length === 0) {
-        showToast('⚠️ No hay planeación para exportar');
-        return;
-    }
-    
-    let tablaHtml = `
-    <table border="1" cellpadding="4" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10pt; font-family:'Times New Roman', Times, serif;">
-        <thead>
-            <tr style="background-color:#00467F; color:white;">
-                <th style="width:12%; padding:4px;">PERIODO</th>
-                <th style="width:28%; padding:4px;">ACTIVIDADES</th>
-                <th style="width:20%; padding:4px;">RECURSOS</th>
-                <th style="width:28%; padding:4px;">PRODUCTO ESPERADO</th>
-                <th style="width:12%; padding:4px;">SESIONES</th>
-            </tr>
-        </thead>
-        <tbody>`;
-    
-    data.forEach((item, index) => {
-        const sesiones = index === 0 ? 2 : 2;
-        tablaHtml += `
-            <tr>
-                <td style="padding:4px; vertical-align:top;">${item.periodo || ''}</td>
-                <td style="padding:4px; vertical-align:top;">${item.actividades || ''}</td>
-                <td style="padding:4px; vertical-align:top;">${item.recursos || ''}</td>
-                <td style="padding:4px; vertical-align:top;">${item.producto || ''}</td>
-                <td style="padding:4px; vertical-align:top; text-align:center;">${sesiones}</td>
-            </tr>`;
-    });
-    
-    const totalSesiones = data.length * 2;
-    
-    tablaHtml += `
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" style="padding:6px; text-align:right; font-weight:700; background-color:#E6F0FA;">TOTAL DE SESIONES</td>
-                <td style="padding:6px; text-align:center; font-weight:700; background-color:#E6F0FA;">${totalSesiones}</td>
-            </tr>
-        </tfoot>
-    </table>`;
-    
-    const html = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
-          xmlns:w="urn:schemas-microsoft-com:office:word" 
-          xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-        <meta charset="UTF-8">
-        <title>Planeación Semanal - Informática ${gradeLabel} Grado</title>
-        <!--[if gte mso 9]>
-        <xml>
-            <w:WordDocument>
-                <w:View>Print</w:View>
-            </w:WordDocument>
-        </xml>
-        <![endif]-->
-        <style>
-            body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
-            h1 { text-align: center; font-size: 16pt; font-weight: bold; }
-            .header-info { text-align: center; font-size: 11pt; margin-bottom: 20px; }
-            .header-info p { margin: 2px 0; }
-            table { width: 100%; border-collapse: collapse; font-size: 10pt; }
-            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
-            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
-            .signature-row { text-align: center; margin-top: 30px; }
-            .signature-block { display: inline-block; width: 30%; text-align: center; }
-            .signature-block strong { display: block; }
-            .signature-name { font-weight: 600; font-size: 11pt; }
-            .signature-title { font-size: 9pt; color: #555; }
-            .footer { text-align: center; margin-top: 20px; font-weight: 500; }
-    `;
-    
-    html += `
-        </style>
-    </head>
-    <body>
-        <h1>PLANEACIÓN SEMANAL - INFORMÁTICA ${gradeLabel} GRADO</h1>
-        <div class="header-info">
-            <p><strong>Docente:</strong> ${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</p>
-            <p><strong>Asignatura:</strong> Informática ${gradeLabel} Grupo: ______</p>
-            <p><strong>Ciclo Escolar:</strong> ${config.schoolCycle || '2026-2027'}</p>
-            <p><strong>Número de Sesiones:</strong> ${totalSesiones}</p>
-            <p><strong>Periodo:</strong> 31 de agosto al 04 de septiembre de 2026</p>
-            <p><strong>Escuela:</strong> ${config.schoolName || 'Escuela Secundaria General'}</p>
-        </div>
-        
-        <h2 style="text-align:center; font-size:13pt; margin-top:15px;">SECUENCIA DE ACTIVIDADES SEMANALES</h2>
-        
-        ${tablaHtml}
-        
-        <div class="footer">Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026</div>
-        
-        <div class="signature-row">
-            <div class="signature-block">
-                <strong>Elaboró</strong>
-                <div class="signature-name">${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</div>
-                <div class="signature-title">Titular de Informática</div>
-            </div>
-            <div class="signature-block">
-                <strong>Revisó</strong>
-                <div class="signature-name">Subdirector Turno Mixto</div>
-            </div>
-            <div class="signature-block">
-                <strong>Vo. Bo.</strong>
-                <div class="signature-name">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
-                <div class="signature-title">Subdirector encargado de la dirección</div>
-            </div>
-        </div>
-    </body>
-    </html>`;
-    
-    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `Planeacion_Semanal_Informatica_${gradeLabel}_${new Date().toISOString().slice(0,10)}.doc`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-    showToast('📄 Planeación exportada a Word (.doc)');
-}
-
-// ============================================================
-// RENDERIZADO DE DOSIFICACIÓN
-// ============================================================
-function renderDosificacion() {
-    const container = document.getElementById('dosificacionContainer');
-    const grade = document.getElementById('dosificacionGrade').value;
-    const data = dosificacionData[grade];
-    
-    if (!data) {
-        container.innerHTML = '<div style="padding:16px; text-align:center; color:var(--text-secondary);">No hay datos para este grado</div>';
-        return;
-    }
-    
-    let html = `
-    <table class="dosificacion-table">
-        <tr>
-            <td colspan="5" style="text-align:center; font-size:1rem; font-weight:700; background:var(--primary); color:white; padding:10px;">
-                ${data.titulo}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5" style="background:var(--primary-light); padding:6px 8px;">
-                <strong>Nombre de la Escuela:</strong>
-                <input type="text" class="editable-input" value="${data.escuela}" 
-                       onchange="updateDosificacionField(${grade}, 'escuela', this.value)" 
-                       style="width:60%; font-weight:normal;">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="5" style="background:var(--primary-light); padding:6px 8px;">
-                <strong>Nombre del Docente:</strong>
-                <input type="text" class="editable-input" value="${data.docente}" 
-                       onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
-                       style="width:60%; font-weight:normal;">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" style="background:var(--primary-light); padding:6px 8px;">
-                <strong>Grado y Grupo:</strong>
-                <input type="text" class="editable-input" value="${data.grado}" 
-                       onchange="updateDosificacionField(${grade}, 'grado', this.value)" 
-                       style="width:50%; font-weight:normal;">
-            </td>
-            <td colspan="3" style="background:var(--primary-light); padding:6px 8px;">
-                <strong>Ciclo Escolar:</strong>
-                <input type="text" class="editable-input" value="${data.ciclo}" 
-                       onchange="updateDosificacionField(${grade}, 'ciclo', this.value)" 
-                       style="width:40%; font-weight:normal;">
-            </td>
-        </tr>
-        <tr>
-            <th class="col-trimestre">TRIMESTRE</th>
-            <th class="col-proyecto">PROYECTO</th>
-            <th class="col-contenido">CONTENIDO</th>
-            <th class="col-pda">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
-            <th class="col-sesiones">SESIONES</th>
-        </tr>`;
-    
-    let totalSesiones = 0;
-    let trimCount = 0;
-    
-    for (const trim of data.trimestres) {
-        trimCount++;
-        let firstRow = true;
-        const mesesValue = data.meses ? data.meses[trim.nombre] : '';
-        
-        for (const proyecto of trim.proyectos) {
-            totalSesiones += proyecto.sesiones;
-            const rowspan = firstRow ? trim.proyectos.length : 1;
-            const projIndex = trim.proyectos.indexOf(proyecto);
-            
-            html += `<tr>
-                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
-                    <div class="trim-label">${trim.nombre}</div>
-                    <div class="meses-label">${mesesValue || 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE'}</div>
-                </td>` : ''}
-                <td>
-                    <textarea class="editable-textarea" 
-                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'nombre', this.value)" 
-                              style="width:100%; min-height:36px; font-weight:600; color:var(--color-proyecto);">${proyecto.nombre}</textarea>
-                </td>
-                <td>
-                    <textarea class="editable-textarea" 
-                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'contenido', this.value)" 
-                              style="width:100%; min-height:36px;">${proyecto.contenido}</textarea>
-                </td>
-                <td>
-                    <textarea class="editable-textarea" 
-                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'pda', this.value)" 
-                              style="width:100%; min-height:50px;">${proyecto.pda}</textarea>
-                </td>
-                <td class="sesiones-cell">
-                    <input type="number" class="editable-input sesiones-input" 
-                           value="${proyecto.sesiones}" 
-                           onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'sesiones', parseInt(this.value) || 0)"
-                           style="width:44px; text-align:center; font-weight:600;">
-                </td>
-            </tr>`;
-            firstRow = false;
-        }
-    }
-    
-    html += `
-        <tr>
-            <td colspan="4" class="total-cell">
-                TOTAL DE SESIONES ANUALES
-            </td>
-            <td class="total-sesiones-cell" id="totalSesionesDisplay">${totalSesiones}</td>
-        </tr>
-        <tr>
-            <td colspan="5" class="footer-cell" style="padding:10px; text-align:center;">
-                Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026
-            </td>
-        </tr>
-        <tr>
-            <td colspan="1" class="signature-cell" style="width:25%;">
-                <strong>Elaboró</strong>
-                <div class="signature-name">
-                    <input type="text" class="editable-input" value="${data.docente}" 
-                           onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
-                           style="width:100%; text-align:center; font-weight:600; font-size:0.75rem;">
-                </div>
-                <div class="signature-title">Titular de Informática</div>
-            </td>
-            <td colspan="2" class="signature-cell" style="width:35%;">
-                <strong>Revisó</strong>
-                <div class="signature-name">Subdirector Turno Mixto</div>
-            </td>
-            <td colspan="2" class="signature-cell" style="width:40%;">
-                <strong>Vo. Bo.</strong>
-                <div class="signature-name">Profr. Melchor Sánchez Monjaraz</div>
-                <div class="signature-title">Subdirector encargado de la dirección</div>
-            </td>
-        </tr>
-    </table>`;
-    
-    container.innerHTML = html;
-    
-    const display = document.getElementById('totalSesionesDisplay');
-    if (display) display.textContent = totalSesiones;
-}
-
-function updateDosificacionField(grade, field, value) {
-    dosificacionData[grade][field] = value;
-    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-}
-
-function updateDosificacionProyecto(grade, trimIndex, projIndex, field, value) {
-    dosificacionData[grade].trimestres[trimIndex].proyectos[projIndex][field] = value;
-    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-    if (field === 'sesiones') {
-        recalcTotalSesiones(grade);
+function eliminarVacacion(fecha) {
+    const idx = fechasVacaciones.indexOf(fecha);
+    if (idx >= 0) {
+        fechasVacaciones.splice(idx, 1);
+        saveFechas();
+        renderFechasUI();
+        renderCronograma();
+        showToast('🗑️ Vacación eliminada');
     }
 }
 
-function recalcTotalSesiones(grade) {
-    let total = 0;
-    for (const trim of dosificacionData[grade].trimestres) {
-        for (const proj of trim.proyectos) {
-            total += parseInt(proj.sesiones) || 0;
-        }
-    }
-    const display = document.getElementById('totalSesionesDisplay');
-    if (display) display.textContent = total;
+function limpiarVacaciones() {
+    if (!confirm('¿Eliminar todos los días de vacaciones?')) return;
+    fechasVacaciones = [];
+    saveFechas();
+    renderFechasUI();
+    renderCronograma();
+    showToast('🗑️ Vacaciones eliminadas');
 }
 
-function saveDosificacion() {
-    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-    showToast('✅ Dosificación guardada correctamente');
+function agregarEventoPersonalizado() {
+    const fechaInput = document.getElementById('eventoFecha');
+    const nombreInput = document.getElementById('eventoNombre');
+    const fecha = fechaInput.value;
+    const nombre = nombreInput.value.trim();
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    if (!nombre) { showToast('⚠️ Escribe un nombre para el evento'); return; }
+    eventosPersonalizados.push({ fecha, nombre });
+    saveFechas();
+    renderFechasUI();
+    fechaInput.value = '';
+    nombreInput.value = '';
+    showToast('✅ Evento agregado');
 }
 
-function printDosificacion() {
-    const grade = document.getElementById('dosificacionGrade').value;
-    const content = document.getElementById('dosificacionContainer');
-    
-    const printWindow = window.open('', '_blank', 'width=1100,height=700');
-    if (!printWindow) {
-        showToast('⚠️ Permite ventanas emergentes para imprimir');
-        return;
-    }
-    
-    const styles = document.querySelector('style').innerHTML;
-    printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Dosificación - Informática ${grade}º</title>
-            <style>
-                ${styles}
-                body { padding: 20px; background: white; }
-                .dosificacion-table { font-size: 0.65rem; }
-                .dosificacion-table td, .dosificacion-table th { padding: 3px 5px; }
-                .dosificacion-grade-selector, .dosificacion-actions .btn { display: none !important; }
-                .editable-input, .editable-textarea {
-                    background: transparent !important;
-                    border: none !important;
-                    box-shadow: none !important;
-                    pointer-events: none;
-                }
-                .editable-input.sesiones-input { pointer-events: none; }
-                .no-print { display: none !important; }
-                @media print {
-                    body { padding: 10px; }
-                    .dosificacion-table { font-size: 0.6rem; }
-                }
-            </style>
-        </head>
-        <body>
-            ${content.innerHTML}
-            <script>
-                window.print();
-            <\/script>
-        </body>
-        </html>
-    `);
-    printWindow.document.close();
+function eliminarEvento(index) {
+    eventosPersonalizados.splice(index, 1);
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Evento eliminado');
 }
 
-// ============================================================
-// IMPLEMENTAR DOSIFICACIÓN
-// ============================================================
-function implementarDosificacion() {
-    const grade = document.getElementById('dosificacionGrade').value;
-    const data = dosificacionData[grade];
+function limpiarEventos() {
+    if (!confirm('¿Eliminar todos los eventos personalizados?')) return;
+    eventosPersonalizados = [];
+    saveFechas();
+    renderFechasUI();
+    showToast('🗑️ Eventos eliminados');
+}
+
+function guardarFechas() {
+    saveFechas();
+    renderCronograma();
+    renderFechasUI();
+    showToast('✅ Fechas guardadas y aplicadas al cronograma');
+}
+
+function aplicarFechasSeleccionadas() {
+    renderCronograma();
+    showToast('📌 Cambios aplicados al cronograma');
+}
+
+function limpiarActividadesEnFestivos() {
+    if (!confirm('¿Eliminar todas las actividades en días festivos?')) return;
+    let eliminados = 0;
     
-    if (!data) {
-        showToast('⚠️ No hay datos para este grado');
-        return;
-    }
-    
-    const trimestreMap = {
-        1: { months: [9, 10, 11], startDay: 1 },
-        2: { months: [12, 1, 2, 3], startDay: 1 },
-        3: { months: [4, 5, 6, 7], startDay: 1 }
-    };
-    
-    let count = 0;
-    const gradeNum = parseInt(grade);
-    
-    for (const trim of data.trimestres) {
-        for (const proyecto of trim.proyectos) {
-            const toRemove = activities.filter(a => {
-                const gradesAct = getGradesForActivity(a.grade);
-                return gradesAct.includes(gradeNum) && a.activity === proyecto.nombre && isProject(a.type);
-            });
-            for (const r of toRemove) {
-                const idx = activities.indexOf(r);
-                if (idx >= 0) activities.splice(idx, 1);
-            }
-        }
-    }
-    
-    let trimIndex = 0;
-    for (const trim of data.trimestres) {
-        trimIndex++;
-        const trimInfo = trimestreMap[trimIndex];
-        if (!trimInfo) continue;
+    for (const fecha of fechasFestivos) {
+        const parts = fecha.split('-').map(Number);
+        const year = parts[0];
+        const month = parts[1];
+        const day = parts[2];
         
-        let currentMonthIndex = 0;
-        let currentDay = trimInfo.startDay;
-        let currentMonth = trimInfo.months[currentMonthIndex];
+        const toRemove = activities.filter(a => {
+            return a.month === month && a.day === day;
+        });
         
-        for (const proyecto of trim.proyectos) {
-            const sesiones = parseInt(proyecto.sesiones) || 12;
-            let diasAgregados = 0;
-            let day = currentDay;
-            let month = currentMonth;
-            let monthIdx = currentMonthIndex;
-            
-            while (diasAgregados < sesiones && monthIdx < trimInfo.months.length) {
-                const year = getYear(month);
-                if (isDiaHabil(month, day, year)) {
-                    const existingIdx = activities.findIndex(a => {
-                        const gradesAct = getGradesForActivity(a.grade);
-                        return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
-                    });
-                    
-                    if (existingIdx >= 0) {
-                        activities[existingIdx] = { 
-                            grade: gradeNum, 
-                            month: month, 
-                            day: day, 
-                            activity: proyecto.nombre, 
-                            type: 'proyecto', 
-                            duration: sesiones, 
-                            unit: 'days' 
-                        };
-                    } else {
-                        activities.push({ 
-                            grade: gradeNum, 
-                            month: month, 
-                            day: day, 
-                            activity: proyecto.nombre, 
-                            type: 'proyecto', 
-                            duration: sesiones, 
-                            unit: 'days' 
-                        });
-                    }
-                    diasAgregados++;
-                    count++;
-                }
-                day++;
-                const daysInMonth = getDaysInMonth(month);
-                if (day > daysInMonth) {
-                    day = 1;
-                    monthIdx++;
-                    if (monthIdx < trimInfo.months.length) {
-                        month = trimInfo.months[monthIdx];
-                    }
-                }
-            }
-            
-            currentDay = day;
-            currentMonth = month;
-            currentMonthIndex = monthIdx;
+        eliminados += toRemove.length;
+        for (const r of toRemove) {
+            const idx = activities.indexOf(r);
+            if (idx >= 0) activities.splice(idx, 1);
         }
     }
     
     saveActivities();
     renderCronograma();
-    showToast(`✅ Implementados ${count} días de actividades para ${data.grado}`);
+    showToast(`🗑️ Eliminadas ${eliminados} actividades en días festivos`);
 }
 
 // ============================================================
-// RENDERIZADO DEL CRONOGRAMA
+// FUNCIONES DE COLORES
+// ============================================================
+function obtenerColorProyecto(nombreProyecto) {
+    if (!nombreProyecto) return PALETA_COLORES[0];
+    if (coloresProyectos[nombreProyecto]) {
+        return coloresProyectos[nombreProyecto];
+    }
+    const color = PALETA_COLORES[indiceColorActual % PALETA_COLORES.length];
+    coloresProyectos[nombreProyecto] = color;
+    indiceColorActual++;
+    localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+    localStorage.setItem('cronograma_indice_color', String(indiceColorActual));
+    return color;
+}
+
+function cambiarColorProyecto(nombreProyecto, nuevoColor) {
+    if (!nombreProyecto) return;
+    coloresProyectos[nombreProyecto] = nuevoColor;
+    localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+    renderCronograma();
+    showToast(`🎨 Color de "${nombreProyecto}" actualizado`);
+}
+
+function aplicarColorEvaluacion() {
+    const color = document.getElementById('colorEvaluacion').value;
+    document.documentElement.style.setProperty('--color-evaluacion', color);
+    localStorage.setItem('cronograma_color_evaluacion', color);
+    document.getElementById('colorEvaluacionHex').value = color;
+    renderCronograma();
+    showToast('🎨 Color de evaluación actualizado');
+}
+
+function abrirMenuColor(event, nombreProyecto) {
+    event.preventDefault();
+    if (!nombreProyecto) return;
+    proyectoColorMenu = nombreProyecto;
+    const overlay = document.getElementById('colorMenuOverlay');
+    document.getElementById('colorMenuProyecto').textContent = nombreProyecto;
+    const colorActual = coloresProyectos[nombreProyecto] || '#6C5CE7';
+    document.getElementById('colorMenuPicker').value = colorActual;
+    document.getElementById('colorMenuHex').value = colorActual;
+    
+    const paleta = document.getElementById('colorMenuPaleta');
+    paleta.innerHTML = '';
+    PALETA_COLORES.forEach(c => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.background = c;
+        swatch.onclick = function() {
+            document.getElementById('colorMenuPicker').value = c;
+            document.getElementById('colorMenuHex').value = c;
+        };
+        paleta.appendChild(swatch);
+    });
+    
+    overlay.classList.add('show');
+}
+
+function aplicarColorDesdeMenu() {
+    const color = document.getElementById('colorMenuPicker').value;
+    cambiarColorProyecto(proyectoColorMenu, color);
+    cerrarMenuColor();
+}
+
+function cerrarMenuColor(e) {
+    if (e && e.target && e.target.id !== 'colorMenuOverlay') {
+        if (!e.target.closest('.color-menu')) return;
+    }
+    document.getElementById('colorMenuOverlay').classList.remove('show');
+}
+
+function aplicarColores() {
+    const colorProyecto = document.getElementById('colorProyecto').value;
+    const colorCTE = document.getElementById('colorCTE').value;
+    const colorFestivo = document.getElementById('colorFestivo').value;
+    const colorEvaluacion = document.getElementById('colorEvaluacion').value;
+    
+    document.documentElement.style.setProperty('--color-proyecto', colorProyecto);
+    document.documentElement.style.setProperty('--color-cte-ordinaria', colorCTE);
+    document.documentElement.style.setProperty('--color-festivo', colorFestivo);
+    document.documentElement.style.setProperty('--color-evaluacion', colorEvaluacion);
+    
+    localStorage.setItem('cronograma_colores', JSON.stringify({
+        proyecto: colorProyecto,
+        cte: colorCTE,
+        festivo: colorFestivo,
+        evaluacion: colorEvaluacion
+    }));
+    localStorage.setItem('cronograma_color_evaluacion', colorEvaluacion);
+    
+    renderCronograma();
+    showToast('🎨 Colores aplicados');
+}
+
+// ============================================================
+// RENDERIZADO DEL CRONOGRAMA - CON DÍAS FESTIVOS PINTADOS
 // ============================================================
 function renderCronograma() {
     const container = document.getElementById('cronogramaContainer');
@@ -3629,6 +2923,10 @@ function renderCronograma() {
                 for (let day = 1; day <= 31; day++) {
                     const year = monthYear;
                     const weekend = isWeekend(monthNum, day, year);
+                    const fechaStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const esFestivo = fechasFestivos.includes(fechaStr);
+                    const esVacacion = fechasVacaciones.includes(fechaStr);
+                    const esHabil = isDiaHabil(monthNum, day, year);
                     
                     const acts = activities.filter(a => {
                         const gradesAct = getGradesForActivity(a.grade);
@@ -3650,7 +2948,10 @@ function renderCronograma() {
                     let projectName = '';
                     let projectDaysArray = [];
                     
-                    if (acts.length > 0) {
+                    // Determinar si el día es no laborable para clics
+                    const esNoLaborable = weekend || esFestivo || esVacacion;
+                    
+                    if (acts.length > 0 && esHabil) {
                         const projectAct = acts.find(a => isProject(a.type));
                         if (projectAct) {
                             isProjectCell = true;
@@ -3667,7 +2968,6 @@ function renderCronograma() {
                             }).sort((a, b) => a.day - b.day);
                             
                             totalProjectDays = projectDaysArray.length;
-                            
                             const dayIndex = projectDaysArray.findIndex(a => a.day === day);
                             const isFirst = dayIndex === 0;
                             const isLast = dayIndex === totalProjectDays - 1;
@@ -3684,9 +2984,8 @@ function renderCronograma() {
                             } else if (isStart) {
                                 typeClass = 'proyecto proyecto-start';
                                 const wordsPerCell = Math.max(1, Math.floor(words.length / totalProjectDays));
-                                const startIdx = 0;
                                 const endIdx = Math.min(wordsPerCell, words.length);
-                                projectText = words.slice(startIdx, endIdx).join(' ');
+                                projectText = words.slice(0, endIdx).join(' ');
                             } else if (isMiddle) {
                                 typeClass = 'proyecto proyecto-middle';
                                 const wordsPerCell = Math.max(1, Math.floor(words.length / totalProjectDays));
@@ -3699,7 +2998,6 @@ function renderCronograma() {
                                 const startIdx = Math.max(0, words.length - wordsPerCell);
                                 projectText = words.slice(startIdx).join(' ');
                             }
-                            
                             content = projectText;
                         } else {
                             const act = acts[0];
@@ -3713,41 +3011,44 @@ function renderCronograma() {
                     let proyectoClass = '';
                     let colorOnlyClass = '';
                     let displayContent = '';
+                    let claseExtra = '';
+                    let fondoExtra = '';
+                    
+                    // Determinar color de fondo y clase extra
+                    if (esFestivo) {
+                        claseExtra = 'festivo-cell';
+                        fondoExtra = 'background: var(--color-festivo-cell);';
+                    } else if (esVacacion) {
+                        claseExtra = 'vacacion-cell';
+                        fondoExtra = 'background: var(--color-vacacion);';
+                    } else if (weekend) {
+                        claseExtra = 'weekend';
+                        fondoExtra = 'background: var(--color-weekend);';
+                    }
+                    
+                    const selectClass = isSelected ? 'selected' : '';
+                    const clickAttr = (!esNoLaborable) ? `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"` : '';
                     
                     if (isProjectCell) {
                         proyectoClass = 'proyecto-cell';
-                        displayContent = content || '';
-                        
                         const colorProyecto = obtenerColorProyecto(projectName);
-                        const selectClass = isSelected ? 'selected' : '';
-                        const weekendClass = weekend ? 'weekend' : '';
-                        const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
-                        const contextAttr = weekend ? '' : `oncontextmenu="abrirMenuColor(event, '${projectName.replace(/'/g, "\\'")}')"`;
+                        const wordsHtml = (projectText || content).split(' ').map(w => `<span class="word">${w}</span>`).join('');
                         
-                        const wordsHtml = displayContent.split(' ').map(w => `<span class="word">${w}</span>`).join('');
-                        
-                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${proyectoClass}" 
-                                    style="background:${colorProyecto};" 
+                        html += `<div class="grid-cell ${claseExtra} ${selectClass} ${proyectoClass}" 
+                                    style="${fondoExtra} background:${colorProyecto};" 
                                     ${clickAttr}
-                                    ${contextAttr}>
+                                    oncontextmenu="abrirMenuColor(event, '${projectName.replace(/'/g, "\\'")}')">
                             <div class="proyecto-text ${typeClass}">${wordsHtml}</div>
                         </div>`;
                     } else if (isOfficial) {
                         colorOnlyClass = 'color-only';
-                        const selectClass = isSelected ? 'selected' : '';
-                        const weekendClass = weekend ? 'weekend' : '';
-                        const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
                         const titleAttr = acts[0]?.activity ? ` title="${String(acts[0].activity).replace(/"/g, '&quot;')}"` : '';
                         
-                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${colorOnlyClass}" ${clickAttr}${titleAttr}>
+                        html += `<div class="grid-cell ${claseExtra} ${selectClass} ${colorOnlyClass}" ${clickAttr}${titleAttr} style="${fondoExtra}">
                             <div class="activity ${typeClass} filled"></div>
                         </div>`;
                     } else {
-                        const selectClass = isSelected ? 'selected' : '';
-                        const weekendClass = weekend ? 'weekend' : '';
-                        const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
-                        
-                        html += `<div class="grid-cell ${weekendClass} ${selectClass}" ${clickAttr}>
+                        html += `<div class="grid-cell ${claseExtra} ${selectClass}" ${clickAttr} style="${fondoExtra}">
                             <div class=""></div>
                         </div>`;
                     }
@@ -3762,12 +3063,123 @@ function renderCronograma() {
 }
 
 // ============================================================
+// IMPLEMENTAR DOSIFICACIÓN - CORREGIDA
+// ============================================================
+function implementarDosificacion() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
+    
+    if (!data) {
+        showToast('⚠️ No hay datos para este grado');
+        return;
+    }
+    
+    const trimestreMap = {
+        1: { months: [9, 10, 11], startDay: 1 },
+        2: { months: [12, 1, 2, 3], startDay: 1 },
+        3: { months: [4, 5, 6, 7], startDay: 1 }
+    };
+    
+    let count = 0;
+    const gradeNum = parseInt(grade);
+    
+    // Eliminar proyectos existentes
+    for (const trim of data.trimestres) {
+        for (const proyecto of trim.proyectos) {
+            const toRemove = activities.filter(a => {
+                const gradesAct = getGradesForActivity(a.grade);
+                return gradesAct.includes(gradeNum) && a.activity === proyecto.nombre && isProject(a.type);
+            });
+            for (const r of toRemove) {
+                const idx = activities.indexOf(r);
+                if (idx >= 0) activities.splice(idx, 1);
+            }
+        }
+    }
+    
+    const trimStartDates = {
+        1: ['2026-09-01', '2026-09-17', '2026-10-05', '2026-10-21'],
+        2: ['2026-12-01', '2026-12-17', '2027-01-12', '2027-01-28'],
+        3: ['2027-04-05', '2027-04-21', '2027-05-10', '2027-05-26']
+    };
+    
+    let trimIndex = 0;
+    for (const trim of data.trimestres) {
+        trimIndex++;
+        const startDates = trimStartDates[trimIndex] || trimStartDates[1];
+        
+        for (const proyecto of trim.proyectos) {
+            const sesiones = parseInt(proyecto.sesiones) || 12;
+            const projIndex = trim.proyectos.indexOf(proyecto);
+            
+            let fechaInicio = proyecto.fechaInicio || startDates[projIndex] || '2026-09-01';
+            const parts = fechaInicio.split('-').map(Number);
+            let month = parts[1];
+            let day = parts[2];
+            let year = parts[0];
+            
+            let diasAsignados = 0;
+            let maxIter = 500;
+            
+            while (diasAsignados < sesiones && maxIter > 0) {
+                maxIter--;
+                if (isDiaHabil(month, day, year)) {
+                    const existingIdx = activities.findIndex(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
+                    });
+                    
+                    if (existingIdx >= 0) {
+                        activities[existingIdx] = { 
+                            grade: gradeNum, 
+                            month: month, 
+                            day: day, 
+                            activity: proyecto.nombre, 
+                            type: 'proyecto', 
+                            duration: sesiones, 
+                            unit: 'days' 
+                        };
+                    } else {
+                        activities.push({ 
+                            grade: gradeNum, 
+                            month: month, 
+                            day: day, 
+                            activity: proyecto.nombre, 
+                            type: 'proyecto', 
+                            duration: sesiones, 
+                            unit: 'days' 
+                        });
+                    }
+                    diasAsignados++;
+                    count++;
+                }
+                day++;
+                const daysInMonth = getDaysInMonth(month);
+                if (day > daysInMonth) {
+                    day = 1;
+                    month++;
+                    if (month > 12) { month = 1; year++; }
+                }
+            }
+        }
+    }
+    
+    saveActivities();
+    renderCronograma();
+    showToast(`✅ Implementados ${count} días de actividades para ${data.grado}`);
+}
+
+// ============================================================
 // FUNCIONES DEL MODAL
 // ============================================================
 function openEditModal(grade, month, day) {
     const year = getYear(month);
     if (isWeekend(month, day, year)) {
         showToast('⚠️ No se pueden editar fines de semana');
+        return;
+    }
+    if (fechasFestivos.includes(`${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`)) {
+        showToast('⚠️ No se pueden editar días festivos');
         return;
     }
     
@@ -3841,7 +3253,6 @@ function openEditModal(grade, month, day) {
         return;
     }
     
-    // No hay actividad: crear nueva
     document.getElementById('modalTitle').textContent = '➕ Nueva Actividad';
     document.getElementById('deleteBtn').style.display = 'none';
     editingIndex = -1;
@@ -4160,8 +3571,18 @@ function deleteActivity() {
 // ============================================================
 function handleCellClick(grade, month, day, event) {
     const year = getYear(month);
+    const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    
     if (isWeekend(month, day, year)) {
         showToast('⚠️ Los fines de semana no son laborables');
+        return;
+    }
+    if (fechasFestivos.includes(fechaStr)) {
+        showToast('⚠️ Día festivo, no se puede editar');
+        return;
+    }
+    if (fechasVacaciones.includes(fechaStr)) {
+        showToast('⚠️ Día de vacaciones, no se puede editar');
         return;
     }
 
@@ -4181,7 +3602,7 @@ function handleCellClick(grade, month, day, event) {
             for (const m of [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7]) {
                 for (let d = 1; d <= 31; d++) {
                     const y = getYear(m);
-                    if (!isWeekend(m, d, y)) {
+                    if (!isWeekend(m, d, y) && !fechasFestivos.includes(`${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`)) {
                         allKeys.push(getCellKey(g, m, d));
                     }
                 }
@@ -4208,10 +3629,21 @@ function handleCellClick(grade, month, day, event) {
 
 function toggleCellSelection(grade, month, day) {
     const year = getYear(month);
+    const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    
     if (isWeekend(month, day, year)) {
         showToast('⚠️ No se pueden seleccionar fines de semana');
         return;
     }
+    if (fechasFestivos.includes(fechaStr)) {
+        showToast('⚠️ No se pueden seleccionar días festivos');
+        return;
+    }
+    if (fechasVacaciones.includes(fechaStr)) {
+        showToast('⚠️ No se pueden seleccionar días de vacaciones');
+        return;
+    }
+    
     const key = getCellKey(grade, month, day);
     const idx = selectedCells.indexOf(key);
     if (idx >= 0) {
@@ -4249,290 +3681,6 @@ function updateSelectionInfo() {
 }
 
 // ============================================================
-// FUNCIONES DE GESTIÓN DE FECHAS (UI)
-// ============================================================
-function renderFechasUI() {
-    const listaFestivos = document.getElementById('listaFestivos');
-    listaFestivos.innerHTML = '';
-    fechasFestivos.sort().forEach(f => {
-        const div = document.createElement('div');
-        div.className = 'fecha-item';
-        const fecha = new Date(f + 'T00:00:00');
-        div.innerHTML = `
-            <span class="fecha-label">🔴 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
-            <button class="btn btn-danger btn-sm" onclick="eliminarFestivo('${f}')">✖</button>
-        `;
-        listaFestivos.appendChild(div);
-    });
-    
-    const listaVacaciones = document.getElementById('listaVacaciones');
-    listaVacaciones.innerHTML = '';
-    fechasVacaciones.sort().forEach(f => {
-        const div = document.createElement('div');
-        div.className = 'fecha-item';
-        const fecha = new Date(f + 'T00:00:00');
-        div.innerHTML = `
-            <span class="fecha-label">🟡 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
-            <button class="btn btn-danger btn-sm" onclick="eliminarVacacion('${f}')">✖</button>
-        `;
-        listaVacaciones.appendChild(div);
-    });
-    
-    const listaEventos = document.getElementById('listaEventos');
-    listaEventos.innerHTML = '';
-    eventosPersonalizados.forEach((e, i) => {
-        const div = document.createElement('div');
-        div.className = 'fecha-item';
-        const fecha = new Date(e.fecha + 'T00:00:00');
-        div.innerHTML = `
-            <span class="fecha-label">📝 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}: ${e.nombre}</span>
-            <button class="btn btn-danger btn-sm" onclick="eliminarEvento(${i})">✖</button>
-        `;
-        listaEventos.appendChild(div);
-    });
-}
-
-function agregarFestivo() {
-    const input = document.getElementById('festivoNuevo');
-    const fecha = input.value;
-    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
-    if (fechasFestivos.includes(fecha)) { showToast('⚠️ Ya está en la lista'); return; }
-    fechasFestivos.push(fecha);
-    saveFechas();
-    renderFechasUI();
-    showToast('✅ Festivo agregado');
-}
-
-function eliminarFestivo(fecha) {
-    const idx = fechasFestivos.indexOf(fecha);
-    if (idx >= 0) fechasFestivos.splice(idx, 1);
-    saveFechas();
-    renderFechasUI();
-    showToast('🗑️ Festivo eliminado');
-}
-
-function limpiarFestivos() {
-    if (!confirm('¿Eliminar todos los días festivos?')) return;
-    fechasFestivos = [];
-    saveFechas();
-    renderFechasUI();
-    showToast('🗑️ Festivos eliminados');
-}
-
-function agregarVacacion() {
-    const input = document.getElementById('vacacionNuevo');
-    const fecha = input.value;
-    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
-    if (fechasVacaciones.includes(fecha)) { showToast('⚠️ Ya está en la lista'); return; }
-    fechasVacaciones.push(fecha);
-    saveFechas();
-    renderFechasUI();
-    showToast('✅ Vacación agregada');
-}
-
-function eliminarVacacion(fecha) {
-    const idx = fechasVacaciones.indexOf(fecha);
-    if (idx >= 0) fechasVacaciones.splice(idx, 1);
-    saveFechas();
-    renderFechasUI();
-    showToast('🗑️ Vacación eliminada');
-}
-
-function limpiarVacaciones() {
-    if (!confirm('¿Eliminar todos los días de vacaciones?')) return;
-    fechasVacaciones = [];
-    saveFechas();
-    renderFechasUI();
-    showToast('🗑️ Vacaciones eliminadas');
-}
-
-function agregarEventoPersonalizado() {
-    const fechaInput = document.getElementById('eventoFecha');
-    const nombreInput = document.getElementById('eventoNombre');
-    const fecha = fechaInput.value;
-    const nombre = nombreInput.value.trim();
-    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
-    if (!nombre) { showToast('⚠️ Escribe un nombre para el evento'); return; }
-    eventosPersonalizados.push({ fecha, nombre });
-    saveFechas();
-    renderFechasUI();
-    fechaInput.value = '';
-    nombreInput.value = '';
-    showToast('✅ Evento agregado');
-}
-
-function eliminarEvento(index) {
-    eventosPersonalizados.splice(index, 1);
-    saveFechas();
-    renderFechasUI();
-    showToast('🗑️ Evento eliminado');
-}
-
-function limpiarEventos() {
-    if (!confirm('¿Eliminar todos los eventos personalizados?')) return;
-    eventosPersonalizados = [];
-    saveFechas();
-    renderFechasUI();
-    showToast('🗑️ Eventos eliminados');
-}
-
-function guardarFechas() {
-    saveFechas();
-    renderCronograma();
-    showToast('✅ Fechas guardadas y aplicadas al cronograma');
-}
-
-function aplicarFechasSeleccionadas() {
-    renderCronograma();
-    showToast('📌 Cambios aplicados al cronograma');
-}
-
-function aplicarColores() {
-    const colorProyecto = document.getElementById('colorProyecto').value;
-    const colorCTE = document.getElementById('colorCTE').value;
-    const colorFestivo = document.getElementById('colorFestivo').value;
-    const colorEvaluacion = document.getElementById('colorEvaluacion').value;
-    
-    document.documentElement.style.setProperty('--color-proyecto', colorProyecto);
-    document.documentElement.style.setProperty('--color-cte-ordinaria', colorCTE);
-    document.documentElement.style.setProperty('--color-festivo', colorFestivo);
-    document.documentElement.style.setProperty('--color-evaluacion', colorEvaluacion);
-    
-    localStorage.setItem('cronograma_colores', JSON.stringify({
-        proyecto: colorProyecto,
-        cte: colorCTE,
-        festivo: colorFestivo,
-        evaluacion: colorEvaluacion
-    }));
-    localStorage.setItem('cronograma_color_evaluacion', colorEvaluacion);
-    
-    renderCronograma();
-    showToast('🎨 Colores aplicados');
-}
-
-// ============================================================
-// VERIFICACIÓN: DOSIFICACIÓN VS CRONOGRAMA
-// ============================================================
-function verificarCorrespondencia() {
-    const container = document.getElementById('verificacionContainer');
-    const grades = [1, 2, 3];
-    const gradeLabels = { 1: '1º Grado', 2: '2º Grado', 3: '3º Grado' };
-    
-    let html = `<table class="verificacion-table">
-        <thead>
-            <tr>
-                <th>Grado</th>
-                <th>Proyecto (Dosificación)</th>
-                <th>Sesiones (Dosificación)</th>
-                <th>Proyecto (Cronograma)</th>
-                <th>Sesiones (Cronograma)</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>`;
-    
-    for (const grade of grades) {
-        const data = dosificacionData[grade];
-        if (!data) continue;
-        
-        const proyectosDosificacion = [];
-        for (const trim of data.trimestres) {
-            for (const proj of trim.proyectos) {
-                proyectosDosificacion.push({
-                    nombre: proj.nombre,
-                    sesiones: parseInt(proj.sesiones) || 0,
-                    trimestre: trim.nombre
-                });
-            }
-        }
-        
-        const proyectosCronograma = [];
-        const activitiesGrade = activities.filter(a => {
-            const gradesAct = getGradesForActivity(a.grade);
-            return gradesAct.includes(grade) && isProject(a.type);
-        });
-        
-        const proyectoMap = {};
-        for (const act of activitiesGrade) {
-            if (!proyectoMap[act.activity]) {
-                proyectoMap[act.activity] = 0;
-            }
-            proyectoMap[act.activity]++;
-        }
-        
-        for (const [nombre, sesiones] of Object.entries(proyectoMap)) {
-            proyectosCronograma.push({ nombre, sesiones });
-        }
-        
-        const dosifNombres = proyectosDosificacion.map(p => p.nombre);
-        const cronoNombres = proyectosCronograma.map(p => p.nombre);
-        
-        for (const proj of proyectosDosificacion) {
-            const cronoMatch = proyectosCronograma.find(p => p.nombre === proj.nombre);
-            let status = '';
-            let statusClass = '';
-            
-            if (cronoMatch) {
-                const sesionesMatch = proj.sesiones === cronoMatch.sesiones;
-                if (sesionesMatch) {
-                    status = '✅ Coinciden';
-                    statusClass = 'status-ok';
-                } else {
-                    status = `⚠️ Sesiones difieren (Dosif: ${proj.sesiones}, Crono: ${cronoMatch.sesiones})`;
-                    statusClass = 'status-error';
-                }
-                html += `<tr>
-                    <td><strong>${gradeLabels[grade]}</strong></td>
-                    <td>${proj.nombre}</td>
-                    <td style="text-align:center;">${proj.sesiones}</td>
-                    <td>${cronoMatch.nombre}</td>
-                    <td style="text-align:center;">${cronoMatch.sesiones}</td>
-                    <td class="${statusClass}">${status}</td>
-                </tr>`;
-            } else {
-                html += `<tr>
-                    <td><strong>${gradeLabels[grade]}</strong></td>
-                    <td>${proj.nombre}</td>
-                    <td style="text-align:center;">${proj.sesiones}</td>
-                    <td style="color:#DC3545;">❌ No encontrado</td>
-                    <td style="text-align:center;">-</td>
-                    <td class="status-missing">❌ Faltante en cronograma</td>
-                </tr>`;
-            }
-        }
-        
-        for (const proj of proyectosCronograma) {
-            const dosifMatch = proyectosDosificacion.find(p => p.nombre === proj.nombre);
-            if (!dosifMatch) {
-                html += `<tr>
-                    <td><strong>${gradeLabels[grade]}</strong></td>
-                    <td style="color:#FF8C00;">${proj.nombre} (extra)</td>
-                    <td style="text-align:center;">-</td>
-                    <td>${proj.nombre}</td>
-                    <td style="text-align:center;">${proj.sesiones}</td>
-                    <td class="status-extra">🟠 Extra en cronograma</td>
-                </tr>`;
-            }
-        }
-        
-        html += `<tr style="background-color:var(--bg);"><td colspan="6" style="text-align:center; font-weight:700; padding:6px;">━━━ ${gradeLabels[grade]} ━━━</td></tr>`;
-    }
-    
-    html += `
-        </tbody>
-    </table>
-    <div style="margin-top:12px; padding:10px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
-        <strong>📌 Resumen de estados:</strong>
-        <br>✅ <strong>Coinciden:</strong> El proyecto existe en ambos lados y las sesiones coinciden.
-        <br>🔴 <strong>Faltante en cronograma:</strong> El proyecto está en la dosificación pero no en el cronograma.
-        <br>🟠 <strong>Extra en cronograma:</strong> El proyecto está en el cronograma pero no en la dosificación.
-        <br>⚠️ <strong>Sesiones difieren:</strong> El número de sesiones no coincide.
-    </div>`;
-    
-    container.innerHTML = html;
-}
-
-// ============================================================
 // BULK MODAL
 // ============================================================
 function openBulkModal() {
@@ -4563,7 +3711,12 @@ function saveBulk() {
     for (const key of selectedCells) {
         const [grade, month, day] = key.split('-').map(Number);
         const year = getYear(month);
+        const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
         if (isWeekend(month, day, year)) continue;
+        if (fechasFestivos.includes(fechaStr)) continue;
+        if (fechasVacaciones.includes(fechaStr)) continue;
+        
         const idx = activities.findIndex(a => {
             const gradesAct = getGradesForActivity(a.grade);
             return gradesAct.includes(grade) && a.month === month && a.day === day;
@@ -4581,6 +3734,224 @@ function saveBulk() {
     renderCronograma();
     closeBulkModal();
     showToast(`✅ "${activity}" asignado a ${count} celdas`);
+}
+
+// ============================================================
+// RENDERIZADO DE DOSIFICACIÓN
+// ============================================================
+function renderDosificacion() {
+    const container = document.getElementById('dosificacionContainer');
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
+    
+    if (!data) {
+        container.innerHTML = '<div style="padding:16px; text-align:center; color:var(--text-secondary);">No hay datos para este grado</div>';
+        return;
+    }
+    
+    let html = `
+    <table class="dosificacion-table">
+        <tr>
+            <td colspan="5" style="text-align:center; font-size:1rem; font-weight:700; background:var(--primary); color:white; padding:10px;">
+                ${data.titulo}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" style="background:var(--primary-light); padding:6px 8px;">
+                <strong>Nombre de la Escuela:</strong>
+                <input type="text" class="editable-input" value="${data.escuela}" 
+                       onchange="updateDosificacionField(${grade}, 'escuela', this.value)" 
+                       style="width:60%; font-weight:normal;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" style="background:var(--primary-light); padding:6px 8px;">
+                <strong>Nombre del Docente:</strong>
+                <input type="text" class="editable-input" value="${data.docente}" 
+                       onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
+                       style="width:60%; font-weight:normal;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="background:var(--primary-light); padding:6px 8px;">
+                <strong>Grado y Grupo:</strong>
+                <input type="text" class="editable-input" value="${data.grado}" 
+                       onchange="updateDosificacionField(${grade}, 'grado', this.value)" 
+                       style="width:50%; font-weight:normal;">
+            </td>
+            <td colspan="3" style="background:var(--primary-light); padding:6px 8px;">
+                <strong>Ciclo Escolar:</strong>
+                <input type="text" class="editable-input" value="${data.ciclo}" 
+                       onchange="updateDosificacionField(${grade}, 'ciclo', this.value)" 
+                       style="width:40%; font-weight:normal;">
+            </td>
+        </tr>
+        <tr>
+            <th class="col-trimestre">TRIMESTRE</th>
+            <th class="col-proyecto">PROYECTO</th>
+            <th class="col-contenido">CONTENIDO</th>
+            <th class="col-pda">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
+            <th class="col-sesiones">SESIONES</th>
+        </tr>`;
+    
+    let totalSesiones = 0;
+    let trimCount = 0;
+    
+    for (const trim of data.trimestres) {
+        trimCount++;
+        let firstRow = true;
+        const mesesValue = data.meses ? data.meses[trim.nombre] : '';
+        
+        for (const proyecto of trim.proyectos) {
+            totalSesiones += proyecto.sesiones;
+            const rowspan = firstRow ? trim.proyectos.length : 1;
+            const projIndex = trim.proyectos.indexOf(proyecto);
+            
+            html += `<tr>
+                ${firstRow ? `<td class="trimestre-cell" rowspan="${rowspan}" style="vertical-align:middle;">
+                    <div class="trim-label">${trim.nombre}</div>
+                    <div class="meses-label">${mesesValue || 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE'}</div>
+                </td>` : ''}
+                <td>
+                    <textarea class="editable-textarea" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'nombre', this.value)" 
+                              style="width:100%; min-height:36px; font-weight:600; color:var(--color-proyecto);">${proyecto.nombre}</textarea>
+                </td>
+                <td>
+                    <textarea class="editable-textarea" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'contenido', this.value)" 
+                              style="width:100%; min-height:36px;">${proyecto.contenido}</textarea>
+                </td>
+                <td>
+                    <textarea class="editable-textarea" 
+                              onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'pda', this.value)" 
+                              style="width:100%; min-height:50px;">${proyecto.pda}</textarea>
+                </td>
+                <td class="sesiones-cell">
+                    <input type="number" class="editable-input sesiones-input" 
+                           value="${proyecto.sesiones}" 
+                           onchange="updateDosificacionProyecto(${grade}, ${trimCount-1}, ${projIndex}, 'sesiones', parseInt(this.value) || 0)"
+                           style="width:44px; text-align:center; font-weight:600;">
+                </td>
+            </tr>`;
+            firstRow = false;
+        }
+    }
+    
+    html += `
+        <tr>
+            <td colspan="4" class="total-cell">
+                TOTAL DE SESIONES ANUALES
+            </td>
+            <td class="total-sesiones-cell" id="totalSesionesDisplay">${totalSesiones}</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="footer-cell" style="padding:10px; text-align:center;">
+                Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1" class="signature-cell" style="width:25%;">
+                <strong>Elaboró</strong>
+                <div class="signature-name">
+                    <input type="text" class="editable-input" value="${data.docente}" 
+                           onchange="updateDosificacionField(${grade}, 'docente', this.value)" 
+                           style="width:100%; text-align:center; font-weight:600; font-size:0.75rem;">
+                </div>
+                <div class="signature-title">Titular de Informática</div>
+            </td>
+            <td colspan="2" class="signature-cell" style="width:35%;">
+                <strong>Revisó</strong>
+                <div class="signature-name">Subdirector Turno Mixto</div>
+            </td>
+            <td colspan="2" class="signature-cell" style="width:40%;">
+                <strong>Vo. Bo.</strong>
+                <div class="signature-name">Profr. Melchor Sánchez Monjaraz</div>
+                <div class="signature-title">Subdirector encargado de la dirección</div>
+            </td>
+        </tr>
+    </table>`;
+    
+    container.innerHTML = html;
+    
+    const display = document.getElementById('totalSesionesDisplay');
+    if (display) display.textContent = totalSesiones;
+}
+
+function updateDosificacionField(grade, field, value) {
+    dosificacionData[grade][field] = value;
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+}
+
+function updateDosificacionProyecto(grade, trimIndex, projIndex, field, value) {
+    dosificacionData[grade].trimestres[trimIndex].proyectos[projIndex][field] = value;
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+    if (field === 'sesiones') {
+        recalcTotalSesiones(grade);
+    }
+}
+
+function recalcTotalSesiones(grade) {
+    let total = 0;
+    for (const trim of dosificacionData[grade].trimestres) {
+        for (const proj of trim.proyectos) {
+            total += parseInt(proj.sesiones) || 0;
+        }
+    }
+    const display = document.getElementById('totalSesionesDisplay');
+    if (display) display.textContent = total;
+}
+
+function saveDosificacion() {
+    localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+    showToast('✅ Dosificación guardada correctamente');
+}
+
+function printDosificacion() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const content = document.getElementById('dosificacionContainer');
+    
+    const printWindow = window.open('', '_blank', 'width=1100,height=700');
+    if (!printWindow) {
+        showToast('⚠️ Permite ventanas emergentes para imprimir');
+        return;
+    }
+    
+    const styles = document.querySelector('style').innerHTML;
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dosificación - Informática ${grade}º</title>
+            <style>
+                ${styles}
+                body { padding: 20px; background: white; }
+                .dosificacion-table { font-size: 0.65rem; }
+                .dosificacion-table td, .dosificacion-table th { padding: 3px 5px; }
+                .dosificacion-grade-selector, .dosificacion-actions .btn { display: none !important; }
+                .editable-input, .editable-textarea {
+                    background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    pointer-events: none;
+                }
+                .editable-input.sesiones-input { pointer-events: none; }
+                .no-print { display: none !important; }
+                @media print {
+                    body { padding: 10px; }
+                    .dosificacion-table { font-size: 0.6rem; }
+                }
+            </style>
+        </head>
+        <body>
+            ${content.innerHTML}
+            <script>
+                window.print();
+            <\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
 }
 
 // ============================================================
@@ -4679,6 +4050,53 @@ function renderPlaneacion() {
     });
 }
 
+function addPlaneacionSemana() {
+    const grade = document.getElementById('planeacionGrade').value;
+    if (!planeacionData[grade]) planeacionData[grade] = [];
+    planeacionData[grade].push({
+        periodo: 'Nueva semana',
+        actividades: 'Descripción de actividades...',
+        recursos: 'Recursos necesarios...',
+        producto: 'Producto esperado...'
+    });
+    localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+    renderPlaneacion();
+    showToast('➕ Nueva semana agregada');
+}
+
+function deletePlaneacionRow(btn) {
+    const row = btn.closest('.planeacion-row');
+    if (!row) return;
+    if (!confirm('¿Eliminar esta semana de planeación?')) return;
+    const grade = document.getElementById('planeacionGrade').value;
+    const index = parseInt(row.dataset.index);
+    if (!isNaN(index) && planeacionData[grade] && planeacionData[grade].length > index) {
+        planeacionData[grade].splice(index, 1);
+        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+        renderPlaneacion();
+        showToast('🗑️ Semana eliminada');
+    }
+}
+
+function savePlaneacion() {
+    const grade = document.getElementById('planeacionGrade').value;
+    const container = document.getElementById('planeacionContainer');
+    const rows = container.querySelectorAll('.planeacion-row');
+    const data = [];
+    
+    rows.forEach(row => {
+        const periodo = row.querySelector('.editable-periodo')?.value || '';
+        const actividades = row.querySelector('.editable-actividades')?.value || '';
+        const recursos = row.querySelector('.editable-recursos')?.value || '';
+        const producto = row.querySelector('.editable-producto')?.value || '';
+        data.push({ periodo, actividades, recursos, producto });
+    });
+    
+    planeacionData[grade] = data;
+    localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+    showToast('✅ Planeación guardada');
+}
+
 function printPlaneacion() {
     const grade = document.getElementById('planeacionGrade').value;
     const container = document.getElementById('planeacionContainer');
@@ -4753,7 +4171,497 @@ function printPlaneacion() {
 }
 
 // ============================================================
-// EXPORTAR A EXCEL
+// EXPORTAR DOSIFICACIÓN A WORD
+// ============================================================
+function exportDosificacionWord() {
+    const grade = document.getElementById('dosificacionGrade').value;
+    const data = dosificacionData[grade];
+    
+    if (!data) {
+        showToast('⚠️ No hay datos de dosificación para exportar');
+        return;
+    }
+    
+    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
+    
+    let tablaHtml = `
+    <table border="1" cellpadding="4" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:9pt; font-family:'Times New Roman', Times, serif;">
+        <thead>
+            <tr style="background-color:#00467F; color:white;">
+                <th style="width:6%; padding:4px; text-align:center;">TRIMESTRE</th>
+                <th style="width:24%; padding:4px;">PROYECTO</th>
+                <th style="width:20%; padding:4px;">CONTENIDO</th>
+                <th style="width:40%; padding:4px;">PROCESOS DE DESARROLLO DE APRENDIZAJE (PDA)</th>
+                <th style="width:10%; padding:4px; text-align:center;">SESIONES</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    let totalSesiones = 0;
+    let trimCount = 0;
+    
+    for (const trim of data.trimestres) {
+        trimCount++;
+        let firstRow = true;
+        const mesesValue = data.meses ? data.meses[trim.nombre] : 'SEPTIEMBRE<br>OCTUBRE<br>NOVIEMBRE';
+        
+        for (const proyecto of trim.proyectos) {
+            totalSesiones += parseInt(proyecto.sesiones) || 0;
+            const rowspan = firstRow ? trim.proyectos.length : 1;
+            
+            tablaHtml += `
+            <tr>
+                ${firstRow ? `<td rowspan="${rowspan}" style="padding:4px; text-align:center; vertical-align:middle; background-color:#E6F0FA; font-weight:700; font-size:8pt;">
+                    <div>${trim.nombre}</div>
+                    <div style="font-weight:400; font-size:7pt; color:#555;">${mesesValue.replace(/<br>/g, ' ')}</div>
+                </td>` : ''}
+                <td style="padding:4px; vertical-align:top; font-weight:600; color:#6C5CE7;">${proyecto.nombre}</td>
+                <td style="padding:4px; vertical-align:top;">${proyecto.contenido}</td>
+                <td style="padding:4px; vertical-align:top;">${proyecto.pda}</td>
+                <td style="padding:4px; text-align:center; vertical-align:middle; font-weight:600;">${proyecto.sesiones}</td>
+            </tr>`;
+            firstRow = false;
+        }
+    }
+    
+    tablaHtml += `
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="padding:6px; text-align:right; font-weight:700; background-color:#E6F0FA;">TOTAL DE SESIONES ANUALES</td>
+                <td style="padding:6px; text-align:center; font-weight:700; background-color:#E6F0FA;">${totalSesiones}</td>
+            </tr>
+        </tfoot>
+    </table>`;
+    
+    const html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+          xmlns:w="urn:schemas-microsoft-com:office:word" 
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <title>Dosificación - Informática ${gradeLabel} Grado</title>
+        <!--[if gte mso 9]>
+        <xml>
+            <w:WordDocument>
+                <w:View>Print</w:View>
+            </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; margin: 40px; }
+            h1 { text-align: center; font-size: 14pt; font-weight: bold; }
+            .header-info { text-align: center; font-size: 10pt; margin-bottom: 15px; }
+            .header-info p { margin: 2px 0; }
+            table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
+            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+            .signature-row { text-align: center; margin-top: 25px; }
+            .signature-block { display: inline-block; width: 30%; text-align: center; }
+            .signature-block strong { display: block; }
+            .signature-name { font-weight: 600; font-size: 10pt; }
+            .signature-title { font-size: 8pt; color: #555; }
+            .footer { text-align: center; margin-top: 15px; font-weight: 500; font-size: 10pt; }
+    `;
+    
+    html += `
+        </style>
+    </head>
+    <body>
+        <h1>${data.titulo}</h1>
+        <div class="header-info">
+            <p><strong>Nombre de la Escuela:</strong> ${data.escuela}</p>
+            <p><strong>Nombre del Docente:</strong> ${data.docente}</p>
+            <p><strong>Grado y Grupo:</strong> ${data.grado}</p>
+            <p><strong>Ciclo Escolar:</strong> ${data.ciclo}</p>
+        </div>
+        
+        ${tablaHtml}
+        
+        <div class="footer">Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026</div>
+        
+        <div class="signature-row">
+            <div class="signature-block">
+                <strong>Elaboró</strong>
+                <div class="signature-name">${data.docente}</div>
+                <div class="signature-title">Titular de Informática</div>
+            </div>
+            <div class="signature-block">
+                <strong>Revisó</strong>
+                <div class="signature-name">Subdirector Turno Mixto</div>
+            </div>
+            <div class="signature-block">
+                <strong>Vo. Bo.</strong>
+                <div class="signature-name">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
+                <div class="signature-title">Subdirector encargado de la dirección</div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+    
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Dosificacion_Informatica_${gradeLabel}_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    showToast('📄 Dosificación exportada a Word (.doc)');
+}
+
+// ============================================================
+// EXPORTAR PLANEACIÓN SEMANAL A WORD
+// ============================================================
+function exportPlaneacionWord() {
+    const grade = document.getElementById('planeacionGrade').value;
+    const gradeLabel = grade === '1' ? '1º' : grade === '2' ? '2º' : '3º';
+    const data = planeacionData[grade] || [];
+    
+    if (data.length === 0) {
+        showToast('⚠️ No hay planeación para exportar');
+        return;
+    }
+    
+    let tablaHtml = `
+    <table border="1" cellpadding="4" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10pt; font-family:'Times New Roman', Times, serif;">
+        <thead>
+            <tr style="background-color:#00467F; color:white;">
+                <th style="width:12%; padding:4px;">PERIODO</th>
+                <th style="width:28%; padding:4px;">ACTIVIDADES</th>
+                <th style="width:20%; padding:4px;">RECURSOS</th>
+                <th style="width:28%; padding:4px;">PRODUCTO ESPERADO</th>
+                <th style="width:12%; padding:4px;">SESIONES</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    data.forEach((item, index) => {
+        const sesiones = index === 0 ? 2 : 2;
+        tablaHtml += `
+            <tr>
+                <td style="padding:4px; vertical-align:top;">${item.periodo || ''}</td>
+                <td style="padding:4px; vertical-align:top;">${item.actividades || ''}</td>
+                <td style="padding:4px; vertical-align:top;">${item.recursos || ''}</td>
+                <td style="padding:4px; vertical-align:top;">${item.producto || ''}</td>
+                <td style="padding:4px; vertical-align:top; text-align:center;">${sesiones}</td>
+            </tr>`;
+    });
+    
+    const totalSesiones = data.length * 2;
+    
+    tablaHtml += `
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="padding:6px; text-align:right; font-weight:700; background-color:#E6F0FA;">TOTAL DE SESIONES</td>
+                <td style="padding:6px; text-align:center; font-weight:700; background-color:#E6F0FA;">${totalSesiones}</td>
+            </tr>
+        </tfoot>
+    </table>`;
+    
+    const html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+          xmlns:w="urn:schemas-microsoft-com:office:word" 
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <title>Planeación Semanal - Informática ${gradeLabel} Grado</title>
+        <!--[if gte mso 9]>
+        <xml>
+            <w:WordDocument>
+                <w:View>Print</w:View>
+            </w:WordDocument>
+        </xml>
+        <![endif]-->
+        <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
+            h1 { text-align: center; font-size: 16pt; font-weight: bold; }
+            .header-info { text-align: center; font-size: 11pt; margin-bottom: 20px; }
+            .header-info p { margin: 2px 0; }
+            table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
+            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+            .signature-row { text-align: center; margin-top: 30px; }
+            .signature-block { display: inline-block; width: 30%; text-align: center; }
+            .signature-block strong { display: block; }
+            .signature-name { font-weight: 600; font-size: 11pt; }
+            .signature-title { font-size: 9pt; color: #555; }
+            .footer { text-align: center; margin-top: 20px; font-weight: 500; }
+    `;
+    
+    html += `
+        </style>
+    </head>
+    <body>
+        <h1>PLANEACIÓN SEMANAL - INFORMÁTICA ${gradeLabel} GRADO</h1>
+        <div class="header-info">
+            <p><strong>Docente:</strong> ${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</p>
+            <p><strong>Asignatura:</strong> Informática ${gradeLabel} Grupo: ______</p>
+            <p><strong>Ciclo Escolar:</strong> ${config.schoolCycle || '2026-2027'}</p>
+            <p><strong>Número de Sesiones:</strong> ${totalSesiones}</p>
+            <p><strong>Periodo:</strong> 31 de agosto al 04 de septiembre de 2026</p>
+            <p><strong>Escuela:</strong> ${config.schoolName || 'Escuela Secundaria General'}</p>
+        </div>
+        
+        <h2 style="text-align:center; font-size:13pt; margin-top:15px;">SECUENCIA DE ACTIVIDADES SEMANALES</h2>
+        
+        ${tablaHtml}
+        
+        <div class="footer">Esquipulas, Santa Cruz Xoxocotlán, Oaxaca a 31 de agosto de 2026</div>
+        
+        <div class="signature-row">
+            <div class="signature-block">
+                <strong>Elaboró</strong>
+                <div class="signature-name">${config.teacherName || 'Profr. José Emmanuel Chan Ibáñez'}</div>
+                <div class="signature-title">Titular de Informática</div>
+            </div>
+            <div class="signature-block">
+                <strong>Revisó</strong>
+                <div class="signature-name">Subdirector Turno Mixto</div>
+            </div>
+            <div class="signature-block">
+                <strong>Vo. Bo.</strong>
+                <div class="signature-name">${config.directorName || 'Profr. Melchor Sánchez Monjaraz'}</div>
+                <div class="signature-title">Subdirector encargado de la dirección</div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+    
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Planeacion_Semanal_Informatica_${gradeLabel}_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    showToast('📄 Planeación exportada a Word (.doc)');
+}
+
+// ============================================================
+// EXPORTAR PLAN A WORD
+// ============================================================
+function exportPlanWord() {
+    const content = document.getElementById('planContainer');
+    const data = planData;
+    
+    let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" 
+          xmlns:w="urn:schemas-microsoft-com:office:word" 
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+        <meta charset="UTF-8">
+        <title>Plan Anual - Informática</title>
+        <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin: 40px; }
+            h1 { text-align: center; font-size: 18pt; font-weight: bold; }
+            .subtitle { text-align: center; font-size: 14pt; margin-bottom: 20px; }
+            .dimension-title { font-size: 14pt; font-weight: bold; margin-top: 20px; color: #00467F; border-bottom: 2px solid #00467F; padding-bottom: 5px; }
+            .dimension-subtitle { font-size: 11pt; font-style: italic; margin-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; font-size: 10pt; margin-bottom: 20px; }
+            th { background-color: #00467F; color: white; font-weight: bold; padding: 4px 6px; border: 1px solid #333; text-align: center; }
+            td { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+            .footer { text-align: center; margin-top: 20px; font-weight: 500; }
+            .signature-block { text-align: center; margin-top: 30px; display: inline-block; width: 30%; }
+            .signature-block strong { display: block; }
+            .signature-name { font-weight: 600; font-size: 11pt; }
+            .signature-title { font-size: 9pt; color: #555; }
+            .signature-row { text-align: center; margin-top: 20px; }
+            .signature-row div { display: inline-block; width: 30%; }
+        </style>
+    </head>
+    <body>
+        <h1>${data.titulo}</h1>
+        <div class="subtitle">Materia: ${data.materia} | Nivel ${data.nivel} | Ciclo Escolar ${data.ciclo}</div>
+    `;
+    
+    for (const dim of data.dimensiones) {
+        html += `
+        <div class="dimension-title">${dim.nombre}</div>
+        <div class="dimension-subtitle">${dim.enfoque}</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:20%;">METAS</th>
+                    <th style="width:40%;">ACCIONES ESTRATÉGICAS</th>
+                    <th style="width:15%;">PERIODO DE REALIZACIÓN</th>
+                    <th style="width:25%;">RECURSOS NECESARIOS</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        
+        for (const meta of dim.metas) {
+            const accionesText = meta.acciones.join('<br>');
+            html += `
+            <tr>
+                <td style="font-weight:600;">${meta.meta}</td>
+                <td>${accionesText}</td>
+                <td>${meta.periodo}</td>
+                <td>${meta.recursos.replace(/\n/g, '<br>')}</td>
+            </tr>`;
+        }
+        
+        html += `
+            </tbody>
+        </table>`;
+    }
+    
+    html += `
+    <div class="footer">${data.fecha}</div>
+    
+    <div class="signature-row">
+        <div class="signature-block">
+            <strong>Elaboró</strong>
+            <div class="signature-name">${data.elaboro}</div>
+            <div class="signature-title">${data.elaboroTitulo}</div>
+        </div>
+        <div class="signature-block">
+            <strong>Revisó</strong>
+            <div class="signature-name">${data.reviso}</div>
+        </div>
+        <div class="signature-block">
+            <strong>Vo. Bo.</strong>
+            <div class="signature-name">${data.voBo}</div>
+            <div class="signature-title">${data.voBoTitulo}</div>
+        </div>
+    </div>
+    </body>
+    </html>`;
+    
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Plan_Anual_Informatica_${new Date().toISOString().slice(0,10)}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    showToast('📄 Plan Anual exportado a Word (.doc)');
+}
+
+// ============================================================
+// VERIFICACIÓN
+// ============================================================
+function verificarCorrespondencia() {
+    const container = document.getElementById('verificacionContainer');
+    const grades = [1, 2, 3];
+    const gradeLabels = { 1: '1º Grado', 2: '2º Grado', 3: '3º Grado' };
+    
+    let html = `<table class="verificacion-table">
+        <thead>
+            <tr>
+                <th>Grado</th>
+                <th>Proyecto (Dosificación)</th>
+                <th>Sesiones (Dosificación)</th>
+                <th>Proyecto (Cronograma)</th>
+                <th>Sesiones (Cronograma)</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    for (const grade of grades) {
+        const data = dosificacionData[grade];
+        if (!data) continue;
+        
+        const proyectosDosificacion = [];
+        for (const trim of data.trimestres) {
+            for (const proj of trim.proyectos) {
+                proyectosDosificacion.push({
+                    nombre: proj.nombre,
+                    sesiones: parseInt(proj.sesiones) || 0,
+                    trimestre: trim.nombre
+                });
+            }
+        }
+        
+        const proyectosCronograma = [];
+        const activitiesGrade = activities.filter(a => {
+            const gradesAct = getGradesForActivity(a.grade);
+            return gradesAct.includes(grade) && isProject(a.type);
+        });
+        
+        const proyectoMap = {};
+        for (const act of activitiesGrade) {
+            if (!proyectoMap[act.activity]) {
+                proyectoMap[act.activity] = 0;
+            }
+            proyectoMap[act.activity]++;
+        }
+        
+        for (const [nombre, sesiones] of Object.entries(proyectoMap)) {
+            proyectosCronograma.push({ nombre, sesiones });
+        }
+        
+        for (const proj of proyectosDosificacion) {
+            const cronoMatch = proyectosCronograma.find(p => p.nombre === proj.nombre);
+            let status = '';
+            let statusClass = '';
+            
+            if (cronoMatch) {
+                const sesionesMatch = proj.sesiones === cronoMatch.sesiones;
+                if (sesionesMatch) {
+                    status = '✅ Coinciden';
+                    statusClass = 'status-ok';
+                } else {
+                    status = `⚠️ Sesiones difieren (Dosif: ${proj.sesiones}, Crono: ${cronoMatch.sesiones})`;
+                    statusClass = 'status-error';
+                }
+                html += `<tr>
+                    <td><strong>${gradeLabels[grade]}</strong></td>
+                    <td>${proj.nombre}</td>
+                    <td style="text-align:center;">${proj.sesiones}</td>
+                    <td>${cronoMatch.nombre}</td>
+                    <td style="text-align:center;">${cronoMatch.sesiones}</td>
+                    <td class="${statusClass}">${status}</td>
+                </tr>`;
+            } else {
+                html += `<tr>
+                    <td><strong>${gradeLabels[grade]}</strong></td>
+                    <td>${proj.nombre}</td>
+                    <td style="text-align:center;">${proj.sesiones}</td>
+                    <td style="color:#DC3545;">❌ No encontrado</td>
+                    <td style="text-align:center;">-</td>
+                    <td class="status-missing">❌ Faltante en cronograma</td>
+                </tr>`;
+            }
+        }
+        
+        for (const proj of proyectosCronograma) {
+            const dosifMatch = proyectosDosificacion.find(p => p.nombre === proj.nombre);
+            if (!dosifMatch) {
+                html += `<tr>
+                    <td><strong>${gradeLabels[grade]}</strong></td>
+                    <td style="color:#FF8C00;">${proj.nombre} (extra)</td>
+                    <td style="text-align:center;">-</td>
+                    <td>${proj.nombre}</td>
+                    <td style="text-align:center;">${proj.sesiones}</td>
+                    <td class="status-extra">🟠 Extra en cronograma</td>
+                </tr>`;
+            }
+        }
+        
+        html += `<tr style="background-color:var(--bg);"><td colspan="6" style="text-align:center; font-weight:700; padding:6px;">━━━ ${gradeLabels[grade]} ━━━</td></tr>`;
+    }
+    
+    html += `
+        </tbody>
+    </table>
+    <div style="margin-top:12px; padding:10px; background:var(--primary-light); border-radius:5px; font-size:0.75rem; color:var(--text-secondary);">
+        <strong>📌 Resumen de estados:</strong>
+        <br>✅ <strong>Coinciden:</strong> El proyecto existe en ambos lados y las sesiones coinciden.
+        <br>🔴 <strong>Faltante en cronograma:</strong> El proyecto está en la dosificación pero no en el cronograma.
+        <br>🟠 <strong>Extra en cronograma:</strong> El proyecto está en el cronograma pero no en la dosificación.
+        <br>⚠️ <strong>Sesiones difieren:</strong> El número de sesiones no coincide.
+    </div>`;
+    
+    container.innerHTML = html;
+}
+
+// ============================================================
+// EXPORTAR A EXCEL (simplificado)
 // ============================================================
 async function exportToExcel() {
     showToast('📊 Exportando a Excel...');
@@ -4799,11 +4707,10 @@ function importJSONFile(event) {
             if (data.config) { config = { ...config, ...data.config }; saveConfig(); }
             if (data.dosificacion) { dosificacionData = data.dosificacion; localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData)); renderDosificacion(); }
             if (data.planeacion) { planeacionData = data.planeacion; localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData)); renderPlaneacion(); }
-            if (data.fechasFestivos) { fechasFestivos = data.fechasFestivos; saveFechas(); }
-            if (data.fechasVacaciones) { fechasVacaciones = data.fechasVacaciones; saveFechas(); }
-            if (data.eventosPersonalizados) { eventosPersonalizados = data.eventosPersonalizados; saveFechas(); }
+            if (data.fechasFestivos) { fechasFestivos = data.fechasFestivos; saveFechas(); renderFechasUI(); }
+            if (data.fechasVacaciones) { fechasVacaciones = data.fechasVacaciones; saveFechas(); renderFechasUI(); }
+            if (data.eventosPersonalizados) { eventosPersonalizados = data.eventosPersonalizados; saveFechas(); renderFechasUI(); }
             if (data.coloresProyectos) { coloresProyectos = data.coloresProyectos; localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos)); }
-            renderFechasUI();
             renderCronograma();
             showToast('📂 Backup importado');
         } catch(err) {
@@ -4853,6 +4760,37 @@ function showToast(message) {
     toast.classList.add('show');
     clearTimeout(toast._timeout);
     toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function resetData() {
+    if (confirm('¿Restaurar datos de fábrica?')) {
+        planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
+        activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
+        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
+        planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
+        fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
+        fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
+        eventosPersonalizados = [];
+        coloresProyectos = {};
+        indiceColorActual = 0;
+        saveFechas();
+        localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+        localStorage.setItem('cronograma_indice_color', '0');
+        localStorage.removeItem('cronograma_color_evaluacion');
+        document.documentElement.style.setProperty('--color-evaluacion', '#FF6B6B');
+        localStorage.setItem('cronograma_plan', JSON.stringify(planData));
+        saveActivities();
+        saveConfig();
+        localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+        renderPlan();
+        renderCronograma();
+        renderDosificacion();
+        renderPlaneacion();
+        renderFechasUI();
+        showToast('🔄 Datos restaurados');
+    }
 }
 
 // ============================================================
@@ -4911,7 +4849,8 @@ document.getElementById('primaryColor').addEventListener('input', function() {
     document.documentElement.style.setProperty('--primary-dark', adjustColor(this.value, -20));
 });
 
-// Sincronizar colores con los campos hexdocument.getElementById('colorProyecto').addEventListener('input', function() {
+// Sincronizar colores
+document.getElementById('colorProyecto').addEventListener('input', function() {
     document.getElementById('colorProyectoHex').value = this.value;
 });
 document.getElementById('colorProyectoHex').addEventListener('input', function() {
