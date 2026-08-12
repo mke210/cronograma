@@ -757,6 +757,7 @@
         .grid-cell .activity.festivo-suspension { background: var(--color-festivo); color: transparent; }
         .grid-cell .activity.cte-intensiva { background: var(--color-cte-intensiva); color: transparent; }
         .grid-cell .activity.cte-ordinaria { background: var(--color-cte-ordinaria); color: transparent; }
+        .grid-cell.cte-locked { cursor: not-allowed; }
         .grid-cell .activity.fortalecimiento { background: var(--color-fortalecimiento); color: transparent; }
         .grid-cell .activity.fin-ciclo { background: var(--color-fin-ciclo); color: transparent; }
         .grid-cell .activity.normal { background: var(--color-normal); color: transparent; }
@@ -1614,6 +1615,26 @@
                 </div>
 
                 <div class="card-mini">
+                    <h4>📘 Fechas de CTE</h4>
+                    <div style="margin-bottom:6px; font-size:0.68rem; color:var(--text-secondary);">
+                        Estas fechas se reflejan automáticamente en el Cronograma como celdas bloqueadas (no editables desde ahí). Al pasar el cursor sobre esa celda se indica a qué corresponde.
+                    </div>
+                    <div class="form-group" style="display:flex; gap:4px; flex-wrap:wrap;">
+                        <input type="date" id="cteNuevaFecha" style="flex:1; min-width:120px;">
+                        <select id="cteNuevoTipo" style="flex:1; min-width:130px; padding:3px 6px; border-radius:5px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.7rem;">
+                            <option value="cte-intensiva">🔵 CTE Fase Intensiva</option>
+                            <option value="cte-ordinaria">🩷 CTE Sesión Ordinaria</option>
+                        </select>
+                        <button class="btn btn-success btn-sm" id="cteAgregarBtn" onclick="agregarCTE()">➕ Agregar</button>
+                        <button class="btn btn-outline btn-sm" id="cteCancelarBtn" onclick="cancelarEdicionCTE()" style="display:none;">✖ Cancelar</button>
+                    </div>
+                    <div class="fechas-list" id="listaCTE"></div>
+                    <div class="fechas-actions">
+                        <button class="btn btn-danger btn-sm" onclick="limpiarCTE()">🗑️ Limpiar todas</button>
+                    </div>
+                </div>
+
+                <div class="card-mini">
                     <h4>🎨 Colores</h4>
                     <div class="form-group">
                         <label>Color de proyectos</label>
@@ -1631,7 +1652,14 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Color de CTE</label>
+                        <label>🔵 Color de CTE Fase Intensiva</label>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <input type="color" id="colorCTEIntensiva" value="#1A3A5C">
+                            <input type="text" id="colorCTEIntensivaHex" value="#1A3A5C" style="width:80px; font-size:0.7rem;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>🩷 Color de CTE Sesión Ordinaria</label>
                         <div style="display:flex; gap:8px; align-items:center;">
                             <input type="color" id="colorCTE" value="#E91E63">
                             <input type="text" id="colorCTEHex" value="#E91E63" style="width:80px; font-size:0.7rem;">
@@ -2623,6 +2651,8 @@ function renderFechasUI() {
         `;
         listaEventos.appendChild(div);
     });
+
+    renderListaCTE();
 }
 
 function agregarFestivo() {
@@ -2687,6 +2717,144 @@ function limpiarVacaciones() {
     renderFechasUI();
     renderCronograma();
     showToast('🗑️ Vacaciones eliminadas');
+}
+
+// ============================================================
+// FUNCIONES DE FECHAS DE CTE (Consejo Técnico Escolar)
+// ============================================================
+let editandoCTEIndex = null;
+
+function getCTEEntries() {
+    return activities
+        .map((a, i) => ({ a, i }))
+        .filter(({ a }) => a.type === 'cte-intensiva' || a.type === 'cte-ordinaria')
+        .sort((x, y) => {
+            const ay = getYear(x.a.month), by = getYear(y.a.month);
+            if (ay !== by) return ay - by;
+            if (x.a.month !== y.a.month) return x.a.month - y.a.month;
+            return x.a.day - y.a.day;
+        });
+}
+
+function renderListaCTE() {
+    const lista = document.getElementById('listaCTE');
+    if (!lista) return;
+    lista.innerHTML = '';
+    const entries = getCTEEntries();
+    if (entries.length === 0) {
+        lista.innerHTML = '<div style="font-size:0.7rem; color:var(--text-secondary); padding:4px;">Sin fechas de CTE registradas</div>';
+        return;
+    }
+    entries.forEach(({ a, i }) => {
+        const year = getYear(a.month);
+        const fechaStr = `${year}-${String(a.month).padStart(2, '0')}-${String(a.day).padStart(2, '0')}`;
+        const fecha = new Date(fechaStr + 'T00:00:00');
+        const esIntensiva = a.type === 'cte-intensiva';
+        const icon = esIntensiva ? '🔵' : '🩷';
+        const div = document.createElement('div');
+        div.className = 'fecha-item';
+        div.innerHTML = `
+            <span class="fecha-label">${icon} ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} — ${esIntensiva ? 'Fase Intensiva' : 'Sesión Ordinaria'}</span>
+            <span style="display:flex; gap:4px;">
+                <button class="btn btn-outline btn-sm" onclick="editarCTE(${i})">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarCTE(${i})">✖</button>
+            </span>
+        `;
+        lista.appendChild(div);
+    });
+}
+
+function agregarCTE() {
+    const fechaInput = document.getElementById('cteNuevaFecha');
+    const tipoInput = document.getElementById('cteNuevoTipo');
+    const fecha = fechaInput.value;
+    const tipo = tipoInput.value;
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    const parts = fecha.split('-').map(Number);
+    const year = parts[0], month = parts[1], day = parts[2];
+
+    const dup = activities.find(a => (a.type === 'cte-intensiva' || a.type === 'cte-ordinaria') &&
+        a.month === month && a.day === day && getYear(a.month) === year);
+    if (dup) { showToast('⚠️ Ya existe una fecha de CTE ese día'); return; }
+
+    activities.push({
+        grade: 'all',
+        month, day,
+        activity: tipo === 'cte-intensiva' ? 'CTE Fase Intensiva' : 'CTE Sesión Ordinaria',
+        type: tipo,
+        duration: 1,
+        unit: 'days'
+    });
+    saveActivities();
+    renderListaCTE();
+    renderCronograma();
+    fechaInput.value = '';
+    showToast('✅ Fecha de CTE agregada');
+}
+
+function editarCTE(idx) {
+    const act = activities[idx];
+    if (!act) return;
+    editandoCTEIndex = idx;
+    const year = getYear(act.month);
+    document.getElementById('cteNuevaFecha').value = `${year}-${String(act.month).padStart(2, '0')}-${String(act.day).padStart(2, '0')}`;
+    document.getElementById('cteNuevoTipo').value = act.type;
+    const btn = document.getElementById('cteAgregarBtn');
+    btn.textContent = '💾 Guardar cambio';
+    btn.setAttribute('onclick', 'guardarEdicionCTE()');
+    document.getElementById('cteCancelarBtn').style.display = 'inline-flex';
+}
+
+function guardarEdicionCTE() {
+    if (editandoCTEIndex === null) return;
+    const fecha = document.getElementById('cteNuevaFecha').value;
+    const tipo = document.getElementById('cteNuevoTipo').value;
+    if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
+    const parts = fecha.split('-').map(Number);
+    activities[editandoCTEIndex] = {
+        grade: 'all',
+        month: parts[1], day: parts[2],
+        activity: tipo === 'cte-intensiva' ? 'CTE Fase Intensiva' : 'CTE Sesión Ordinaria',
+        type: tipo,
+        duration: 1,
+        unit: 'days'
+    };
+    saveActivities();
+    cancelarEdicionCTE();
+    renderListaCTE();
+    renderCronograma();
+    showToast('✅ Fecha de CTE actualizada');
+}
+
+function cancelarEdicionCTE() {
+    editandoCTEIndex = null;
+    document.getElementById('cteNuevaFecha').value = '';
+    document.getElementById('cteNuevoTipo').value = 'cte-intensiva';
+    const btn = document.getElementById('cteAgregarBtn');
+    btn.textContent = '➕ Agregar';
+    btn.setAttribute('onclick', 'agregarCTE()');
+    document.getElementById('cteCancelarBtn').style.display = 'none';
+}
+
+function eliminarCTE(idx) {
+    if (idx >= 0 && idx < activities.length) {
+        activities.splice(idx, 1);
+        saveActivities();
+        if (editandoCTEIndex === idx) cancelarEdicionCTE();
+        renderListaCTE();
+        renderCronograma();
+        showToast('🗑️ Fecha de CTE eliminada');
+    }
+}
+
+function limpiarCTE() {
+    if (!confirm('¿Eliminar todas las fechas de CTE?')) return;
+    activities = activities.filter(a => a.type !== 'cte-intensiva' && a.type !== 'cte-ordinaria');
+    saveActivities();
+    cancelarEdicionCTE();
+    renderListaCTE();
+    renderCronograma();
+    showToast('🗑️ Fechas de CTE eliminadas');
 }
 
 function agregarEventoPersonalizado() {
@@ -2832,17 +3000,20 @@ function cerrarMenuColor(e) {
 function aplicarColores() {
     const colorProyecto = document.getElementById('colorProyecto').value;
     const colorCTE = document.getElementById('colorCTE').value;
+    const colorCTEIntensiva = document.getElementById('colorCTEIntensiva').value;
     const colorFestivo = document.getElementById('colorFestivo').value;
     const colorEvaluacion = document.getElementById('colorEvaluacion').value;
     
     document.documentElement.style.setProperty('--color-proyecto', colorProyecto);
     document.documentElement.style.setProperty('--color-cte-ordinaria', colorCTE);
+    document.documentElement.style.setProperty('--color-cte-intensiva', colorCTEIntensiva);
     document.documentElement.style.setProperty('--color-festivo', colorFestivo);
     document.documentElement.style.setProperty('--color-evaluacion', colorEvaluacion);
     
     localStorage.setItem('cronograma_colores', JSON.stringify({
         proyecto: colorProyecto,
         cte: colorCTE,
+        cteIntensiva: colorCTEIntensiva,
         festivo: colorFestivo,
         evaluacion: colorEvaluacion
     }));
@@ -3261,8 +3432,9 @@ function renderCronograma() {
                         fondoExtra = 'background: var(--color-weekend);';
                     }
                     
+                    const esCTE = isOfficial && (acts[0].type === 'cte-intensiva' || acts[0].type === 'cte-ordinaria');
                     const selectClass = isSelected ? 'selected' : '';
-                    const clickAttr = (!esNoLaborable) ? `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"` : '';
+                    const clickAttr = (!esNoLaborable && !esCTE) ? `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"` : '';
                     
                     if (isProjectCell) {
                         proyectoClass = 'proyecto-cell';
@@ -3277,9 +3449,15 @@ function renderCronograma() {
                         </div>`;
                     } else if (isOfficial) {
                         colorOnlyClass = 'color-only';
-                        const titleAttr = acts[0]?.activity ? ` title="${String(acts[0].activity).replace(/"/g, '&quot;')}"` : '';
+                        let tooltipText = acts[0]?.activity || '';
+                        let lockedClass = '';
+                        if (esCTE) {
+                            tooltipText += ' 🔒 (bloqueado — edítalo en la pestaña "Gestión de Fechas")';
+                            lockedClass = 'cte-locked';
+                        }
+                        const titleAttr = tooltipText ? ` title="${String(tooltipText).replace(/"/g, '&quot;')}"` : '';
                         
-                        html += `<div class="grid-cell ${claseExtra} ${selectClass} ${colorOnlyClass}" ${clickAttr}${titleAttr} style="${fondoExtra}">
+                        html += `<div class="grid-cell ${claseExtra} ${selectClass} ${colorOnlyClass} ${lockedClass}" ${clickAttr}${titleAttr} style="${fondoExtra}">
                             <div class="activity ${typeClass} filled"></div>
                         </div>`;
                     } else {
@@ -3935,6 +4113,7 @@ function saveBulk() {
             return gradesAct.includes(grade) && a.month === month && a.day === day;
         });
         if (idx >= 0) {
+            if (activities[idx].type === 'cte-intensiva' || activities[idx].type === 'cte-ordinaria') continue; // bloqueado: se edita solo en Gestión de Fechas
             activities[idx] = { grade, month, day, activity, type, duration: 1, unit: 'days' };
         } else {
             activities.push({ grade, month, day, activity, type, duration: 1, unit: 'days' });
@@ -4973,6 +5152,12 @@ document.getElementById('colorCTE').addEventListener('input', function() {
 document.getElementById('colorCTEHex').addEventListener('input', function() {
     document.getElementById('colorCTE').value = this.value;
 });
+document.getElementById('colorCTEIntensiva').addEventListener('input', function() {
+    document.getElementById('colorCTEIntensivaHex').value = this.value;
+});
+document.getElementById('colorCTEIntensivaHex').addEventListener('input', function() {
+    document.getElementById('colorCTEIntensiva').value = this.value;
+});
 document.getElementById('colorFestivo').addEventListener('input', function() {
     document.getElementById('colorFestivoHex').value = this.value;
 });
@@ -4995,12 +5180,15 @@ if (savedColors) {
         document.getElementById('colorProyectoHex').value = colors.proyecto || '#6C5CE7';
         document.getElementById('colorCTE').value = colors.cte || '#E91E63';
         document.getElementById('colorCTEHex').value = colors.cte || '#E91E63';
+        document.getElementById('colorCTEIntensiva').value = colors.cteIntensiva || '#1A3A5C';
+        document.getElementById('colorCTEIntensivaHex').value = colors.cteIntensiva || '#1A3A5C';
         document.getElementById('colorFestivo').value = colors.festivo || '#DC3545';
         document.getElementById('colorFestivoHex').value = colors.festivo || '#DC3545';
         document.getElementById('colorEvaluacion').value = colors.evaluacion || '#FF6B6B';
         document.getElementById('colorEvaluacionHex').value = colors.evaluacion || '#FF6B6B';
         document.documentElement.style.setProperty('--color-proyecto', colors.proyecto || '#6C5CE7');
         document.documentElement.style.setProperty('--color-cte-ordinaria', colors.cte || '#E91E63');
+        document.documentElement.style.setProperty('--color-cte-intensiva', colors.cteIntensiva || '#1A3A5C');
         document.documentElement.style.setProperty('--color-festivo', colors.festivo || '#DC3545');
         document.documentElement.style.setProperty('--color-evaluacion', colors.evaluacion || '#FF6B6B');
         localStorage.setItem('cronograma_color_evaluacion', colors.evaluacion || '#FF6B6B');
