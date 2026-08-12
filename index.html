@@ -1680,16 +1680,32 @@
 
                 <div class="card-mini">
                     <h4>📝 Eventos Adicionales</h4>
+                    <div style="margin-bottom:6px; font-size:0.68rem; color:var(--text-secondary);">
+                        Estos eventos (incluidas las evaluaciones) se agregan directamente al Cronograma en la fecha y grado indicados.
+                    </div>
                     <div class="form-group">
-                        <label>Agregar evento personalizado</label>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:4px;">
+                            <select id="eventoGrado" style="flex:1; min-width:100px; padding:3px 6px; border-radius:5px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.7rem;">
+                                <option value="all">🌐 Todos los grados</option>
+                                <option value="1">1º Grado</option>
+                                <option value="2">2º Grado</option>
+                                <option value="3">3º Grado</option>
+                            </select>
+                            <select id="eventoTipo" style="flex:1; min-width:130px; padding:3px 6px; border-radius:5px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.7rem;">
+                                <option value="tema-personalizado">📝 Tema / Evento</option>
+                                <option value="evaluacion">✅ Evaluación</option>
+                            </select>
+                        </div>
                         <div style="display:flex; gap:4px; flex-wrap:wrap;">
                             <input type="date" id="eventoFecha" style="flex:1; min-width:100px;">
                             <input type="text" id="eventoNombre" placeholder="Nombre del evento" style="flex:2; min-width:120px;">
-                            <button class="btn btn-success btn-sm" onclick="agregarEventoPersonalizado()">➕ Agregar</button>
+                            <button class="btn btn-success btn-sm" id="eventoAgregarBtn" onclick="agregarEventoPersonalizado()">➕ Agregar</button>
+                            <button class="btn btn-outline btn-sm" id="eventoCancelarBtn" onclick="cancelarEdicionEvento()" style="display:none;">✖ Cancelar</button>
                         </div>
                     </div>
                     <div class="fechas-list" id="listaEventos"></div>
                     <div class="fechas-actions">
+                        <button class="btn btn-primary btn-sm" onclick="generarEvaluacionesAutomaticas()">✅ Generar evaluaciones automáticas</button>
                         <button class="btn btn-danger btn-sm" onclick="limpiarEventos()">🗑️ Limpiar todos</button>
                     </div>
                 </div>
@@ -2569,6 +2585,8 @@ function loadData() {
         document.documentElement.style.setProperty('--color-evaluacion', colorEval);
     }
 
+    sincronizarEventosConCronograma();
+
     applyTheme(config.theme || 'light');
     document.documentElement.style.setProperty('--primary', config.primaryColor || '#00467F');
     document.documentElement.style.setProperty('--primary-dark', adjustColor(config.primaryColor || '#00467F', -20));
@@ -2644,13 +2662,22 @@ function renderFechasUI() {
     
     const listaEventos = document.getElementById('listaEventos');
     listaEventos.innerHTML = '';
+    if (eventosPersonalizados.length === 0) {
+        listaEventos.innerHTML = '<div style="font-size:0.7rem; color:var(--text-secondary); padding:4px;">Sin eventos registrados</div>';
+    }
     eventosPersonalizados.forEach((e, i) => {
         const div = document.createElement('div');
         div.className = 'fecha-item';
         const fecha = new Date(e.fecha + 'T00:00:00');
+        const esEvaluacion = e.tipo === 'evaluacion';
+        const icon = esEvaluacion ? '✅' : '📝';
+        const gradoLabel = (!e.grade || e.grade === 'all') ? 'Todos' : `${e.grade}º`;
         div.innerHTML = `
-            <span class="fecha-label">📝 ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}: ${e.nombre}</span>
-            <button class="btn btn-danger btn-sm" onclick="eliminarEvento(${i})">✖</button>
+            <span class="fecha-label">${icon} ${fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })} (${gradoLabel}): ${e.nombre}</span>
+            <span style="display:flex; gap:4px;">
+                <button class="btn btn-outline btn-sm" onclick="editarEvento(${i})">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarEvento(${i})">✖</button>
+            </span>
         `;
         listaEventos.appendChild(div);
     });
@@ -2860,34 +2887,249 @@ function limpiarCTE() {
     showToast('🗑️ Fechas de CTE eliminadas');
 }
 
+// ============================================================
+// FUNCIONES DE EVENTOS ADICIONALES (se reflejan en el Cronograma)
+// ============================================================
+let editandoEventoIndex = null;
+
+function gradeToActivityValue(grade) {
+    return grade === 'all' ? 'all' : parseInt(grade);
+}
+
+// Crea la celda correspondiente en el cronograma (activities) para un evento.
+// Devuelve false y avisa si el día ya está ocupado (no sobrescribe nada).
+function agregarActivityDeEvento(evento) {
+    const parts = evento.fecha.split('-').map(Number);
+    const month = parts[1], day = parts[2];
+    const gradeVal = gradeToActivityValue(evento.grade || 'all');
+    const gradesEvento = getGradesForActivity(gradeVal);
+
+    const ocupado = activities.some(a => {
+        const gradesAct = getGradesForActivity(a.grade);
+        return gradesEvento.some(g => gradesAct.includes(g)) && a.month === month && a.day === day;
+    });
+    if (ocupado) {
+        showToast('⚠️ Ese día ya está ocupado en el cronograma para ese grado');
+        return false;
+    }
+
+    activities.push({
+        grade: gradeVal,
+        month, day,
+        activity: evento.nombre,
+        type: evento.tipo || 'tema-personalizado',
+        duration: 1,
+        unit: 'days'
+    });
+    return true;
+}
+
+// Quita del cronograma la celda que corresponde exactamente a un evento
+function quitarActivityDeEvento(evento) {
+    if (!evento || !evento.fecha) return;
+    const parts = evento.fecha.split('-').map(Number);
+    const month = parts[1], day = parts[2];
+    const gradeVal = gradeToActivityValue(evento.grade || 'all');
+    const idx = activities.findIndex(a =>
+        a.month === month && a.day === day && a.activity === evento.nombre && a.grade === gradeVal
+    );
+    if (idx >= 0) activities.splice(idx, 1);
+}
+
+// Al cargar los datos guardados, garantiza que todo evento de la lista
+// tenga su celda reflejada en el cronograma (corrige eventos agregados antes de este cambio)
+function sincronizarEventosConCronograma() {
+    let migrados = 0;
+    eventosPersonalizados.forEach(ev => {
+        if (!ev.grade) ev.grade = 'all';
+        if (!ev.tipo) ev.tipo = 'tema-personalizado';
+        const parts = ev.fecha.split('-').map(Number);
+        const month = parts[1], day = parts[2];
+        const gradeVal = gradeToActivityValue(ev.grade);
+        const existe = activities.some(a =>
+            a.month === month && a.day === day && a.activity === ev.nombre && a.grade === gradeVal
+        );
+        if (!existe) {
+            activities.push({ grade: gradeVal, month, day, activity: ev.nombre, type: ev.tipo, duration: 1, unit: 'days' });
+            migrados++;
+        }
+    });
+    if (migrados > 0) {
+        saveActivities();
+        console.log(`🔄 ${migrados} evento(s) sincronizados con el cronograma`);
+    }
+}
+
 function agregarEventoPersonalizado() {
     const fechaInput = document.getElementById('eventoFecha');
     const nombreInput = document.getElementById('eventoNombre');
+    const gradoInput = document.getElementById('eventoGrado');
+    const tipoInput = document.getElementById('eventoTipo');
     const fecha = fechaInput.value;
     const nombre = nombreInput.value.trim();
+    const grade = gradoInput.value;
+    const tipo = tipoInput.value;
     if (!fecha) { showToast('⚠️ Selecciona una fecha'); return; }
     if (!nombre) { showToast('⚠️ Escribe un nombre para el evento'); return; }
-    eventosPersonalizados.push({ fecha, nombre });
+
+    if (editandoEventoIndex !== null) {
+        const anterior = eventosPersonalizados[editandoEventoIndex];
+        quitarActivityDeEvento(anterior);
+        const actualizado = { fecha, nombre, grade, tipo };
+        if (!agregarActivityDeEvento(actualizado)) {
+            // el nuevo día está ocupado: restauramos el evento anterior en el cronograma
+            agregarActivityDeEvento(anterior);
+            return;
+        }
+        eventosPersonalizados[editandoEventoIndex] = actualizado;
+        cancelarEdicionEvento();
+        showToast('✅ Evento actualizado y aplicado al cronograma');
+    } else {
+        const nuevo = { fecha, nombre, grade, tipo };
+        if (!agregarActivityDeEvento(nuevo)) return;
+        eventosPersonalizados.push(nuevo);
+        fechaInput.value = '';
+        nombreInput.value = '';
+        showToast('✅ Evento agregado y aplicado al cronograma');
+    }
+
     saveFechas();
+    saveActivities();
     renderFechasUI();
-    fechaInput.value = '';
-    nombreInput.value = '';
-    showToast('✅ Evento agregado');
+    renderCronograma();
+}
+
+function editarEvento(index) {
+    const ev = eventosPersonalizados[index];
+    if (!ev) return;
+    editandoEventoIndex = index;
+    document.getElementById('eventoFecha').value = ev.fecha;
+    document.getElementById('eventoNombre').value = ev.nombre;
+    document.getElementById('eventoGrado').value = ev.grade || 'all';
+    document.getElementById('eventoTipo').value = ev.tipo || 'tema-personalizado';
+    const btn = document.getElementById('eventoAgregarBtn');
+    btn.textContent = '💾 Guardar cambio';
+    document.getElementById('eventoCancelarBtn').style.display = 'inline-flex';
+}
+
+function cancelarEdicionEvento() {
+    editandoEventoIndex = null;
+    document.getElementById('eventoFecha').value = '';
+    document.getElementById('eventoNombre').value = '';
+    document.getElementById('eventoGrado').value = 'all';
+    document.getElementById('eventoTipo').value = 'tema-personalizado';
+    const btn = document.getElementById('eventoAgregarBtn');
+    btn.textContent = '➕ Agregar';
+    document.getElementById('eventoCancelarBtn').style.display = 'none';
 }
 
 function eliminarEvento(index) {
+    const ev = eventosPersonalizados[index];
+    quitarActivityDeEvento(ev);
     eventosPersonalizados.splice(index, 1);
+    if (editandoEventoIndex === index) cancelarEdicionEvento();
     saveFechas();
+    saveActivities();
     renderFechasUI();
+    renderCronograma();
     showToast('🗑️ Evento eliminado');
 }
 
 function limpiarEventos() {
     if (!confirm('¿Eliminar todos los eventos personalizados?')) return;
+    eventosPersonalizados.forEach(ev => quitarActivityDeEvento(ev));
     eventosPersonalizados = [];
+    cancelarEdicionEvento();
     saveFechas();
+    saveActivities();
     renderFechasUI();
+    renderCronograma();
     showToast('🗑️ Eventos eliminados');
+}
+
+// Genera automáticamente una fecha de evaluación justo después de la última
+// sesión de cada tema/proyecto ya implementado en el cronograma (para los 3 grados)
+function generarEvaluacionesAutomaticas() {
+    let totalGeneradas = 0;
+    const sinImplementar = [];
+
+    for (const grade of [1, 2, 3]) {
+        const data = dosificacionData[grade];
+        if (!data) continue;
+
+        for (const trim of data.trimestres) {
+            for (const proyecto of trim.proyectos) {
+                const nombreEval = `Evaluación: ${proyecto.nombre}`;
+
+                // Quitar evaluación previa auto-generada para este tema/grado (evita duplicados al repetir)
+                for (let i = activities.length - 1; i >= 0; i--) {
+                    const a = activities[i];
+                    if (a.type === 'evaluacion' && a.activity === nombreEval && a.grade === grade) {
+                        activities.splice(i, 1);
+                    }
+                }
+                eventosPersonalizados = eventosPersonalizados.filter(ev =>
+                    !(ev.tipo === 'evaluacion' && ev.nombre === nombreEval && gradeToActivityValue(ev.grade) === grade)
+                );
+
+                // Ubicar los días ya asignados a este tema en el cronograma
+                const diasProyecto = activities.filter(a => {
+                    const gradesAct = getGradesForActivity(a.grade);
+                    return gradesAct.includes(grade) && a.activity === proyecto.nombre && isProject(a.type);
+                });
+
+                if (diasProyecto.length === 0) {
+                    sinImplementar.push(`${proyecto.nombre} (${grade}º)`);
+                    continue;
+                }
+
+                diasProyecto.sort((a, b) => {
+                    const ay = getYear(a.month), by = getYear(b.month);
+                    if (ay !== by) return ay - by;
+                    if (a.month !== b.month) return a.month - b.month;
+                    return a.day - b.day;
+                });
+                const ultimo = diasProyecto[diasProyecto.length - 1];
+
+                // Buscar el siguiente día hábil y libre después de la última sesión
+                let month = ultimo.month, day = ultimo.day, year = getYear(ultimo.month);
+                let maxIter = 60;
+                let encontrado = false;
+
+                while (maxIter > 0 && !encontrado) {
+                    maxIter--;
+                    day++;
+                    const daysInMonth = getDaysInMonth(month);
+                    if (day > daysInMonth) { day = 1; month++; if (month > 12) { month = 1; year++; } }
+
+                    if (isDiaHabil(month, day, year)) {
+                        const ocupado = activities.some(a => {
+                            const gradesAct = getGradesForActivity(a.grade);
+                            return gradesAct.includes(grade) && a.month === month && a.day === day;
+                        });
+                        if (!ocupado) {
+                            activities.push({ grade, month, day, activity: nombreEval, type: 'evaluacion', duration: 1, unit: 'days' });
+                            const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                            eventosPersonalizados.push({ fecha: fechaStr, nombre: nombreEval, grade: String(grade), tipo: 'evaluacion' });
+                            totalGeneradas++;
+                            encontrado = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    saveActivities();
+    saveFechas();
+    renderCronograma();
+    renderFechasUI();
+
+    let msg = `✅ ${totalGeneradas} fecha(s) de evaluación generadas`;
+    if (sinImplementar.length > 0) {
+        msg += ` · Sin implementar aún: ${sinImplementar.slice(0, 3).join(', ')}${sinImplementar.length > 3 ? '…' : ''}`;
+    }
+    showToast(msg);
 }
 
 function guardarFechas() {
