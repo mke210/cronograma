@@ -31,6 +31,7 @@
             --color-selected: #FF6B6B;
             --color-weekend: #e8e8e8;
             --color-proyecto: #6C5CE7;
+            --color-evaluacion: #FF6B6B;
             --color-result-hover: #E8F0FE;
         }
 
@@ -52,6 +53,7 @@
             --color-selected: #CC4444;
             --color-weekend: #2a2a2a;
             --color-proyecto: #4A3A8A;
+            --color-evaluacion: #CC4444;
             --color-result-hover: #2A3A5A;
         }
 
@@ -579,12 +581,12 @@
         }
         
         .grid-cell.proyecto-cell {
-            background: var(--color-proyecto);
             color: white;
             font-weight: 600;
             cursor: pointer;
             position: relative;
             min-height: 22px;
+            border-radius: 3px;
         }
         .grid-cell.proyecto-cell:hover {
             transform: scale(1.02);
@@ -751,6 +753,7 @@
         .grid-cell .activity.fin-ciclo { background: var(--color-fin-ciclo); color: transparent; }
         .grid-cell .activity.normal { background: var(--color-normal); color: transparent; }
         .grid-cell .activity.tema-personalizado { background: var(--color-tema); color: transparent; }
+        .grid-cell .activity.evaluacion { background: var(--color-evaluacion); color: transparent; }
         .grid-cell .activity.filled { border-radius: 3px; }
 
         .modal-overlay {
@@ -957,68 +960,6 @@
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
-        }
-
-        .search-results-list {
-            margin-top: 6px;
-            max-height: 240px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 5px;
-            background: var(--card-bg);
-        }
-        .search-result-item {
-            padding: 6px 10px;
-            cursor: pointer;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-            transition: background 0.2s ease;
-        }
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
-        .search-result-item:hover {
-            background: var(--color-result-hover);
-        }
-        .search-result-item.selected {
-            background: var(--primary-light);
-            border-left: 3px solid var(--primary);
-        }
-        .search-result-item .result-name {
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-        .search-result-item .result-detail {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-        }
-        .search-result-item .result-badge {
-            font-size: 0.6rem;
-            padding: 2px 6px;
-            border-radius: 10px;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .move-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin: 6px 0 8px 0;
-            padding: 6px;
-            background: var(--bg);
-            border-radius: 5px;
-        }
-        .move-options .form-group {
-            margin-bottom: 0;
-        }
-        .move-options select {
-            font-size: 0.7rem;
-            padding: 4px 6px;
         }
 
         /* ============================================================
@@ -1237,6 +1178,86 @@
             color: var(--text-secondary);
         }
 
+        /* ============================================================
+           MENÚ CONTEXTUAL PARA COLORES
+           ============================================================ */
+        .color-menu-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 1500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .color-menu-overlay.show { display: flex; }
+        .color-menu {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            max-width: 320px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .color-menu h4 { margin-bottom: 8px; }
+        .color-menu .proyecto-nombre {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        .color-menu .color-picker-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .color-menu .color-picker-row input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 2px;
+        }
+        .color-menu .color-picker-row input[type="text"] {
+            width: 80px;
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .color-menu .paleta-colores {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .color-menu .paleta-colores .color-swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: all 0.2s ease;
+        }
+        .color-menu .paleta-colores .color-swatch:hover {
+            transform: scale(1.15);
+            border-color: var(--primary);
+        }
+        .color-menu .modal-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         @media (max-width: 768px) {
             body { padding: 6px; }
             .header { padding: 8px 12px; flex-direction: column; align-items: stretch; }
@@ -1253,8 +1274,6 @@
             .theme-toggle { bottom: 8px; right: 8px; width: 34px; height: 34px; font-size: 0.85rem; }
             .form-row { grid-template-columns: 1fr; }
             .form-row-3 { grid-template-columns: 1fr; }
-            .move-options { grid-template-columns: 1fr; }
-            .search-result-item { flex-direction: column; align-items: flex-start; }
             .dosificacion-table { font-size: 0.45rem; }
             .dosificacion-table th,
             .dosificacion-table td { padding: 2px 3px; }
@@ -1362,7 +1381,6 @@ HEADER
         <button class="tab-btn" data-tab="dosificacion">📋 Dosificación</button>
         <button class="tab-btn" data-tab="planeacion">📝 Planeación Semanal</button>
         <button class="tab-btn" data-tab="fechas">⚙️ Gestión de Fechas</button>
-        <button class="tab-btn" data-tab="editor">✏️ Editor</button>
         <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
         <button class="tab-btn" data-tab="export">📤 Exportar</button>
     </nav>
@@ -1403,6 +1421,7 @@ HEADER
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-fortalecimiento);"></span> Fortalecimiento</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-fin-ciclo);"></span> Fin de ciclo</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-tema);"></span> Tema / Evento personalizado</span>
+                <span class="legend-item"><span class="legend-color" style="background:var(--color-evaluacion);"></span> Evaluación</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-proyecto);"></span> Proyecto / Tema</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-selected);"></span> Seleccionado</span>
                 <span class="legend-item"><span class="legend-color" style="background:var(--color-weekend); border:1px solid #ccc;"></span> Fin de semana</span>
@@ -1564,14 +1583,22 @@ HEADER
                     </div>
                 </div>
 
-                <!-- Colores de Proyectos -->
+                <!-- Colores -->
                 <div class="card-mini">
-                    <h4>🎨 Colores de Proyectos</h4>
+                    <h4>🎨 Colores</h4>
                     <div class="form-group">
-                        <label>Color de proyectos</label>
+                        <label>Color de proyectos (clic derecho sobre proyecto para cambiarlo)</label>
                         <div style="display:flex; gap:8px; align-items:center;">
                             <input type="color" id="colorProyecto" value="#6C5CE7">
                             <input type="text" id="colorProyectoHex" value="#6C5CE7" style="width:80px; font-size:0.7rem;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Color de Evaluación</label>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <input type="color" id="colorEvaluacion" value="#FF6B6B">
+                            <input type="text" id="colorEvaluacionHex" value="#FF6B6B" style="width:80px; font-size:0.7rem;">
+                            <button class="btn btn-primary btn-sm" onclick="aplicarColorEvaluacion()">🎨 Aplicar</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1588,7 +1615,7 @@ HEADER
                             <input type="text" id="colorFestivoHex" value="#DC3545" style="width:80px; font-size:0.7rem;">
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-sm" onclick="aplicarColores()" style="margin-top:4px;">🎨 Aplicar colores</button>
+                    <button class="btn btn-primary btn-sm" onclick="aplicarColores()" style="margin-top:4px;">🎨 Aplicar todos</button>
                 </div>
 
                 <!-- Eventos adicionales -->
@@ -1608,90 +1635,6 @@ HEADER
                     <div class="fechas-actions">
                         <button class="btn btn-danger btn-sm" onclick="limpiarEventos()">🗑️ Limpiar todos</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    PESTAÑA EDITOR
-    ============================================================ -->
-    <div class="tab-content" id="tab-editor">
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">✏️ Editor - Buscar y Mover Actividades</span>
-                <button class="btn btn-danger btn-sm" onclick="clearAllActivities()">🗑️ Limpiar todas</button>
-            </div>
-            
-            <div class="form-group">
-                <label>🔍 Buscar actividad por nombre</label>
-                <input type="text" id="searchActivity" placeholder="Escribe para buscar..." oninput="searchActivities()" autocomplete="off">
-            </div>
-            
-            <div id="searchResultsContainer" style="display:none;">
-                <div class="search-results-list" id="searchResultsList"></div>
-            </div>
-            
-            <div id="noResultsMessage" style="display:none; padding:8px; text-align:center; color:var(--text-secondary); margin-top:4px;">
-                No se encontraron actividades con ese nombre.
-            </div>
-            
-            <div id="selectedActivityInfo" style="display:none; background:var(--primary-light); padding:8px; border-radius:5px; margin-top:8px;">
-                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; margin-bottom:6px;">
-                    <span><strong>📝 Actividad:</strong> <span id="selectedActName"></span></span>
-                    <span><strong>📅 Fecha actual:</strong> <span id="selectedActDate"></span></span>
-                </div>
-                
-                <div class="move-options">
-                    <div class="form-group">
-                        <label>📚 Grado a mover</label>
-                        <select id="moveGrade">
-                            <option value="all">🌐 Todos los grados</option>
-                            <option value="1">1º Grado</option>
-                            <option value="2">2º Grado</option>
-                            <option value="3">3º Grado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>📅 Trimestre a mover</label>
-                        <select id="moveTrimestre">
-                            <option value="all">🌐 Todos los trimestres</option>
-                            <option value="1">TRIMESTRE I</option>
-                            <option value="2">TRIMESTRE II</option>
-                            <option value="3">TRIMESTRE III</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>📅 Nuevo mes</label>
-                        <select id="moveMonth" onchange="checkConflict()">
-                            <option value="8">Agosto 2026</option>
-                            <option value="9">Septiembre 2026</option>
-                            <option value="10">Octubre 2026</option>
-                            <option value="11">Noviembre 2026</option>
-                            <option value="12">Diciembre 2026</option>
-                            <option value="1">Enero 2027</option>
-                            <option value="2">Febrero 2027</option>
-                            <option value="3">Marzo 2027</option>
-                            <option value="4">Abril 2027</option>
-                            <option value="5">Mayo 2027</option>
-                            <option value="6">Junio 2027</option>
-                            <option value="7">Julio 2027</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Día de inicio</label>
-                        <input type="number" id="moveDay" min="1" max="31" value="1" onchange="checkConflict()" oninput="checkConflict()">
-                    </div>
-                    <div class="form-group" style="justify-content:flex-end;">
-                        <button class="btn btn-warning" onclick="moveActivity()" style="height:36px;">🔄 Mover actividad</button>
-                    </div>
-                </div>
-                
-                <div id="conflictAlert" class="alert-conflict" style="display:none;">
-                    ⚠️ ¡Conflicto! Ya existe una actividad en esta fecha y grado.
                 </div>
             </div>
         </div>
@@ -1764,6 +1707,25 @@ HEADER
     </div>
 
     <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+</div>
+
+<!-- ============================================================
+MENÚ CONTEXTUAL PARA COLORES
+============================================================ -->
+<div class="color-menu-overlay" id="colorMenuOverlay" onclick="cerrarMenuColor(event)">
+    <div class="color-menu" onclick="event.stopPropagation()">
+        <h4>🎨 Cambiar color</h4>
+        <div class="proyecto-nombre" id="colorMenuProyecto">Proyecto</div>
+        <div class="color-picker-row">
+            <input type="color" id="colorMenuPicker" value="#6C5CE7">
+            <input type="text" id="colorMenuHex" value="#6C5CE7" oninput="document.getElementById('colorMenuPicker').value=this.value">
+        </div>
+        <div class="paleta-colores" id="colorMenuPaleta"></div>
+        <div class="modal-actions">
+            <button class="btn btn-primary btn-sm" onclick="aplicarColorDesdeMenu()">💾 Aplicar</button>
+            <button class="btn btn-outline btn-sm" onclick="cerrarMenuColor()">❌ Cancelar</button>
+        </div>
+    </div>
 </div>
 
 <!-- ============================================================
@@ -1852,6 +1814,7 @@ MODALES
                 <option value="fortalecimiento">🟢 Fortalecimiento</option>
                 <option value="fin-ciclo">🏁 Fin de ciclo</option>
                 <option value="tema-personalizado">📝 Tema personalizado</option>
+                <option value="evaluacion">📝 Evaluación</option>
             </select>
         </div>
         
@@ -1884,6 +1847,7 @@ MODALES
                 <option value="cte-ordinaria">🩷 CTE Ordinaria</option>
                 <option value="fortalecimiento">🟢 Fortalecimiento</option>
                 <option value="fin-ciclo">🏁 Fin de ciclo</option>
+                <option value="evaluacion">📝 Evaluación</option>
             </select>
         </div>
         <div class="modal-actions">
@@ -2356,28 +2320,178 @@ let planeacionData = {};
 let editingIndex = -1;
 let selectedCells = [];
 let editingProject = null;
-let selectedSearchActivity = null;
 let dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
 let pendingOverwrite = false;
+let proyectoColorMenu = '';
 
-// Listas para gestión de fechas
+// ============================================================
+// GESTIÓN DE COLORES DE PROYECTOS
+// ============================================================
+let coloresProyectos = {};
+
+const PALETA_COLORES = [
+    '#6C5CE7', '#00B894', '#FD79A8', '#0984E3', '#FDCB6E',
+    '#E17055', '#00CEC9', '#A29BFE', '#F8A5C2', '#74B9FF',
+    '#55EFC4', '#FAB1A0', '#81ECEC', '#DDA0DD', '#F7DC6F',
+    '#BB8FCE', '#85C1E9', '#82E0AA', '#F1948A', '#85929E'
+];
+
+let indiceColorActual = 0;
+
+function obtenerColorProyecto(nombreProyecto) {
+    if (!nombreProyecto) return PALETA_COLORES[0];
+    if (coloresProyectos[nombreProyecto]) {
+        return coloresProyectos[nombreProyecto];
+    }
+    const color = PALETA_COLORES[indiceColorActual % PALETA_COLORES.length];
+    coloresProyectos[nombreProyecto] = color;
+    indiceColorActual++;
+    localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+    localStorage.setItem('cronograma_indice_color', String(indiceColorActual));
+    return color;
+}
+
+function cambiarColorProyecto(nombreProyecto, nuevoColor) {
+    if (!nombreProyecto) return;
+    coloresProyectos[nombreProyecto] = nuevoColor;
+    localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+    renderCronograma();
+    showToast(`🎨 Color de "${nombreProyecto}" actualizado`);
+}
+
+function cargarColoresProyectos() {
+    const saved = localStorage.getItem('cronograma_colores_proyectos');
+    if (saved) {
+        try {
+            coloresProyectos = JSON.parse(saved);
+            const usedColors = Object.values(coloresProyectos);
+            indiceColorActual = 0;
+            for (const c of PALETA_COLORES) {
+                if (!usedColors.includes(c)) break;
+                indiceColorActual++;
+            }
+        } catch(e) {}
+    }
+    const colorEval = localStorage.getItem('cronograma_color_evaluacion');
+    if (colorEval) {
+        document.documentElement.style.setProperty('--color-evaluacion', colorEval);
+    }
+}
+
+function aplicarColorEvaluacion() {
+    const color = document.getElementById('colorEvaluacion').value;
+    document.documentElement.style.setProperty('--color-evaluacion', color);
+    localStorage.setItem('cronograma_color_evaluacion', color);
+    document.getElementById('colorEvaluacionHex').value = color;
+    renderCronograma();
+    showToast('🎨 Color de evaluación actualizado');
+}
+
+// ============================================================
+// FUNCIONES DEL MENÚ CONTEXTUAL DE COLORES
+// ============================================================
+function abrirMenuColor(event, nombreProyecto) {
+    event.preventDefault();
+    if (!nombreProyecto) return;
+    proyectoColorMenu = nombreProyecto;
+    const overlay = document.getElementById('colorMenuOverlay');
+    document.getElementById('colorMenuProyecto').textContent = nombreProyecto;
+    const colorActual = coloresProyectos[nombreProyecto] || '#6C5CE7';
+    document.getElementById('colorMenuPicker').value = colorActual;
+    document.getElementById('colorMenuHex').value = colorActual;
+    
+    const paleta = document.getElementById('colorMenuPaleta');
+    paleta.innerHTML = '';
+    PALETA_COLORES.forEach(c => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.background = c;
+        swatch.onclick = function() {
+            document.getElementById('colorMenuPicker').value = c;
+            document.getElementById('colorMenuHex').value = c;
+        };
+        paleta.appendChild(swatch);
+    });
+    
+    overlay.classList.add('show');
+}
+
+function aplicarColorDesdeMenu() {
+    const color = document.getElementById('colorMenuPicker').value;
+    cambiarColorProyecto(proyectoColorMenu, color);
+    cerrarMenuColor();
+}
+
+function cerrarMenuColor(e) {
+    if (e && e.target && e.target.id !== 'colorMenuOverlay') {
+        if (!e.target.closest('.color-menu')) return;
+    }
+    document.getElementById('colorMenuOverlay').classList.remove('show');
+}
+
+// ============================================================
+// FUNCIONES DE FECHA
+// ============================================================
 let fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
 let fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
 let eventosPersonalizados = [];
 
-// ============================================================
-// FUNCIÓN PARA VERIFICAR SI UN DÍA ES HÁBIL
-// ============================================================
+function getWeekday(month, day, year) {
+    return new Date(year, month - 1, day).getDay();
+}
+const WEEKDAYS_SHORT = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+const WEEKDAYS_LONG = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+function getYear(month) {
+    return month >= 8 && month <= 12 ? 2026 : 2027;
+}
+
+function isWeekend(month, day, year) {
+    const wd = getWeekday(month, day, year);
+    return wd === 0 || wd === 6;
+}
+
+function getMonthName(month) {
+    const names = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return names[month] || '';
+}
+
+function getCellKey(grade, month, day) {
+    return `${grade}-${month}-${day}`;
+}
+
+function getDaysInMonth(month) {
+    const days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    return days[month] || 31;
+}
+
+function getGradesForActivity(grade) {
+    if (grade === 'all') return [1, 2, 3];
+    return [parseInt(grade)];
+}
+
+function isProject(type) {
+    return type === 'proyecto';
+}
+
+function isOfficialEvent(type) {
+    const officialTypes = ['inicio-clases', 'receso-vacaciones', 'festivo-suspension', 
+                           'cte-intensiva', 'cte-ordinaria', 'fortalecimiento', 'fin-ciclo', 'normal', 'tema-personalizado', 'evaluacion'];
+    return officialTypes.includes(type);
+}
+
+function getTrimestreMonths(trimestre) {
+    if (trimestre === 1) return [8, 9, 10, 11];
+    if (trimestre === 2) return [12, 1, 2, 3];
+    if (trimestre === 3) return [4, 5, 6, 7];
+    return [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
+}
+
 function isDiaHabil(month, day, year) {
     if (isWeekend(month, day, year)) return false;
-    
-    // Verificar si es festivo
     const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     if (fechasFestivos.includes(fechaStr)) return false;
-    
-    // Verificar si es vacación
     if (fechasVacaciones.includes(fechaStr)) return false;
-    
     return true;
 }
 
@@ -2385,7 +2499,6 @@ function isDiaHabil(month, day, year) {
 // FUNCIONES DE CARGA Y GUARDADO
 // ============================================================
 function loadData() {
-    // Cargar fechas desde localStorage
     const savedFestivos = localStorage.getItem('cronograma_festivos');
     if (savedFestivos) try { fechasFestivos = JSON.parse(savedFestivos); } catch(e) {}
     
@@ -2433,6 +2546,8 @@ function loadData() {
         planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
     }
 
+    cargarColoresProyectos();
+
     applyTheme(config.theme || 'light');
     document.documentElement.style.setProperty('--primary', config.primaryColor || '#00467F');
     document.documentElement.style.setProperty('--primary-dark', adjustColor(config.primaryColor || '#00467F', -20));
@@ -2447,7 +2562,6 @@ function loadData() {
 
     document.getElementById('schoolBadge').textContent = config.schoolName ? `${config.schoolName} · ${config.schoolCycle || ''}` : 'Configurar escuela ⚙️';
     
-    // Cargar fechas en la interfaz
     renderFechasUI();
 }
 
@@ -2537,7 +2651,13 @@ function resetData() {
         fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
         fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
         eventosPersonalizados = [];
+        coloresProyectos = {};
+        indiceColorActual = 0;
         saveFechas();
+        localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
+        localStorage.setItem('cronograma_indice_color', '0');
+        localStorage.removeItem('cronograma_color_evaluacion');
+        document.documentElement.style.setProperty('--color-evaluacion', '#FF6B6B');
         localStorage.setItem('cronograma_plan', JSON.stringify(planData));
         saveActivities();
         saveConfig();
@@ -2550,60 +2670,6 @@ function resetData() {
         renderFechasUI();
         showToast('🔄 Datos restaurados');
     }
-}
-
-// ============================================================
-// FUNCIONES DE FECHA
-// ============================================================
-function getWeekday(month, day, year) {
-    return new Date(year, month - 1, day).getDay();
-}
-const WEEKDAYS_SHORT = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
-const WEEKDAYS_LONG = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-
-function getYear(month) {
-    return month >= 8 && month <= 12 ? 2026 : 2027;
-}
-
-function isWeekend(month, day, year) {
-    const wd = getWeekday(month, day, year);
-    return wd === 0 || wd === 6;
-}
-
-function getMonthName(month) {
-    const names = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    return names[month] || '';
-}
-
-function getCellKey(grade, month, day) {
-    return `${grade}-${month}-${day}`;
-}
-
-function getDaysInMonth(month) {
-    const days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    return days[month] || 31;
-}
-
-function getGradesForActivity(grade) {
-    if (grade === 'all') return [1, 2, 3];
-    return [parseInt(grade)];
-}
-
-function isProject(type) {
-    return type === 'proyecto';
-}
-
-function isOfficialEvent(type) {
-    const officialTypes = ['inicio-clases', 'receso-vacaciones', 'festivo-suspension', 
-                           'cte-intensiva', 'cte-ordinaria', 'fortalecimiento', 'fin-ciclo', 'normal', 'tema-personalizado'];
-    return officialTypes.includes(type);
-}
-
-function getTrimestreMonths(trimestre) {
-    if (trimestre === 1) return [8, 9, 10, 11];
-    if (trimestre === 2) return [12, 1, 2, 3];
-    if (trimestre === 3) return [4, 5, 6, 7];
-    return [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
 }
 
 // ============================================================
@@ -3321,13 +3387,18 @@ function renderCronograma() {
                         proyectoClass = 'proyecto-cell';
                         displayContent = content || '';
                         
+                        const colorProyecto = obtenerColorProyecto(projectName);
                         const selectClass = isSelected ? 'selected' : '';
                         const weekendClass = weekend ? 'weekend' : '';
                         const clickAttr = weekend ? '' : `onclick="handleCellClick(${grade}, ${monthNum}, ${day}, event)"`;
+                        const contextAttr = weekend ? '' : `oncontextmenu="abrirMenuColor(event, '${projectName.replace(/'/g, "\\'")}')"`;
                         
                         const wordsHtml = displayContent.split(' ').map(w => `<span class="word">${w}</span>`).join('');
                         
-                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${proyectoClass}" ${clickAttr}>
+                        html += `<div class="grid-cell ${weekendClass} ${selectClass} ${proyectoClass}" 
+                                    style="background:${colorProyecto};" 
+                                    ${clickAttr}
+                                    ${contextAttr}>
                             <div class="proyecto-text ${typeClass}">${wordsHtml}</div>
                         </div>`;
                     } else if (isOfficial) {
@@ -3360,7 +3431,7 @@ function renderCronograma() {
 }
 
 // ============================================================
-// FUNCIONES DEL MODAL - CORREGIDAS
+// FUNCIONES DEL MODAL
 // ============================================================
 function openEditModal(grade, month, day) {
     const year = getYear(month);
@@ -3862,7 +3933,6 @@ function copyGrade1ToAll() {
         return;
     }
     
-    // Eliminar actividades de 2º y 3º grado
     const toRemove = activities.filter(a => {
         const grades = getGradesForActivity(a.grade);
         return grades.includes(2) || grades.includes(3);
@@ -3872,12 +3942,9 @@ function copyGrade1ToAll() {
         if (idx >= 0) activities.splice(idx, 1);
     }
     
-    // Copiar actividades de 1º a 2º y 3º
     for (const act of grade1Activities) {
-        // Para 2º grado
         const act2 = { ...act, grade: 2 };
         activities.push(act2);
-        // Para 3º grado
         const act3 = { ...act, grade: 3 };
         activities.push(act3);
     }
@@ -3891,7 +3958,6 @@ function copyGrade1ToAll() {
 // FUNCIONES DE GESTIÓN DE FECHAS (UI)
 // ============================================================
 function renderFechasUI() {
-    // Renderizar festivos
     const listaFestivos = document.getElementById('listaFestivos');
     listaFestivos.innerHTML = '';
     fechasFestivos.sort().forEach(f => {
@@ -3905,7 +3971,6 @@ function renderFechasUI() {
         listaFestivos.appendChild(div);
     });
     
-    // Renderizar vacaciones
     const listaVacaciones = document.getElementById('listaVacaciones');
     listaVacaciones.innerHTML = '';
     fechasVacaciones.sort().forEach(f => {
@@ -3919,7 +3984,6 @@ function renderFechasUI() {
         listaVacaciones.appendChild(div);
     });
     
-    // Renderizar eventos personalizados
     const listaEventos = document.getElementById('listaEventos');
     listaEventos.innerHTML = '';
     eventosPersonalizados.forEach((e, i) => {
@@ -4025,27 +4089,28 @@ function guardarFechas() {
 }
 
 function aplicarFechasSeleccionadas() {
-    const target = document.getElementById('fechasGradoTarget').value;
-    // Solo se aplica al cronograma, no modifica las fechas guardadas
     renderCronograma();
-    showToast(`📌 Cambios aplicados a ${target === 'all' ? 'todos los grados' : target + 'º Grado'}`);
+    showToast('📌 Cambios aplicados al cronograma');
 }
 
 function aplicarColores() {
     const colorProyecto = document.getElementById('colorProyecto').value;
     const colorCTE = document.getElementById('colorCTE').value;
     const colorFestivo = document.getElementById('colorFestivo').value;
+    const colorEvaluacion = document.getElementById('colorEvaluacion').value;
     
     document.documentElement.style.setProperty('--color-proyecto', colorProyecto);
     document.documentElement.style.setProperty('--color-cte-ordinaria', colorCTE);
     document.documentElement.style.setProperty('--color-festivo', colorFestivo);
+    document.documentElement.style.setProperty('--color-evaluacion', colorEvaluacion);
     
-    // Guardar en localStorage
     localStorage.setItem('cronograma_colores', JSON.stringify({
         proyecto: colorProyecto,
         cte: colorCTE,
-        festivo: colorFestivo
+        festivo: colorFestivo,
+        evaluacion: colorEvaluacion
     }));
+    localStorage.setItem('cronograma_color_evaluacion', colorEvaluacion);
     
     renderCronograma();
     showToast('🎨 Colores aplicados');
@@ -4100,159 +4165,6 @@ function saveBulk() {
     renderCronograma();
     closeBulkModal();
     showToast(`✅ "${activity}" asignado a ${count} celdas`);
-}
-
-// ============================================================
-// EDITOR - BUSCAR Y MOVER ACTIVIDADES
-// ============================================================
-function searchActivities() {
-    const query = document.getElementById('searchActivity').value.toLowerCase().trim();
-    const resultsContainer = document.getElementById('searchResultsContainer');
-    const resultsList = document.getElementById('searchResultsList');
-    const noResults = document.getElementById('noResultsMessage');
-    const selectedInfo = document.getElementById('selectedActivityInfo');
-    
-    resultsContainer.style.display = 'none';
-    noResults.style.display = 'none';
-    selectedInfo.style.display = 'none';
-    selectedSearchActivity = null;
-    document.getElementById('conflictAlert').style.display = 'none';
-    
-    if (!query || query.length < 2) return;
-    
-    const found = activities.filter(a => a.activity.toLowerCase().includes(query));
-    const unique = [];
-    const seen = new Set();
-    for (const item of found) {
-        const key = `${item.activity}-${item.grade}`;
-        if (!seen.has(key)) {
-            seen.add(key);
-            unique.push(item);
-        }
-    }
-    
-    if (unique.length === 0) {
-        noResults.style.display = 'block';
-        return;
-    }
-    
-    resultsContainer.style.display = 'block';
-    resultsList.innerHTML = '';
-    
-    for (const item of unique) {
-        const year = getYear(item.month);
-        const wd = getWeekday(item.month, item.day, year);
-        const gradeLabel = item.grade === 'all' ? 'Todos' : `${item.grade}º`;
-        const typeIcons = { 
-            'proyecto': '🎯', 'inicio-clases': '🟠', 'receso-vacaciones': '🟡', 
-            'festivo-suspension': '🔴', 'cte-intensiva': '🔵', 'cte-ordinaria': '🩷',
-            'fortalecimiento': '🟢', 'fin-ciclo': '🏁', 'normal': '⚪', 'tema-personalizado': '📝'
-        };
-        const icon = typeIcons[item.type] || '📘';
-        const durationLabel = item.duration && item.duration > 1 ? ` (${item.duration} ${item.unit})` : '';
-        
-        const div = document.createElement('div');
-        div.className = 'search-result-item';
-        div.dataset.grade = item.grade;
-        div.dataset.month = item.month;
-        div.dataset.day = item.day;
-        div.dataset.activity = item.activity;
-        div.dataset.type = item.type;
-        div.dataset.duration = item.duration || 1;
-        div.dataset.unit = item.unit || 'days';
-        
-        div.innerHTML = `
-            <span class="result-name">${icon} ${item.activity}${durationLabel}</span>
-            <span class="result-detail">${getMonthName(item.month)} ${item.day}, ${year} (${WEEKDAYS_SHORT[wd]})</span>
-            <span class="result-badge">${gradeLabel}</span>
-        `;
-        
-        div.addEventListener('click', function() {
-            selectSearchResult(this);
-        });
-        resultsList.appendChild(div);
-    }
-}
-
-function selectSearchResult(element) {
-    document.querySelectorAll('.search-result-item').forEach(el => el.classList.remove('selected'));
-    element.classList.add('selected');
-    
-    const data = {
-        grade: element.dataset.grade,
-        month: parseInt(element.dataset.month),
-        day: parseInt(element.dataset.day),
-        activity: element.dataset.activity,
-        type: element.dataset.type,
-        duration: parseInt(element.dataset.duration) || 1,
-        unit: element.dataset.unit || 'days'
-    };
-    
-    selectedSearchActivity = data;
-    
-    const year = getYear(data.month);
-    const wd = getWeekday(data.month, data.day, year);
-    const gradeLabel = data.grade === 'all' ? 'Todos' : `${data.grade}º`;
-    
-    document.getElementById('selectedActName').textContent = data.activity;
-    document.getElementById('selectedActDate').textContent = `${WEEKDAYS_LONG[wd]} ${data.day} de ${getMonthName(data.month)} ${year}`;
-    
-    document.getElementById('selectedActivityInfo').style.display = 'block';
-    document.getElementById('moveGrade').value = data.grade;
-    document.getElementById('moveTrimestre').value = 'all';
-    document.getElementById('moveMonth').value = data.month;
-    document.getElementById('moveDay').value = data.day;
-    document.getElementById('conflictAlert').style.display = 'none';
-    checkConflict();
-}
-
-function checkConflict() {
-    if (!selectedSearchActivity) return;
-    
-    const newMonth = parseInt(document.getElementById('moveMonth').value);
-    const newDay = parseInt(document.getElementById('moveDay').value);
-    const grade = document.getElementById('moveGrade').value;
-    const activity = selectedSearchActivity.activity;
-    
-    const grades = getGradesForActivity(grade);
-    let conflict = false;
-    let conflictText = '';
-    
-    for (const g of grades) {
-        const exists = activities.some(a => {
-            const gradesAct = getGradesForActivity(a.grade);
-            return gradesAct.includes(g) && 
-                   a.month === newMonth && 
-                   a.day === newDay && 
-                   a.activity !== activity;
-        });
-        if (exists) {
-            conflict = true;
-            conflictText = `${g}º Grado en ${getMonthName(newMonth)} ${newDay}, ${getYear(newMonth)}`;
-            break;
-        }
-    }
-    
-    const alert = document.getElementById('conflictAlert');
-    if (conflict) {
-        alert.style.display = 'block';
-        alert.textContent = `⚠️ ¡Conflicto! Ya existe una actividad en ${conflictText}.`;
-    } else {
-        alert.style.display = 'none';
-    }
-}
-
-function moveActivity() {
-    showToast('🔄 Función mover actividad en desarrollo');
-}
-
-function clearAllActivities() {
-    if (confirm('¿Eliminar TODAS las actividades?')) {
-        activities = [];
-        saveActivities();
-        renderCronograma();
-        showToast('🗑️ Todas las actividades eliminadas');
-    }
 }
 
 // ============================================================
@@ -4448,6 +4360,7 @@ function exportJSON() {
         fechasFestivos: fechasFestivos,
         fechasVacaciones: fechasVacaciones,
         eventosPersonalizados: eventosPersonalizados,
+        coloresProyectos: coloresProyectos,
         exportedAt: new Date().toISOString()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -4473,6 +4386,7 @@ function importJSONFile(event) {
             if (data.fechasFestivos) { fechasFestivos = data.fechasFestivos; saveFechas(); }
             if (data.fechasVacaciones) { fechasVacaciones = data.fechasVacaciones; saveFechas(); }
             if (data.eventosPersonalizados) { eventosPersonalizados = data.eventosPersonalizados; saveFechas(); }
+            if (data.coloresProyectos) { coloresProyectos = data.coloresProyectos; localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos)); }
             renderFechasUI();
             renderCronograma();
             showToast('📂 Backup importado');
@@ -4564,6 +4478,7 @@ renderFechasUI();
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeModal(); closeBulkModal(); clearSelection(); }
+    if (e.key === 'Escape') { cerrarMenuColor(); }
 });
 
 document.getElementById('activityModal').addEventListener('click', function(e) {
@@ -4597,6 +4512,12 @@ document.getElementById('colorFestivo').addEventListener('input', function() {
 document.getElementById('colorFestivoHex').addEventListener('input', function() {
     document.getElementById('colorFestivo').value = this.value;
 });
+document.getElementById('colorEvaluacion').addEventListener('input', function() {
+    document.getElementById('colorEvaluacionHex').value = this.value;
+});
+document.getElementById('colorEvaluacionHex').addEventListener('input', function() {
+    document.getElementById('colorEvaluacion').value = this.value;
+});
 
 // Cargar colores guardados
 const savedColors = localStorage.getItem('cronograma_colores');
@@ -4609,9 +4530,13 @@ if (savedColors) {
         document.getElementById('colorCTEHex').value = colors.cte || '#E91E63';
         document.getElementById('colorFestivo').value = colors.festivo || '#DC3545';
         document.getElementById('colorFestivoHex').value = colors.festivo || '#DC3545';
+        document.getElementById('colorEvaluacion').value = colors.evaluacion || '#FF6B6B';
+        document.getElementById('colorEvaluacionHex').value = colors.evaluacion || '#FF6B6B';
         document.documentElement.style.setProperty('--color-proyecto', colors.proyecto || '#6C5CE7');
         document.documentElement.style.setProperty('--color-cte-ordinaria', colors.cte || '#E91E63');
         document.documentElement.style.setProperty('--color-festivo', colors.festivo || '#DC3545');
+        document.documentElement.style.setProperty('--color-evaluacion', colors.evaluacion || '#FF6B6B');
+        localStorage.setItem('cronograma_color_evaluacion', colors.evaluacion || '#FF6B6B');
     } catch(e) {}
 }
 
@@ -4619,10 +4544,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado con Gestión de Fechas');
+console.log('📚 Cronograma SEP 2026-2027 cargado');
 console.log(`📊 ${activities.length} actividades cargadas`);
 console.log(`🔴 ${fechasFestivos.length} días festivos`);
 console.log(`🟡 ${fechasVacaciones.length} días de vacaciones`);
+console.log(`🎨 ${Object.keys(coloresProyectos).length} proyectos con color personalizado`);
 </script>
 </body>
 </html>
