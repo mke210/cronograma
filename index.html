@@ -2380,6 +2380,8 @@ function syncAllToFirebase() {
     }
     
     isSyncing = true;
+    const localTimestamp = Date.now();
+    localStorage.setItem('cronograma_updatedAt', String(localTimestamp));
     
     const data = {
         activities: activities,
@@ -2391,6 +2393,7 @@ function syncAllToFirebase() {
         fechasVacaciones: fechasVacaciones,
         eventosPersonalizados: eventosPersonalizados,
         coloresProyectos: coloresProyectos,
+        localUpdatedAt: localTimestamp,
         updatedAt: firebase.database.ServerValue.TIMESTAMP
     };
     
@@ -2411,27 +2414,54 @@ function syncAllToFirebase() {
 }
 
 function loadFromFirebase() {
-    showToast('🔄 Cargando datos desde la nube...');
+    showToast('🔄 Verificando datos en la nube...');
     
     database.ref('cronograma').once('value')
         .then((snapshot) => {
             const data = snapshot.val();
+            const localTimestamp = parseInt(localStorage.getItem('cronograma_updatedAt') || '0', 10);
+            
             if (data) {
-                if (data.activities) activities = data.activities;
-                if (data.config) config = { ...DEFAULT_CONFIG, ...data.config };
-                if (data.planData) planData = data.planData;
-                if (data.dosificacionData) dosificacionData = data.dosificacionData;
-                if (data.planeacionData) planeacionData = data.planeacionData;
-                if (data.fechasFestivos) fechasFestivos = data.fechasFestivos;
-                if (data.fechasVacaciones) fechasVacaciones = data.fechasVacaciones;
-                if (data.eventosPersonalizados) eventosPersonalizados = data.eventosPersonalizados;
-                if (data.coloresProyectos) coloresProyectos = data.coloresProyectos;
+                const remoteTimestamp = typeof data.localUpdatedAt === 'number' ? data.localUpdatedAt : 0;
                 
-                console.log('✅ Datos cargados desde Firebase');
-                showToast('✅ Datos cargados desde la nube');
-                
-                saveAllLocal();
-                renderAll();
+                if (remoteTimestamp > localTimestamp) {
+                    // La nube tiene cambios más recientes que este dispositivo: los usamos
+                    if (data.activities) activities = data.activities;
+                    if (data.config) config = { ...DEFAULT_CONFIG, ...data.config };
+                    if (data.planData) planData = data.planData;
+                    if (data.dosificacionData) dosificacionData = data.dosificacionData;
+                    if (data.planeacionData) planeacionData = data.planeacionData;
+                    if (data.fechasFestivos) fechasFestivos = data.fechasFestivos;
+                    if (data.fechasVacaciones) fechasVacaciones = data.fechasVacaciones;
+                    if (data.eventosPersonalizados) eventosPersonalizados = data.eventosPersonalizados;
+                    if (data.coloresProyectos) coloresProyectos = data.coloresProyectos;
+                    
+                    localStorage.setItem('cronograma_updatedAt', String(remoteTimestamp));
+                    console.log('✅ Datos cargados desde Firebase (más recientes)');
+                    showToast('✅ Datos actualizados desde la nube');
+                    
+                    saveAllLocal();
+                    renderAll();
+                } else if (localTimestamp > 0) {
+                    // Este dispositivo tiene cambios más recientes (o iguales) sin subir: los preservamos y los subimos
+                    console.log('📤 Los datos locales son más recientes; se conservan y se suben a la nube');
+                    syncAllToFirebase();
+                } else {
+                    // Sin cambios locales previos: usamos lo que haya en la nube
+                    if (data.activities) activities = data.activities;
+                    if (data.config) config = { ...DEFAULT_CONFIG, ...data.config };
+                    if (data.planData) planData = data.planData;
+                    if (data.dosificacionData) dosificacionData = data.dosificacionData;
+                    if (data.planeacionData) planeacionData = data.planeacionData;
+                    if (data.fechasFestivos) fechasFestivos = data.fechasFestivos;
+                    if (data.fechasVacaciones) fechasVacaciones = data.fechasVacaciones;
+                    if (data.eventosPersonalizados) eventosPersonalizados = data.eventosPersonalizados;
+                    if (data.coloresProyectos) coloresProyectos = data.coloresProyectos;
+                    
+                    if (data.localUpdatedAt) localStorage.setItem('cronograma_updatedAt', String(data.localUpdatedAt));
+                    saveAllLocal();
+                    renderAll();
+                }
             } else {
                 console.log('📝 No hay datos en Firebase, usando datos locales');
                 loadDataLocal();
@@ -2753,9 +2783,46 @@ function savePlaneacion() {
 // ============================================================
 // EXPORTAR A EXCEL - FUNCIÓN CORREGIDA
 // ============================================================
+function excelColorFromCSSVar(varName, fallbackHex) {
+    let val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    if (!val) val = fallbackHex;
+    if (val.startsWith('#')) {
+        val = val.slice(1);
+    } else if (val.startsWith('rgb')) {
+        const nums = val.match(/\d+/g).map(Number);
+        val = nums.slice(0, 3).map(n => n.toString(16).padStart(2, '0')).join('');
+    }
+    if (val.length === 3) val = val.split('').map(c => c + c).join('');
+    return val.toUpperCase();
+}
+
+function getTypeFillColorExcel(type) {
+    const map = {
+        'cte-intensiva': ['--color-cte-intensiva', '1A3A5C'],
+        'cte-ordinaria': ['--color-cte-ordinaria', 'E91E63'],
+        'evaluacion': ['--color-evaluacion', 'FF6B6B'],
+        'tema-personalizado': ['--color-tema', '17A2B8'],
+        'inicio-clases': ['--color-inicio', 'FF8C00'],
+        'fortalecimiento': ['--color-fortalecimiento', '28A745'],
+        'fin-ciclo': ['--color-fin-ciclo', '8B0000'],
+        'normal': ['--color-normal', 'E8F0FE'],
+        'festivo-suspension': ['--color-festivo-cell', 'DC3545']
+    };
+    const entry = map[type];
+    if (!entry) return 'CCCCCC';
+    return excelColorFromCSSVar(entry[0], entry[1]);
+}
+
+function textColorForBg(hex) {
+    // Blanco o negro según el contraste del color de fondo
+    const r = parseInt(hex.substr(0, 2), 16), g = parseInt(hex.substr(2, 2), 16), b = parseInt(hex.substr(4, 2), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.6 ? 'FF000000' : 'FFFFFFFF';
+}
+
 async function exportToExcel() {
     try {
-        showToast('📊 Generando archivo Excel...');
+        showToast('📊 Generando archivo Excel del cronograma...');
         
         if (typeof ExcelJS === 'undefined') {
             showToast('⚠️ Cargando librería Excel...');
@@ -2769,130 +2836,178 @@ async function exportToExcel() {
         const filter = document.getElementById('gradeFilter').value;
         const grades = filter === 'all' ? [1, 2, 3] : [parseInt(filter)];
         
+        const months = [
+            { num: 8, name: 'Agosto', year: 2026 },
+            { num: 9, name: 'Septiembre', year: 2026 },
+            { num: 10, name: 'Octubre', year: 2026 },
+            { num: 11, name: 'Noviembre', year: 2026 },
+            { num: 12, name: 'Diciembre', year: 2026 },
+            { num: 1, name: 'Enero', year: 2027 },
+            { num: 2, name: 'Febrero', year: 2027 },
+            { num: 3, name: 'Marzo', year: 2027 },
+            { num: 4, name: 'Abril', year: 2027 },
+            { num: 5, name: 'Mayo', year: 2027 },
+            { num: 6, name: 'Junio', year: 2027 },
+            { num: 7, name: 'Julio', year: 2027 }
+        ];
+        const trimestres = [
+            { name: 'TRIMESTRE I', months: [8, 9, 10, 11] },
+            { name: 'TRIMESTRE II', months: [12, 1, 2, 3] },
+            { name: 'TRIMESTRE III', months: [4, 5, 6, 7] }
+        ];
+        
+        const COLOR_FESTIVO = excelColorFromCSSVar('--color-festivo-cell', 'DC3545');
+        const COLOR_VACACION = excelColorFromCSSVar('--color-vacacion', 'FFD700');
+        const COLOR_WEEKEND = excelColorFromCSSVar('--color-weekend', 'E8E8E8');
+        const primaryColor = excelColorFromCSSVar('--primary', '00467F');
+        const primaryDark = excelColorFromCSSVar('--primary-dark', '003057');
+        
         for (const grade of grades) {
             const worksheet = workbook.addWorksheet(`${grade}º Grado`);
+            worksheet.views = [{ state: 'frozen', xSplit: 1, ySplit: 1 }];
             
-            worksheet.columns = [
-                { header: 'Mes', key: 'mes', width: 15 },
-                { header: 'Día', key: 'dia', width: 10 },
-                { header: 'Fecha', key: 'fecha', width: 25 },
-                { header: 'Actividad', key: 'actividad', width: 40 },
-                { header: 'Tipo', key: 'tipo', width: 25 },
-                { header: 'Día hábil', key: 'habil', width: 12 }
-            ];
+            // Columna 1 = nombre de mes, columnas 2-32 = días 1-31
+            worksheet.getColumn(1).width = 14;
+            for (let c = 2; c <= 32; c++) worksheet.getColumn(c).width = 5;
             
-            worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
-            worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '00467F' } };
+            const tituloRow = worksheet.addRow([`${config.schoolName || 'Cronograma'} · ${grade}º Grado · Ciclo ${config.schoolCycle || ''}`]);
+            worksheet.mergeCells(tituloRow.number, 1, tituloRow.number, 32);
+            tituloRow.getCell(1).font = { bold: true, size: 13, color: { argb: 'FFFFFFFF' } };
+            tituloRow.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: primaryDark } };
+            tituloRow.getCell(1).alignment = { horizontal: 'center', vertical: 'middle' };
+            tituloRow.height = 22;
             
-            let rowIndex = 2;
-            const months = [
-                { num: 8, name: 'Agosto', year: 2026 },
-                { num: 9, name: 'Septiembre', year: 2026 },
-                { num: 10, name: 'Octubre', year: 2026 },
-                { num: 11, name: 'Noviembre', year: 2026 },
-                { num: 12, name: 'Diciembre', year: 2026 },
-                { num: 1, name: 'Enero', year: 2027 },
-                { num: 2, name: 'Febrero', year: 2027 },
-                { num: 3, name: 'Marzo', year: 2027 },
-                { num: 4, name: 'Abril', year: 2027 },
-                { num: 5, name: 'Mayo', year: 2027 },
-                { num: 6, name: 'Junio', year: 2027 },
-                { num: 7, name: 'Julio', year: 2027 }
-            ];
-            
-            for (const monthData of months) {
-                const monthNum = monthData.num;
-                const year = monthData.year;
-                const monthName = monthData.name;
+            for (const trim of trimestres) {
+                const trimRow = worksheet.addRow([trim.name]);
+                worksheet.mergeCells(trimRow.number, 1, trimRow.number, 32);
+                trimRow.getCell(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+                trimRow.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: primaryColor } };
+                trimRow.getCell(1).alignment = { horizontal: 'center' };
                 
-                for (let day = 1; day <= 31; day++) {
+                const headerRow = worksheet.addRow(['Mes / Día', ...Array.from({ length: 31 }, (_, i) => i + 1)]);
+                headerRow.eachCell((cell) => {
+                    cell.font = { bold: true };
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE8F0FE' } };
+                    cell.alignment = { horizontal: 'center' };
+                    cell.border = { bottom: { style: 'thin' } };
+                });
+                
+                for (const monthNum of trim.months) {
+                    const monthData = months.find(m => m.num === monthNum);
+                    if (!monthData) continue;
+                    const year = monthData.year;
                     const daysInMonth = getDaysInMonth(monthNum);
-                    if (day > daysInMonth) continue;
                     
-                    const fechaStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const wd = getWeekday(monthNum, day, year);
-                    const wdName = WEEKDAYS_LONG[wd];
-                    const esHabil = isDiaHabil(monthNum, day, year);
+                    const rowValues = [monthData.name];
+                    for (let d = 1; d <= 31; d++) rowValues.push('');
+                    const monthRow = worksheet.addRow(rowValues);
+                    monthRow.getCell(1).font = { bold: true };
+                    monthRow.getCell(1).alignment = { vertical: 'middle' };
+                    monthRow.height = 26;
                     
-                    const acts = activities.filter(a => {
-                        const gradesAct = getGradesForActivity(a.grade);
-                        return gradesAct.includes(grade) && a.month === monthNum && a.day === day;
-                    });
-                    
-                    let actividad = '';
-                    let tipo = '';
-                    if (acts.length > 0) {
-                        actividad = acts[0].activity || '';
-                        tipo = acts[0].type || '';
-                        if (isProject(acts[0].type)) {
-                            actividad = acts[0].activity || '';
-                            tipo = 'Proyecto';
+                    let day = 1;
+                    while (day <= 31) {
+                        const cell = monthRow.getCell(day + 1);
+                        if (day > daysInMonth) {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF5F5F5' } };
+                            day++;
+                            continue;
                         }
-                    } else if (fechasFestivos.includes(fechaStr)) {
-                        actividad = 'Día festivo';
-                        tipo = 'Festivo';
-                    } else if (fechasVacaciones.includes(fechaStr)) {
-                        actividad = 'Vacaciones';
-                        tipo = 'Vacaciones';
-                    } else if (!esHabil) {
-                        actividad = 'Fin de semana';
-                        tipo = 'Fin de semana';
+                        
+                        const weekend = isWeekend(monthNum, day, year);
+                        const fechaStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const esFestivo = fechasFestivos.includes(fechaStr);
+                        const esVacacion = fechasVacaciones.includes(fechaStr);
+                        const esHabil = isDiaHabil(monthNum, day, year);
+                        
+                        const acts = activities.filter(a => {
+                            const gradesAct = getGradesForActivity(a.grade);
+                            return gradesAct.includes(grade) && a.month === monthNum && a.day === day;
+                        });
+                        
+                        const projectAct = esHabil ? acts.find(a => isProject(a.type)) : null;
+                        
+                        if (projectAct) {
+                            // Fusionar todos los días consecutivos de este mismo tema en una sola celda
+                            const projectName = projectAct.activity;
+                            let span = 0;
+                            let d2 = day;
+                            while (d2 <= daysInMonth) {
+                                const found = activities.some(a => {
+                                    const gradesAct = getGradesForActivity(a.grade);
+                                    return gradesAct.includes(grade) && a.month === monthNum && a.day === d2 &&
+                                           a.type === 'proyecto' && a.activity === projectName;
+                                });
+                                if (!found) break;
+                                span++;
+                                d2++;
+                            }
+                            
+                            const colorHex = obtenerColorProyecto(projectName).replace('#', '').toUpperCase();
+                            if (span > 1) {
+                                worksheet.mergeCells(monthRow.number, day + 1, monthRow.number, day + span);
+                            }
+                            cell.value = projectName;
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: colorHex } };
+                            cell.font = { color: { argb: textColorForBg(colorHex) }, size: 8, bold: true };
+                            cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+                            
+                            day += span;
+                            continue;
+                        } else if (esHabil && acts.length > 0) {
+                            const act = acts[0];
+                            const colorHex = getTypeFillColorExcel(act.type);
+                            cell.value = act.activity || '';
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: colorHex } };
+                            cell.font = { color: { argb: textColorForBg(colorHex) }, size: 7, bold: true };
+                            cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+                        } else if (esFestivo) {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_FESTIVO } };
+                        } else if (esVacacion) {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_VACACION } };
+                        } else if (weekend) {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: COLOR_WEEKEND } };
+                        }
+                        cell.border = { top: { style: 'hair', color: { argb: 'FFDDDDDD' } }, left: { style: 'hair', color: { argb: 'FFDDDDDD' } }, right: { style: 'hair', color: { argb: 'FFDDDDDD' } }, bottom: { style: 'hair', color: { argb: 'FFDDDDDD' } } };
+                        
+                        day++;
                     }
-                    
-                    const fechaCompleta = `${wdName} ${day} de ${monthName} ${year}`;
-                    
-                    worksheet.addRow({
-                        mes: monthName,
-                        dia: day,
-                        fecha: fechaCompleta,
-                        actividad: actividad,
-                        tipo: tipo,
-                        habil: esHabil ? 'Sí' : 'No'
-                    });
-                    
-                    const row = worksheet.getRow(rowIndex);
-                    row.getCell(1).alignment = { horizontal: 'center' };
-                    row.getCell(2).alignment = { horizontal: 'center' };
-                    row.getCell(6).alignment = { horizontal: 'center' };
-                    
-                    if (!esHabil) {
-                        row.eachCell((cell) => {
-                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } };
-                        });
-                    } else if (tipo === 'cte-intensiva' || tipo === 'cte-ordinaria') {
-                        row.eachCell((cell) => {
-                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E3F2FD' } };
-                        });
-                    } else if (tipo === 'proyecto') {
-                        row.eachCell((cell) => {
-                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E8F5E9' } };
-                        });
-                    }
-                    
-                    rowIndex++;
                 }
+                worksheet.addRow([]);
             }
             
-            const totalRow = worksheet.addRow(['', '', '', 'TOTAL DE DÍAS HÁBILES', '', '']);
-            totalRow.font = { bold: true };
-            totalRow.getCell(4).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3E0' } };
+            // ---- Leyenda de colores ----
+            const legendTitleRow = worksheet.addRow(['LEYENDA']);
+            legendTitleRow.getCell(1).font = { bold: true };
+            const legendItems = [
+                ['Proyecto / Tema', null],
+                ['CTE Fase Intensiva', getTypeFillColorExcel('cte-intensiva')],
+                ['CTE Sesión Ordinaria', getTypeFillColorExcel('cte-ordinaria')],
+                ['Evaluación', getTypeFillColorExcel('evaluacion')],
+                ['Tema / Evento personalizado', getTypeFillColorExcel('tema-personalizado')],
+                ['Inicio de clases', getTypeFillColorExcel('inicio-clases')],
+                ['Fortalecimiento', getTypeFillColorExcel('fortalecimiento')],
+                ['Fin de ciclo', getTypeFillColorExcel('fin-ciclo')],
+                ['Día festivo', COLOR_FESTIVO],
+                ['Vacaciones', COLOR_VACACION],
+                ['Fin de semana', COLOR_WEEKEND]
+            ];
+            legendItems.forEach(([label, color]) => {
+                const r = worksheet.addRow(['', label]);
+                if (color) {
+                    r.getCell(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: color } };
+                }
+            });
             
+            // Total de días hábiles del ciclo
             let habiles = 0;
             for (const monthData of months) {
-                const monthNum = monthData.num;
-                const year = monthData.year;
-                for (let day = 1; day <= 31; day++) {
-                    const daysInMonth = getDaysInMonth(monthNum);
-                    if (day > daysInMonth) continue;
-                    if (isDiaHabil(monthNum, day, year)) {
-                        habiles++;
-                    }
+                for (let day = 1; day <= getDaysInMonth(monthData.num); day++) {
+                    if (isDiaHabil(monthData.num, day, monthData.year)) habiles++;
                 }
             }
-            
-            const countRow = worksheet.addRow(['', '', '', `Días hábiles: ${habiles}`, '', '']);
-            countRow.getCell(4).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E8F5E9' } };
-            countRow.getCell(4).font = { bold: true };
+            const totalRow = worksheet.addRow(['', `Total de días hábiles del ciclo: ${habiles}`]);
+            totalRow.getCell(2).font = { bold: true };
         }
         
         const buffer = await workbook.xlsx.writeBuffer();
@@ -2905,7 +3020,7 @@ async function exportToExcel() {
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(link.href), 1000);
         
-        showToast('✅ Excel exportado correctamente');
+        showToast('✅ Excel exportado con el formato del cronograma');
     } catch (error) {
         console.error('Error al exportar Excel:', error);
         showToast('⚠️ Error al exportar Excel: ' + error.message);
@@ -5487,7 +5602,84 @@ function aplicarColores() {
 }
 
 function printPreview() {
-    showToast('🖨️ Vista previa de impresión');
+    const container = document.getElementById('cronogramaContainer');
+    if (!container || !container.innerHTML.trim()) {
+        showToast('⚠️ No hay cronograma para mostrar. Ve primero a la pestaña Cronograma.');
+        return;
+    }
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const cssVars = [
+        '--primary', '--primary-dark', '--primary-light', '--bg', '--card-bg', '--text', '--text-secondary', '--border',
+        '--color-proyecto', '--color-cte-ordinaria', '--color-cte-intensiva', '--color-festivo', '--color-festivo-cell',
+        '--color-vacacion', '--color-weekend', '--color-evaluacion', '--color-tema', '--color-inicio',
+        '--color-fortalecimiento', '--color-fin-ciclo', '--color-normal'
+    ];
+    let varsCSS = ':root {';
+    cssVars.forEach(v => {
+        const val = rootStyles.getPropertyValue(v).trim();
+        if (val) varsCSS += `${v}: ${val};`;
+    });
+    varsCSS += '}';
+
+    // Extraer del documento solo las reglas CSS relacionadas al grid del cronograma
+    let gridCSS = '';
+    for (const sheet of document.styleSheets) {
+        try {
+            for (const rule of sheet.cssRules) {
+                const sel = rule.selectorText || '';
+                if (sel.includes('grid-cell') || sel.includes('cronograma-grid') || sel.includes('.activity') ||
+                    sel.includes('.proyecto') || sel.includes('trimestre-header') || sel.includes('month-header') ||
+                    sel.includes('day-number-header') || sel.includes('.word')) {
+                    gridCSS += rule.cssText + '\n';
+                }
+            }
+        } catch (e) { /* hoja externa bloqueada por CORS, se ignora */ }
+    }
+
+    const schoolInfo = `${config.schoolName || 'Cronograma de Actividades'}${config.schoolCycle ? ' · Ciclo ' + config.schoolCycle : ''}`;
+
+    const win = window.open('', '_blank');
+    if (!win) {
+        showToast('⚠️ El navegador bloqueó la ventana emergente. Permite pop-ups para ver la vista previa.');
+        return;
+    }
+
+    win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vista previa - Cronograma</title>
+<style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background: #fff; }
+    .print-header { margin-bottom: 14px; }
+    .print-header h1 { font-size: 1.2rem; margin: 0 0 4px; }
+    .print-header div { font-size: 0.8rem; color: #555; }
+    .print-toolbar { margin-bottom: 12px; }
+    .print-toolbar button {
+        padding: 6px 14px; border: none; border-radius: 6px; background: #00467F; color: #fff;
+        font-size: 0.85rem; cursor: pointer;
+    }
+    ${varsCSS}
+    ${gridCSS}
+    @media print {
+        .print-toolbar { display: none; }
+        body { margin: 0; }
+    }
+</style>
+</head>
+<body>
+    <div class="print-header">
+        <h1>${schoolInfo}</h1>
+        <div>Generado el ${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</div>
+    </div>
+    <div class="print-toolbar"><button onclick="window.print()">🖨️ Imprimir / Guardar como PDF</button></div>
+    ${container.outerHTML}
+</body>
+</html>`);
+    win.document.close();
+
+    showToast('🖨️ Vista previa abierta en una nueva pestaña');
 }
 
 function exportJSON() {
