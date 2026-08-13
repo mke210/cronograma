@@ -10,6 +10,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     
+    <!-- ExcelJS para exportar a Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+    
     <style>
         :root {
             --primary: #00467F;
@@ -104,7 +107,7 @@
         .header-actions { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
         #connectionStatus {
             font-size: 0.6rem;
-            padding: 2px 8px;
+            padding: 2px 10px;
             border-radius: 10px;
             background: var(--bg);
             color: var(--text-secondary);
@@ -128,6 +131,7 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-success { background: #28A745; color: white; }
+        .btn-success:hover { background: #1E7E34; transform: translateY(-1px); }
         .btn-danger { background: #DC3545; color: white; }
         .btn-danger:hover { background: #B02A37; transform: translateY(-1px); }
         .btn-outline { background: transparent; border: 1px solid var(--border); }
@@ -2215,105 +2219,9 @@ const DOSIFICACION_DATA = {
 };
 
 // ============================================================
-// DATOS OFICIALES SEP - INICIALES (para el cronograma)
+// DATOS OFICIALES SEP - INICIALES (VACÍO - SIN DATOS PRECARGADOS)
 // ============================================================
-const OFFICIAL_EVENTS_INICIAL = [
-    { grade: 'all', month: 8, day: 24, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
-    { grade: 'all', month: 8, day: 25, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
-    { grade: 'all', month: 8, day: 26, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
-    { grade: 'all', month: 8, day: 27, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
-    { grade: 'all', month: 8, day: 28, activity: 'CTE Fase Intensiva', type: 'cte-intensiva', duration: 1, unit: 'days' },
-    { grade: 'all', month: 8, day: 31, activity: 'Inicio de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
-    { grade: 'all', month: 9, day: 4, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 9, day: 11, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 9, day: 16, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 9, day: 18, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 9, day: 25, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 10, day: 2, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 10, day: 9, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 10, day: 16, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 10, day: 23, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 10, day: 30, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 11, day: 2, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 11, day: 6, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 11, day: 13, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 11, day: 16, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 11, day: 20, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 11, day: 27, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 4, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 11, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 18, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 21, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 22, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 23, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 24, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 25, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 26, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 27, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 28, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 29, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 30, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 12, day: 31, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 1, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 2, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 3, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 4, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 5, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 6, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 7, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 8, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 11, activity: 'Reanudación de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
-    { grade: 'all', month: 1, day: 29, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 2, day: 1, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 2, day: 5, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 2, day: 12, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 2, day: 19, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 2, day: 26, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 5, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 12, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 15, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 19, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 22, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 23, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 24, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 25, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 26, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 27, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 28, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 29, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 30, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 3, day: 31, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 4, day: 1, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 4, day: 2, activity: 'Receso / Vacaciones', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 4, day: 5, activity: 'Reanudación de clases', type: 'inicio-clases', duration: 1, unit: 'days' },
-    { grade: 'all', month: 4, day: 30, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 5, day: 5, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 5, day: 7, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 5, day: 14, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 5, day: 15, activity: 'Festivo / Suspensión laboral', type: 'festivo-suspension', duration: 1, unit: 'days' },
-    { grade: 'all', month: 5, day: 21, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 5, day: 28, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 6, day: 4, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 6, day: 11, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 6, day: 18, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 6, day: 25, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 2, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 9, activity: 'CTE Sesión Ordinaria', type: 'cte-ordinaria', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 16, activity: 'Fin de Clases', type: 'fin-ciclo', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 19, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 20, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 21, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 22, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 23, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 24, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 25, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 26, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 27, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 28, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 29, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 30, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-    { grade: 'all', month: 7, day: 31, activity: 'Receso escolar de verano', type: 'receso-vacaciones', duration: 1, unit: 'days' },
-];
+const OFFICIAL_EVENTS_INICIAL = [];
 
 const DEFAULT_CONFIG = {
     schoolName: 'Secundaria Técnica No. 1',
@@ -2638,9 +2546,9 @@ function loadDataLocal() {
     const saved = localStorage.getItem('cronograma_activities');
     if (saved) {
         try { activities = JSON.parse(saved); } 
-        catch(e) { activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL)); }
+        catch(e) { activities = []; }
     } else {
-        activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
+        activities = [];
     }
 
     const savedConfig = localStorage.getItem('cronograma_config');
@@ -2766,7 +2674,195 @@ function savePlaneacion() {
     showToast('✅ Planeación guardada en la nube');
 }
 
-// ... resto de funciones (renderPlan, renderCronograma, etc.) se mantienen igual ...
+// ============================================================
+// EXPORTAR A EXCEL - FUNCIÓN CORREGIDA
+// ============================================================
+async function exportToExcel() {
+    try {
+        showToast('📊 Generando archivo Excel...');
+        
+        // Verificar que ExcelJS esté cargado
+        if (typeof ExcelJS === 'undefined') {
+            showToast('⚠️ Cargando librería Excel...');
+            await loadExcelJS();
+        }
+        
+        const workbook = new ExcelJS.Workbook();
+        workbook.creator = 'Cronograma SEP';
+        workbook.created = new Date();
+        
+        // Obtener el grado seleccionado
+        const filter = document.getElementById('gradeFilter').value;
+        const grades = filter === 'all' ? [1, 2, 3] : [parseInt(filter)];
+        
+        for (const grade of grades) {
+            const worksheet = workbook.addWorksheet(`${grade}º Grado`);
+            
+            // Configurar columnas
+            worksheet.columns = [
+                { header: 'Mes', key: 'mes', width: 15 },
+                { header: 'Día', key: 'dia', width: 10 },
+                { header: 'Fecha', key: 'fecha', width: 25 },
+                { header: 'Actividad', key: 'actividad', width: 40 },
+                { header: 'Tipo', key: 'tipo', width: 25 },
+                { header: 'Día hábil', key: 'habil', width: 12 }
+            ];
+            
+            // Estilo del encabezado
+            worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+            worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '00467F' } };
+            
+            let rowIndex = 2;
+            const months = [
+                { num: 8, name: 'Agosto', year: 2026 },
+                { num: 9, name: 'Septiembre', year: 2026 },
+                { num: 10, name: 'Octubre', year: 2026 },
+                { num: 11, name: 'Noviembre', year: 2026 },
+                { num: 12, name: 'Diciembre', year: 2026 },
+                { num: 1, name: 'Enero', year: 2027 },
+                { num: 2, name: 'Febrero', year: 2027 },
+                { num: 3, name: 'Marzo', year: 2027 },
+                { num: 4, name: 'Abril', year: 2027 },
+                { num: 5, name: 'Mayo', year: 2027 },
+                { num: 6, name: 'Junio', year: 2027 },
+                { num: 7, name: 'Julio', year: 2027 }
+            ];
+            
+            for (const monthData of months) {
+                const monthNum = monthData.num;
+                const year = monthData.year;
+                const monthName = monthData.name;
+                
+                for (let day = 1; day <= 31; day++) {
+                    // Verificar si el día existe en el mes
+                    const daysInMonth = getDaysInMonth(monthNum);
+                    if (day > daysInMonth) continue;
+                    
+                    const fechaStr = `${year}-${String(monthNum).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const wd = getWeekday(monthNum, day, year);
+                    const wdName = WEEKDAYS_LONG[wd];
+                    const esHabil = isDiaHabil(monthNum, day, year);
+                    
+                    // Buscar actividad para este día y grado
+                    const acts = activities.filter(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(grade) && a.month === monthNum && a.day === day;
+                    });
+                    
+                    let actividad = '';
+                    let tipo = '';
+                    if (acts.length > 0) {
+                        actividad = acts[0].activity || '';
+                        tipo = acts[0].type || '';
+                        if (isProject(acts[0].type)) {
+                            actividad = acts[0].activity || '';
+                            tipo = 'Proyecto';
+                        }
+                    } else if (fechasFestivos.includes(fechaStr)) {
+                        actividad = 'Día festivo';
+                        tipo = 'Festivo';
+                    } else if (fechasVacaciones.includes(fechaStr)) {
+                        actividad = 'Vacaciones';
+                        tipo = 'Vacaciones';
+                    } else if (!esHabil) {
+                        actividad = 'Fin de semana';
+                        tipo = 'Fin de semana';
+                    }
+                    
+                    const fechaCompleta = `${wdName} ${day} de ${monthName} ${year}`;
+                    
+                    worksheet.addRow({
+                        mes: monthName,
+                        dia: day,
+                        fecha: fechaCompleta,
+                        actividad: actividad,
+                        tipo: tipo,
+                        habil: esHabil ? 'Sí' : 'No'
+                    });
+                    
+                    // Aplicar estilos a las celdas
+                    const row = worksheet.getRow(rowIndex);
+                    row.getCell(1).alignment = { horizontal: 'center' };
+                    row.getCell(2).alignment = { horizontal: 'center' };
+                    row.getCell(6).alignment = { horizontal: 'center' };
+                    
+                    // Color según tipo
+                    if (!esHabil) {
+                        row.eachCell((cell) => {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } };
+                        });
+                    } else if (tipo === 'cte-intensiva' || tipo === 'cte-ordinaria') {
+                        row.eachCell((cell) => {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E3F2FD' } };
+                        });
+                    } else if (tipo === 'proyecto') {
+                        row.eachCell((cell) => {
+                            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E8F5E9' } };
+                        });
+                    }
+                    
+                    rowIndex++;
+                }
+            }
+            
+            // Agregar resumen al final
+            const totalRow = worksheet.addRow(['', '', '', 'TOTAL DE DÍAS HÁBILES', '', '']);
+            totalRow.font = { bold: true };
+            totalRow.getCell(4).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3E0' } };
+            
+            // Contar días hábiles
+            let habiles = 0;
+            for (const monthData of months) {
+                const monthNum = monthData.num;
+                const year = monthData.year;
+                for (let day = 1; day <= 31; day++) {
+                    const daysInMonth = getDaysInMonth(monthNum);
+                    if (day > daysInMonth) continue;
+                    if (isDiaHabil(monthNum, day, year)) {
+                        habiles++;
+                    }
+                }
+            }
+            
+            const countRow = worksheet.addRow(['', '', '', `Días hábiles: ${habiles}`, '', '']);
+            countRow.getCell(4).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E8F5E9' } };
+            countRow.getCell(4).font = { bold: true };
+        }
+        
+        // Generar y descargar el archivo
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Cronograma_SEP_${new Date().toISOString().slice(0,10)}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+        
+        showToast('✅ Excel exportado correctamente');
+    } catch (error) {
+        console.error('Error al exportar Excel:', error);
+        showToast('⚠️ Error al exportar Excel: ' + error.message);
+    }
+}
+
+// Función para cargar ExcelJS si no está disponible
+function loadExcelJS() {
+    return new Promise((resolve, reject) => {
+        if (typeof ExcelJS !== 'undefined') {
+            resolve();
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+// ... resto de las funciones (renderPlan, renderCronograma, renderDosificacion, renderPlaneacion, etc.) 
 
 // ============================================================
 // INICIALIZACIÓN
@@ -2859,10 +2955,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
 });
 
-// ... resto de funciones del código original (renderPlan, renderCronograma, renderDosificacion, renderPlaneacion, renderFechasUI, etc.) ...
-
 // ============================================================
-// FUNCIONES DE RENDERIZADO (RESUMIDAS)
+// FUNCIONES DE RENDERIZADO
 // ============================================================
 
 function renderPlan() {
@@ -3017,7 +3111,6 @@ function printPlan() {
 }
 
 function exportPlanWord() {
-    const content = document.getElementById('planContainer');
     const data = planData;
     
     let html = `
@@ -4647,6 +4740,10 @@ function printDosificacion() {
     printWindow.document.close();
 }
 
+// ============================================================
+// FUNCIONES DE GESTIÓN DE FECHAS
+// ============================================================
+
 function renderFechasUI() {
     const listaFestivos = document.getElementById('listaFestivos');
     listaFestivos.innerHTML = '';
@@ -5314,10 +5411,6 @@ function aplicarColores() {
     showToast('🎨 Colores aplicados');
 }
 
-function exportToExcel() {
-    showToast('📊 Exportando a Excel...');
-}
-
 function printPreview() {
     showToast('🖨️ Vista previa de impresión');
 }
@@ -5412,12 +5505,12 @@ function showToast(message) {
 function resetData() {
     if (confirm('¿Restaurar datos de fábrica? Esto eliminará todos los datos en la nube y localmente.')) {
         planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
-        activities = JSON.parse(JSON.stringify(OFFICIAL_EVENTS_INICIAL));
+        activities = [];
         config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
         planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
-        fechasFestivos = ['2026-09-16', '2026-11-02', '2026-11-16', '2027-02-01', '2027-03-15', '2027-05-05', '2027-05-15'];
-        fechasVacaciones = ['2026-12-21', '2026-12-22', '2026-12-23', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31', '2027-01-01', '2027-01-02', '2027-01-03', '2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08', '2027-03-22', '2027-03-23', '2027-03-24', '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28', '2027-03-29', '2027-03-30', '2027-03-31', '2027-04-01', '2027-04-02', '2027-07-19', '2027-07-20', '2027-07-21', '2027-07-22', '2027-07-23', '2027-07-24', '2027-07-25', '2027-07-26', '2027-07-27', '2027-07-28', '2027-07-29', '2027-07-30', '2027-07-31'];
+        fechasFestivos = [];
+        fechasVacaciones = [];
         eventosPersonalizados = [];
         coloresProyectos = {};
         indiceColorActual = 0;
@@ -5465,13 +5558,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
     if (document.getElementById('themeSelect').value === 'system') applyTheme('system');
 });
 
-console.log('📚 Cronograma SEP 2026-2027 cargado con Firebase');
-console.log(`📊 ${activities.length} actividades cargadas`);
-console.log(`🔴 ${fechasFestivos.length} días festivos`);
-console.log(`🟡 ${fechasVacaciones.length} días de vacaciones`);
-console.log(`🎨 ${Object.keys(coloresProyectos).length} proyectos con color personalizado`);
-console.log('📋 Plan Anual cargado correctamente');
-
 // Sincronizar colores al cambiar
 document.getElementById('colorProyecto').addEventListener('input', function() {
     document.getElementById('colorProyectoHex').value = this.value;
@@ -5517,6 +5603,12 @@ document.getElementById('primaryColor').addEventListener('input', function() {
     document.documentElement.style.setProperty('--primary', this.value);
     document.documentElement.style.setProperty('--primary-dark', adjustColor(this.value, -20));
 });
+
+console.log('📚 Cronograma SEP 2026-2027 cargado con Firebase');
+console.log('📊 El cronograma inicia vacío. Usa la pestaña "Gestión de Fechas" y "Dosificación" para llenarlo.');
+console.log(`🔴 ${fechasFestivos.length} días festivos`);
+console.log(`🟡 ${fechasVacaciones.length} días de vacaciones`);
+console.log(`🎨 ${Object.keys(coloresProyectos).length} proyectos con color personalizado`);
 </script>
 </body>
 </html>
