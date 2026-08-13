@@ -3045,22 +3045,27 @@ function loadExcelJS() {
 // FUNCIÓN RESET - SOLO LIMPIA EL CRONOGRAMA (PERO CONSERVA FECHAS DE CURSO)
 // ============================================================
 function resetData() {
-    if (confirm('¿Restaurar solo el cronograma? Se eliminarán todas las actividades del cronograma pero se mantendrán:\n- Fechas festivas\n- Vacaciones\n- Eventos personalizados\n- Fechas CTE\n- Configuración de la escuela\n- Plan Anual\n- Dosificación\n- Planeación semanal')) {
+    if (confirm('¿Restaurar solo el cronograma? Se eliminarán únicamente los temas/proyectos asignados desde Dosificación, pero se mantendrán:\n- Fechas festivas\n- Vacaciones\n- Eventos personalizados\n- Fechas CTE\n- Evaluaciones\n- Inicio/fin de curso\n- Configuración de la escuela\n- Plan Anual\n- Dosificación\n- Planeación semanal')) {
         
-        // Solo limpiar las actividades del cronograma
-        activities = [];
+        // Solo eliminar los temas/proyectos (dosificación implementada en el cronograma).
+        // CTE, eventos personalizados, evaluaciones e inicio/fin de curso NO se tocan.
+        for (let i = activities.length - 1; i >= 0; i--) {
+            if (isProject(activities[i].type)) {
+                activities.splice(i, 1);
+            }
+        }
         
         // Guardar cambios
         saveActivities();
         
-        // Aplicar nuevamente las fechas de curso (inicio, fin, reanudaciones)
+        // Volver a aplicar inicio/fin de curso por si acaso (no afecta CTE ni eventos)
         aplicarFechasCurso();
         
         // Renderizar
         renderCronograma();
         renderFechasUI();
         
-        showToast('🔄 Cronograma reiniciado. Las fechas, configuración y demás datos se conservan.');
+        showToast('🔄 Temas del cronograma reiniciados. CTE, eventos y demás datos se conservan.');
     }
 }
 
