@@ -2373,7 +2373,6 @@ function updateConnectionStatus(connected) {
     }
 }
 
-// Guardar todos los datos en Firebase
 function syncAllToFirebase() {
     if (isSyncing) {
         syncQueue.push('syncAll');
@@ -2411,7 +2410,6 @@ function syncAllToFirebase() {
         });
 }
 
-// Cargar datos desde Firebase
 function loadFromFirebase() {
     showToast('🔄 Cargando datos desde la nube...');
     
@@ -2432,7 +2430,6 @@ function loadFromFirebase() {
                 console.log('✅ Datos cargados desde Firebase');
                 showToast('✅ Datos cargados desde la nube');
                 
-                // Guardar localmente
                 saveAllLocal();
                 renderAll();
             } else {
@@ -2681,7 +2678,6 @@ async function exportToExcel() {
     try {
         showToast('📊 Generando archivo Excel...');
         
-        // Verificar que ExcelJS esté cargado
         if (typeof ExcelJS === 'undefined') {
             showToast('⚠️ Cargando librería Excel...');
             await loadExcelJS();
@@ -2691,14 +2687,12 @@ async function exportToExcel() {
         workbook.creator = 'Cronograma SEP';
         workbook.created = new Date();
         
-        // Obtener el grado seleccionado
         const filter = document.getElementById('gradeFilter').value;
         const grades = filter === 'all' ? [1, 2, 3] : [parseInt(filter)];
         
         for (const grade of grades) {
             const worksheet = workbook.addWorksheet(`${grade}º Grado`);
             
-            // Configurar columnas
             worksheet.columns = [
                 { header: 'Mes', key: 'mes', width: 15 },
                 { header: 'Día', key: 'dia', width: 10 },
@@ -2708,7 +2702,6 @@ async function exportToExcel() {
                 { header: 'Día hábil', key: 'habil', width: 12 }
             ];
             
-            // Estilo del encabezado
             worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
             worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '00467F' } };
             
@@ -2734,7 +2727,6 @@ async function exportToExcel() {
                 const monthName = monthData.name;
                 
                 for (let day = 1; day <= 31; day++) {
-                    // Verificar si el día existe en el mes
                     const daysInMonth = getDaysInMonth(monthNum);
                     if (day > daysInMonth) continue;
                     
@@ -2743,7 +2735,6 @@ async function exportToExcel() {
                     const wdName = WEEKDAYS_LONG[wd];
                     const esHabil = isDiaHabil(monthNum, day, year);
                     
-                    // Buscar actividad para este día y grado
                     const acts = activities.filter(a => {
                         const gradesAct = getGradesForActivity(a.grade);
                         return gradesAct.includes(grade) && a.month === monthNum && a.day === day;
@@ -2780,13 +2771,11 @@ async function exportToExcel() {
                         habil: esHabil ? 'Sí' : 'No'
                     });
                     
-                    // Aplicar estilos a las celdas
                     const row = worksheet.getRow(rowIndex);
                     row.getCell(1).alignment = { horizontal: 'center' };
                     row.getCell(2).alignment = { horizontal: 'center' };
                     row.getCell(6).alignment = { horizontal: 'center' };
                     
-                    // Color según tipo
                     if (!esHabil) {
                         row.eachCell((cell) => {
                             cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F5F5F5' } };
@@ -2805,12 +2794,10 @@ async function exportToExcel() {
                 }
             }
             
-            // Agregar resumen al final
             const totalRow = worksheet.addRow(['', '', '', 'TOTAL DE DÍAS HÁBILES', '', '']);
             totalRow.font = { bold: true };
             totalRow.getCell(4).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3E0' } };
             
-            // Contar días hábiles
             let habiles = 0;
             for (const monthData of months) {
                 const monthNum = monthData.num;
@@ -2829,7 +2816,6 @@ async function exportToExcel() {
             countRow.getCell(4).font = { bold: true };
         }
         
-        // Generar y descargar el archivo
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
@@ -2847,7 +2833,6 @@ async function exportToExcel() {
     }
 }
 
-// Función para cargar ExcelJS si no está disponible
 function loadExcelJS() {
     return new Promise((resolve, reject) => {
         if (typeof ExcelJS !== 'undefined') {
@@ -2862,18 +2847,34 @@ function loadExcelJS() {
     });
 }
 
-// ... resto de las funciones (renderPlan, renderCronograma, renderDosificacion, renderPlaneacion, etc.) 
+// ============================================================
+// FUNCIÓN RESET - SOLO LIMPIA EL CRONOGRAMA
+// ============================================================
+function resetData() {
+    if (confirm('¿Restaurar solo el cronograma? Se eliminarán todas las actividades del cronograma pero se mantendrán:\n- Fechas festivas\n- Vacaciones\n- Eventos personalizados\n- Fechas CTE\n- Configuración de la escuela\n- Plan Anual\n- Dosificación\n- Planeación semanal')) {
+        
+        // Solo limpiar las actividades del cronograma
+        activities = [];
+        
+        // Guardar cambios
+        saveActivities();
+        
+        // Renderizar
+        renderCronograma();
+        renderFechasUI();
+        
+        showToast('🔄 Cronograma reiniciado. Las fechas, configuración y demás datos se conservan.');
+    }
+}
 
 // ============================================================
 // INICIALIZACIÓN
 // ============================================================
 
-// Monitorear conexión a Firebase
 database.ref('.info/connected').on('value', (snapshot) => {
     updateConnectionStatus(snapshot.val() === true);
 });
 
-// Verificar conexión a Firebase
 function checkFirebaseConnection() {
     return database.ref('.info/connected').once('value')
         .then((snapshot) => {
@@ -2882,12 +2883,9 @@ function checkFirebaseConnection() {
         .catch(() => false);
 }
 
-// Inicializar la aplicación
 async function initApp() {
-    // Primero cargar datos locales como fallback
     loadDataLocal();
     
-    // Intentar conectar a Firebase y cargar datos
     try {
         const connected = await checkFirebaseConnection();
         if (connected) {
@@ -2902,7 +2900,6 @@ async function initApp() {
         showToast('📡 Usando datos locales');
     }
     
-    // Configurar sincronización automática cada 30 segundos cuando haya cambios
     setInterval(() => {
         if (navigator.onLine) {
             syncAllToFirebase();
@@ -2910,10 +2907,8 @@ async function initApp() {
     }, 30000);
 }
 
-// Iniciar la aplicación
 initApp();
 
-// Detectar cambios en conectividad
 window.addEventListener('online', () => {
     showToast('📶 Conexión restablecida. Sincronizando...');
     syncAllToFirebase();
@@ -2923,13 +2918,11 @@ window.addEventListener('offline', () => {
     showToast('📶 Sin conexión a internet. Los cambios se guardarán localmente.');
 });
 
-// Eventos de teclado
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeModal(); closeBulkModal(); clearSelection(); }
     if (e.key === 'Escape') { cerrarMenuColor(); }
 });
 
-// Tabs
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', function() {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -4740,10 +4733,6 @@ function printDosificacion() {
     printWindow.document.close();
 }
 
-// ============================================================
-// FUNCIONES DE GESTIÓN DE FECHAS
-// ============================================================
-
 function renderFechasUI() {
     const listaFestivos = document.getElementById('listaFestivos');
     listaFestivos.innerHTML = '';
@@ -5502,35 +5491,9 @@ function showToast(message) {
     toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-function resetData() {
-    if (confirm('¿Restaurar datos de fábrica? Esto eliminará todos los datos en la nube y localmente.')) {
-        planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
-        activities = [];
-        config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-        dosificacionData = JSON.parse(JSON.stringify(DOSIFICACION_DATA));
-        planeacionData = JSON.parse(JSON.stringify(PLANEACION_INICIAL));
-        fechasFestivos = [];
-        fechasVacaciones = [];
-        eventosPersonalizados = [];
-        coloresProyectos = {};
-        indiceColorActual = 0;
-        saveFechas();
-        localStorage.setItem('cronograma_colores_proyectos', JSON.stringify(coloresProyectos));
-        localStorage.setItem('cronograma_indice_color', '0');
-        localStorage.removeItem('cronograma_color_evaluacion');
-        document.documentElement.style.setProperty('--color-evaluacion', '#FF6B6B');
-        localStorage.setItem('cronograma_plan', JSON.stringify(planData));
-        saveActivities();
-        saveConfig();
-        localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
-        localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
-        syncAllToFirebase();
-        renderAll();
-        showToast('🔄 Datos restaurados y sincronizados con la nube');
-    }
-}
-
+// ============================================================
 // Cargar colores guardados al iniciar
+// ============================================================
 const savedColors = localStorage.getItem('cronograma_colores');
 if (savedColors) {
     try {
