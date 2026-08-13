@@ -2529,6 +2529,84 @@ function isDiaHabil(month, day, year) {
     return true;
 }
 
+// ============================================================
+// APLICAR FECHAS DE CURSO AL CRONOGRAMA
+// ============================================================
+function aplicarFechasCurso() {
+    // Obtener fechas del formulario
+    const fechaInicio = document.getElementById('fechaInicioCurso').value;
+    const fechaFin = document.getElementById('fechaFinCurso').value;
+    const fechaReanudacion = document.getElementById('fechaReanudacion').value;
+    const fechaReanudacionAbril = document.getElementById('fechaReanudacionAbril').value;
+    
+    // Eliminar actividades anteriores de inicio/reanudación/fin
+    const tiposAEliminar = ['inicio-clases', 'fin-ciclo'];
+    for (let i = activities.length - 1; i >= 0; i--) {
+        if (tiposAEliminar.includes(activities[i].type)) {
+            activities.splice(i, 1);
+        }
+    }
+    
+    // Agregar fecha de inicio
+    if (fechaInicio) {
+        const parts = fechaInicio.split('-').map(Number);
+        activities.push({
+            grade: 'all',
+            month: parts[1],
+            day: parts[2],
+            activity: 'Inicio de clases',
+            type: 'inicio-clases',
+            duration: 1,
+            unit: 'days'
+        });
+    }
+    
+    // Agregar fecha de fin
+    if (fechaFin) {
+        const parts = fechaFin.split('-').map(Number);
+        activities.push({
+            grade: 'all',
+            month: parts[1],
+            day: parts[2],
+            activity: 'Fin de Clases',
+            type: 'fin-ciclo',
+            duration: 1,
+            unit: 'days'
+        });
+    }
+    
+    // Agregar reanudación de enero
+    if (fechaReanudacion) {
+        const parts = fechaReanudacion.split('-').map(Number);
+        activities.push({
+            grade: 'all',
+            month: parts[1],
+            day: parts[2],
+            activity: 'Reanudación de clases',
+            type: 'inicio-clases',
+            duration: 1,
+            unit: 'days'
+        });
+    }
+    
+    // Agregar reanudación de abril
+    if (fechaReanudacionAbril) {
+        const parts = fechaReanudacionAbril.split('-').map(Number);
+        activities.push({
+            grade: 'all',
+            month: parts[1],
+            day: parts[2],
+            activity: 'Reanudación de clases',
+            type: 'inicio-clases',
+            duration: 1,
+            unit: 'days'
+        });
+    }
+    
+    saveActivities();
+    renderCronograma();
+}
+
 function loadDataLocal() {
     loadFechas();
     
@@ -2578,6 +2656,7 @@ function loadDataLocal() {
     }
     
     sincronizarEventosConCronograma();
+    aplicarFechasCurso();  // <-- Aplicar fechas de inicio/fin de curso al cargar
     applyConfig();
     renderAll();
 }
@@ -2848,7 +2927,7 @@ function loadExcelJS() {
 }
 
 // ============================================================
-// FUNCIÓN RESET - SOLO LIMPIA EL CRONOGRAMA
+// FUNCIÓN RESET - SOLO LIMPIA EL CRONOGRAMA (PERO CONSERVA FECHAS DE CURSO)
 // ============================================================
 function resetData() {
     if (confirm('¿Restaurar solo el cronograma? Se eliminarán todas las actividades del cronograma pero se mantendrán:\n- Fechas festivas\n- Vacaciones\n- Eventos personalizados\n- Fechas CTE\n- Configuración de la escuela\n- Plan Anual\n- Dosificación\n- Planeación semanal')) {
@@ -2859,12 +2938,26 @@ function resetData() {
         // Guardar cambios
         saveActivities();
         
+        // Aplicar nuevamente las fechas de curso (inicio, fin, reanudaciones)
+        aplicarFechasCurso();
+        
         // Renderizar
         renderCronograma();
         renderFechasUI();
         
         showToast('🔄 Cronograma reiniciado. Las fechas, configuración y demás datos se conservan.');
     }
+}
+
+// ============================================================
+// GUARDAR FECHAS - AHORA APLICA LAS FECHAS DE CURSO
+// ============================================================
+function guardarFechas() {
+    aplicarFechasCurso();  // <-- Aplicar fechas de inicio/fin/reanudación
+    saveFechas();
+    renderCronograma();
+    renderFechasUI();
+    showToast('✅ Fechas guardadas en la nube');
 }
 
 // ============================================================
@@ -5209,13 +5302,6 @@ function generarEvaluacionesAutomaticas() {
         msg += ` · Sin implementar aún: ${sinImplementar.slice(0, 3).join(', ')}${sinImplementar.length > 3 ? '…' : ''}`;
     }
     showToast(msg);
-}
-
-function guardarFechas() {
-    saveFechas();
-    renderCronograma();
-    renderFechasUI();
-    showToast('✅ Fechas guardadas en la nube');
 }
 
 function aplicarFechasSeleccionadas() {
