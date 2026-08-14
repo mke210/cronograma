@@ -1509,7 +1509,7 @@
                 </div>
             </div>
             <div style="margin:0 14px 8px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.72rem; color:var(--text-secondary);">
-                <strong>📌 "Implementar en Cronograma":</strong> cada tema (proyecto) toma tantos días hábiles como indique su columna de <strong>Sesiones</strong>, saltando automáticamente sábados, domingos, días festivos, vacaciones y cualquier campo ya ocupado (por ejemplo fechas de CTE). El siguiente tema continúa justo donde terminó el anterior. Si un tema no alcanza a completar sus sesiones dentro del calendario disponible, ajusta el número de sesiones en la columna correspondiente.
+                <strong>📌 "Implementar en Cronograma":</strong> cada tema (proyecto) toma tantos días hábiles como indique su columna de <strong>Sesiones</strong>, saltando automáticamente sábados, domingos, días festivos, vacaciones y cualquier campo ya ocupado (por ejemplo fechas de CTE o eventos). Al terminar sus sesiones, se agregan automáticamente <strong>2 días hábiles de evaluación</strong>, y justo después comienza el siguiente tema — sin fechas fijas, todo encadenado. Si un tema no alcanza a completar sus sesiones dentro del calendario disponible, ajusta el número de sesiones en la columna correspondiente.
             </div>
             <div id="dosificacionContainer" class="dosificacion-container"></div>
         </div>
@@ -1705,7 +1705,6 @@
                     </div>
                     <div class="fechas-list" id="listaEventos"></div>
                     <div class="fechas-actions">
-                        <button class="btn btn-primary btn-sm" onclick="generarEvaluacionesAutomaticas()">✅ Generar evaluaciones automáticas</button>
                         <button class="btn btn-danger btn-sm" onclick="limpiarEventos()">🗑️ Limpiar todos</button>
                     </div>
                 </div>
@@ -4379,22 +4378,35 @@ function implementarDosificacion() {
     }
     
     let count = 0;
+    let evaluacionesGeneradas = 0;
     let omitidos = 0;
     const gradeNum = parseInt(grade);
+    const DIAS_EVALUACION = 2; // días hábiles de evaluación al final de cada tema
     
+    // 1. Limpiar únicamente las celdas que ya pertenecían a los proyectos y a sus evaluaciones
+    //    automáticas de esta dosificación (así se puede re-ejecutar sin duplicar, sin tocar
+    //    CTE, festivos, vacaciones ni eventos personalizados agregados manualmente)
     for (const trim of data.trimestres) {
         for (const proyecto of trim.proyectos) {
-            const toRemove = activities.filter(a => {
+            const nombreEval = `Evaluación: ${proyecto.nombre}`;
+            for (let i = activities.length - 1; i >= 0; i--) {
+                const a = activities[i];
                 const gradesAct = getGradesForActivity(a.grade);
-                return gradesAct.includes(gradeNum) && a.activity === proyecto.nombre && isProject(a.type);
-            });
-            for (const r of toRemove) {
-                const idx = activities.indexOf(r);
-                if (idx >= 0) activities.splice(idx, 1);
+                if (!gradesAct.includes(gradeNum)) continue;
+                if (a.activity === proyecto.nombre && isProject(a.type)) {
+                    activities.splice(i, 1);
+                } else if (a.type === 'evaluacion' && a.activity === nombreEval) {
+                    activities.splice(i, 1);
+                }
             }
+            eventosPersonalizados = eventosPersonalizados.filter(ev =>
+                !(ev.tipo === 'evaluacion' && ev.nombre === nombreEval && gradeToActivityValue(ev.grade) === gradeNum)
+            );
         }
     }
     
+    // 2. Fecha de arranque de cada trimestre (el primer tema comienza aquí; los siguientes
+    //    retoman justo donde terminó la evaluación del anterior, sin fechas fijas por tema)
     const trimStartDates = {
         1: '2026-09-01',
         2: '2026-12-01',
@@ -4407,15 +4419,18 @@ function implementarDosificacion() {
         const inicioTrim = trimStartDates[trimIndex] || trimStartDates[1];
         const parts0 = inicioTrim.split('-').map(Number);
         
+        // Cursor continuo dentro del trimestre: compartido entre temas consecutivos
         let month = parts0[1];
         let day = parts0[2];
         let year = parts0[0];
         
         for (const proyecto of trim.proyectos) {
             const sesiones = parseInt(proyecto.sesiones) || 12;
+            const nombreEval = `Evaluación: ${proyecto.nombre}`;
             let diasAsignados = 0;
             let maxIter = 800;
             
+            // --- Sesiones del tema ---
             while (diasAsignados < sesiones && maxIter > 0) {
                 maxIter--;
                 
@@ -4449,12 +4464,55 @@ function implementarDosificacion() {
                     if (month > 12) { month = 1; year++; }
                 }
             }
+            
+            // --- 2 días hábiles de evaluación, justo después del tema ---
+            let diasEval = 0;
+            maxIter = 200;
+            while (diasEval < DIAS_EVALUACION && maxIter > 0) {
+                maxIter--;
+                
+                if (isDiaHabil(month, day, year)) {
+                    const ocupado = activities.some(a => {
+                        const gradesAct = getGradesForActivity(a.grade);
+                        return gradesAct.includes(gradeNum) && a.month === month && a.day === day;
+                    });
+                    
+                    if (!ocupado) {
+                        activities.push({
+                            grade: gradeNum,
+                            month, day,
+                            activity: nombreEval,
+                            type: 'evaluacion',
+                            duration: 1,
+                            unit: 'days'
+                        });
+                        const fechaStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        eventosPersonalizados.push({ fecha: fechaStr, nombre: nombreEval, grade: String(gradeNum), tipo: 'evaluacion' });
+                        diasEval++;
+                        evaluacionesGeneradas++;
+                    } else {
+                        omitidos++;
+                    }
+                }
+                
+                day++;
+                const daysInMonth = getDaysInMonth(month);
+                if (day > daysInMonth) {
+                    day = 1;
+                    month++;
+                    if (month > 12) { month = 1; year++; }
+                }
+            }
+            // El cursor queda apuntando justo al día siguiente de la evaluación:
+            // el próximo tema retoma desde ahí (sin huecos ni fechas fijas).
         }
     }
     
     saveActivities();
+    saveFechas();
     renderCronograma();
-    let msg = `✅ Implementados ${count} días de actividades para ${data.grado}`;
+    renderFechasUI();
+    let msg = `✅ Implementados ${count} días de temas + ${evaluacionesGeneradas} días de evaluación para ${data.grado}`;
     if (omitidos > 0) msg += ` · ${omitidos} días ocupados se omitieron automáticamente`;
     showToast(msg);
 }
