@@ -1508,7 +1508,8 @@
                     <button class="btn btn-implement btn-sm" onclick="implementarDosificacion()">📌 Implementar en Cronograma</button>
                     <button class="btn btn-success btn-sm" onclick="saveDosificacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
-                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla Excel</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla (todos)</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel(document.getElementById('dosificacionGrade').value)">📊 Descargar solo este grado</button>
                     <button class="btn btn-sync btn-sm" onclick="triggerImportPlantilla()">📤 Subir Excel editado</button>
                 </div>
             </div>
@@ -1539,7 +1540,8 @@
                     <button class="btn btn-success btn-sm" onclick="savePlaneacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printPlaneacion()">🖨️ Imprimir</button>
                     <button class="btn btn-primary btn-sm" onclick="addPlaneacionSemana()">➕ Agregar Semana</button>
-                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla Excel</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla (todos)</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel(document.getElementById('planeacionGrade').value)">📊 Descargar solo este grado</button>
                     <button class="btn btn-sync btn-sm" onclick="triggerImportPlantilla()">📤 Subir Excel editado</button>
                 </div>
             </div>
@@ -1547,7 +1549,7 @@
             <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
                 <strong>💡 Instrucciones:</strong> Edita todos los campos directamente. Los cambios se guardan automáticamente al hacer clic en "Guardar". 
                 Usa "Agregar Semana" para añadir una nueva fila de planeación.
-                <br><strong>📊 Plantilla Excel:</strong> "Descargar plantilla Excel" genera un solo archivo con 3 hojas (Plan Anual, Dosificación y Planeación Semanal). Edítalo en Excel y usa "Subir Excel editado" — desde cualquiera de las tres pestañas — para actualizar automáticamente los campos de las tres a la vez. En la hoja "Dosificación" solo edita Proyecto/Tema, Contenido, PDA y Sesiones; las columnas Grado y Trimestre son identificadores y no deben cambiarse.
+                <br><strong>📊 Plantilla Excel:</strong> "Descargar plantilla (todos)" incluye los 3 grados; "Descargar solo este grado" incluye únicamente el grado seleccionado en el selector de arriba. Al subir el Excel editado, solo se actualizan los grados que vengan en el archivo — los demás grados quedan intactos, así que puedes subir la plantilla de un solo grado sin afectar los otros. En la hoja "Dosificación" solo edita Proyecto/Tema, Contenido, PDA y Sesiones; las columnas Grado y Trimestre son identificadores y no deben cambiarse.
             </div>
             <input type="file" id="plantillaExcelInput" accept=".xlsx" style="display:none" onchange="importPlantillaExcel(event)">
         </div>
@@ -3052,13 +3054,15 @@ function loadExcelJS() {
 // PLANTILLA EXCEL EDITABLE: PLAN ANUAL + DOSIFICACIÓN + PLANEACIÓN
 // (descargar, editar en Excel, volver a subir y actualizar todo)
 // ============================================================
-async function exportPlantillaExcel() {
+async function exportPlantillaExcel(soloGrado) {
     try {
         showToast('📊 Generando plantilla editable...');
         if (typeof ExcelJS === 'undefined') {
             showToast('⚠️ Cargando librería Excel...');
             await loadExcelJS();
         }
+
+        const gradosAExportar = soloGrado ? [parseInt(soloGrado)] : [1, 2, 3];
 
         const workbook = new ExcelJS.Workbook();
         workbook.creator = 'Cronograma SEP';
@@ -3097,7 +3101,7 @@ async function exportPlantillaExcel() {
         const dosHeader = wsDos.addRow(['Grado', 'Trimestre', 'Proyecto / Tema', 'Contenido', 'PDA (Proceso de Desarrollo de Aprendizaje)', 'Sesiones']);
         dosHeader.font = { bold: true };
         dosHeader.eachCell(c => c.fill = headerFill);
-        [1, 2, 3].forEach(grade => {
+        gradosAExportar.forEach(grade => {
             const d = dosificacionData[grade];
             if (!d) return;
             (d.trimestres || []).forEach(trim => {
@@ -3116,7 +3120,7 @@ async function exportPlantillaExcel() {
         const plaHeader = wsPla.addRow(['Grado', 'Periodo', 'Actividades', 'Recursos', 'Producto']);
         plaHeader.font = { bold: true };
         plaHeader.eachCell(c => c.fill = headerFill);
-        [1, 2, 3].forEach(grade => {
+        gradosAExportar.forEach(grade => {
             (planeacionData[grade] || []).forEach(item => {
                 const row = wsPla.addRow([grade, item.periodo || '', item.actividades || '', item.recursos || '', item.producto || '']);
                 row.eachCell(c => c.alignment = { wrapText: true, vertical: 'top' });
@@ -3128,7 +3132,9 @@ async function exportPlantillaExcel() {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `Plantilla_Plan_Dosificacion_Planeacion_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        link.download = soloGrado
+            ? `Plantilla_Dosificacion_Planeacion_Grado${soloGrado}_${new Date().toISOString().slice(0, 10)}.xlsx`
+            : `Plantilla_Plan_Dosificacion_Planeacion_${new Date().toISOString().slice(0, 10)}.xlsx`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -3234,7 +3240,8 @@ async function importPlantillaExcel(event) {
                 if (nombre) trim.proyectos.push({ nombre, contenido, pda, sesiones });
             });
             if (Object.keys(nuevaDos).length) {
-                dosificacionData = nuevaDos;
+                // Solo se actualizan los grados presentes en el Excel; los demás quedan intactos.
+                Object.keys(nuevaDos).forEach(g => { dosificacionData[g] = nuevaDos[g]; });
                 localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
                 renderDosificacion();
                 huboCambios = true;
@@ -3255,7 +3262,8 @@ async function importPlantillaExcel(event) {
                 nuevaPla[grade].push({ periodo, actividades, recursos, producto });
             });
             if (Object.keys(nuevaPla).length) {
-                planeacionData = nuevaPla;
+                // Solo se actualizan los grados presentes en el Excel; los demás quedan intactos.
+                Object.keys(nuevaPla).forEach(g => { planeacionData[g] = nuevaPla[g]; });
                 localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
                 renderPlaneacion();
                 huboCambios = true;
