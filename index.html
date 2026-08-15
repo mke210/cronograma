@@ -1547,7 +1547,7 @@
             <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
                 <strong>💡 Instrucciones:</strong> Edita todos los campos directamente. Los cambios se guardan automáticamente al hacer clic en "Guardar". 
                 Usa "Agregar Semana" para añadir una nueva fila de planeación.
-                <br><strong>📊 Plantilla Excel:</strong> "Descargar plantilla Excel" genera un solo archivo con 3 hojas (Plan Anual, Dosificación y Planeación Semanal). Edítalo en Excel y usa "Subir Excel editado" — desde cualquiera de las tres pestañas — para actualizar automáticamente los campos de las tres a la vez.
+                <br><strong>📊 Plantilla Excel:</strong> "Descargar plantilla Excel" genera un solo archivo con 3 hojas (Plan Anual, Dosificación y Planeación Semanal). Edítalo en Excel y usa "Subir Excel editado" — desde cualquiera de las tres pestañas — para actualizar automáticamente los campos de las tres a la vez. En la hoja "Dosificación" solo edita Proyecto/Tema, Contenido, PDA y Sesiones; las columnas Grado y Trimestre son identificadores y no deben cambiarse.
             </div>
             <input type="file" id="plantillaExcelInput" accept=".xlsx" style="display:none" onchange="importPlantillaExcel(event)">
         </div>
@@ -3091,8 +3091,10 @@ async function exportPlantillaExcel() {
         [26, 30, 34, 55, 20, 34].forEach((w, i) => wsPlan.getColumn(i + 1).width = w);
 
         // ---------------- Hoja: Dosificación ----------------
+        // Solo se exponen los campos editables: Proyecto/Tema, Contenido, PDA y Sesiones.
+        // "Grado" y "Trimestre" se incluyen únicamente como identificadores (no se deben modificar).
         const wsDos = workbook.addWorksheet('Dosificación');
-        const dosHeader = wsDos.addRow(['Grado', 'Título', 'Escuela', 'Docente', 'Ciclo', 'Trimestre', 'Proyecto / Tema', 'Contenido', 'PDA', 'Sesiones']);
+        const dosHeader = wsDos.addRow(['Grado', 'Trimestre', 'Proyecto / Tema', 'Contenido', 'PDA (Proceso de Desarrollo de Aprendizaje)', 'Sesiones']);
         dosHeader.font = { bold: true };
         dosHeader.eachCell(c => c.fill = headerFill);
         [1, 2, 3].forEach(grade => {
@@ -3101,14 +3103,13 @@ async function exportPlantillaExcel() {
             (d.trimestres || []).forEach(trim => {
                 (trim.proyectos || []).forEach(p => {
                     const row = wsDos.addRow([
-                        grade, d.titulo || '', d.escuela || '', d.docente || '', d.ciclo || '',
-                        trim.nombre || '', p.nombre || '', p.contenido || '', p.pda || '', p.sesiones || 0
+                        grade, trim.nombre || '', p.nombre || '', p.contenido || '', p.pda || '', p.sesiones || 0
                     ]);
                     row.eachCell(c => c.alignment = { wrapText: true, vertical: 'top' });
                 });
             });
         });
-        [8, 30, 22, 24, 12, 10, 34, 32, 45, 10].forEach((w, i) => wsDos.getColumn(i + 1).width = w);
+        [8, 10, 34, 32, 45, 10].forEach((w, i) => wsDos.getColumn(i + 1).width = w);
 
         // ---------------- Hoja: Planeación Semanal ----------------
         const wsPla = workbook.addWorksheet('Planeación Semanal');
@@ -3208,6 +3209,8 @@ async function importPlantillaExcel(event) {
         }
 
         // ---------------- Dosificación ----------------
+        // Solo se actualizan los campos editables (Proyecto/Tema, Contenido, PDA, Sesiones);
+        // título, escuela, docente, ciclo y meses de cada grado se conservan tal cual estaban.
         const wsDos = workbook.getWorksheet('Dosificación');
         if (wsDos) {
             const nuevaDos = {};
@@ -3215,15 +3218,15 @@ async function importPlantillaExcel(event) {
                 if (rowNumber === 1) return;
                 const grade = parseInt(cellText(row, 1));
                 if (!grade) return;
-                const titulo = cellText(row, 2), escuela = cellText(row, 3), docente = cellText(row, 4), ciclo = cellText(row, 5);
-                const trimNombre = cellText(row, 6);
-                const nombre = cellText(row, 7), contenido = cellText(row, 8), pda = cellText(row, 9);
-                const sesiones = parseInt(cellText(row, 10)) || 0;
+                const trimNombre = cellText(row, 2);
+                const nombre = cellText(row, 3), contenido = cellText(row, 4), pda = cellText(row, 5);
+                const sesiones = parseInt(cellText(row, 6)) || 0;
                 if (!nuevaDos[grade]) {
+                    const base = dosificacionData[grade] || {};
                     nuevaDos[grade] = {
-                        titulo, escuela, docente,
-                        grado: (dosificacionData[grade] && dosificacionData[grade].grado) || `${grade}.º Año`,
-                        ciclo, meses: (dosificacionData[grade] && dosificacionData[grade].meses) || {}, trimestres: []
+                        titulo: base.titulo || '', escuela: base.escuela || '', docente: base.docente || '',
+                        grado: base.grado || `${grade}.º Año`, ciclo: base.ciclo || '',
+                        meses: base.meses || {}, trimestres: []
                     };
                 }
                 let trim = nuevaDos[grade].trimestres.find(t => t.nombre === trimNombre);
