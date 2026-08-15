@@ -1478,6 +1478,8 @@
                     <button class="btn btn-word btn-sm" onclick="exportPlanWord()">📄 Exportar a Word</button>
                     <button class="btn btn-print btn-sm" onclick="printPlan()">🖨️ Imprimir</button>
                     <button class="btn btn-success btn-sm" onclick="savePlan()">💾 Guardar</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla Excel</button>
+                    <button class="btn btn-sync btn-sm" onclick="triggerImportPlantilla()">📤 Subir Excel editado</button>
                 </div>
             </div>
             <div id="planContainer" class="plan-container">
@@ -1506,6 +1508,8 @@
                     <button class="btn btn-implement btn-sm" onclick="implementarDosificacion()">📌 Implementar en Cronograma</button>
                     <button class="btn btn-success btn-sm" onclick="saveDosificacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printDosificacion()">🖨️ Imprimir</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla Excel</button>
+                    <button class="btn btn-sync btn-sm" onclick="triggerImportPlantilla()">📤 Subir Excel editado</button>
                 </div>
             </div>
             <div style="margin:0 14px 8px; padding:8px; background:var(--primary-light); border-radius:5px; font-size:0.72rem; color:var(--text-secondary);">
@@ -1535,13 +1539,17 @@
                     <button class="btn btn-success btn-sm" onclick="savePlaneacion()">💾 Guardar</button>
                     <button class="btn btn-print btn-sm" onclick="printPlaneacion()">🖨️ Imprimir</button>
                     <button class="btn btn-primary btn-sm" onclick="addPlaneacionSemana()">➕ Agregar Semana</button>
+                    <button class="btn btn-excel btn-sm" onclick="exportPlantillaExcel()">📊 Descargar plantilla Excel</button>
+                    <button class="btn btn-sync btn-sm" onclick="triggerImportPlantilla()">📤 Subir Excel editado</button>
                 </div>
             </div>
             <div id="planeacionContainer" class="planeacion-container"></div>
             <div style="margin-top:8px; padding:6px; background:var(--primary-light); border-radius:5px; font-size:0.7rem; color:var(--text-secondary);">
                 <strong>💡 Instrucciones:</strong> Edita todos los campos directamente. Los cambios se guardan automáticamente al hacer clic en "Guardar". 
                 Usa "Agregar Semana" para añadir una nueva fila de planeación.
+                <br><strong>📊 Plantilla Excel:</strong> "Descargar plantilla Excel" genera un solo archivo con 3 hojas (Plan Anual, Dosificación y Planeación Semanal). Edítalo en Excel y usa "Subir Excel editado" — desde cualquiera de las tres pestañas — para actualizar automáticamente los campos de las tres a la vez.
             </div>
+            <input type="file" id="plantillaExcelInput" accept=".xlsx" style="display:none" onchange="importPlantillaExcel(event)">
         </div>
     </div>
 
@@ -3038,6 +3046,230 @@ function loadExcelJS() {
         script.onerror = reject;
         document.head.appendChild(script);
     });
+}
+
+// ============================================================
+// PLANTILLA EXCEL EDITABLE: PLAN ANUAL + DOSIFICACIÓN + PLANEACIÓN
+// (descargar, editar en Excel, volver a subir y actualizar todo)
+// ============================================================
+async function exportPlantillaExcel() {
+    try {
+        showToast('📊 Generando plantilla editable...');
+        if (typeof ExcelJS === 'undefined') {
+            showToast('⚠️ Cargando librería Excel...');
+            await loadExcelJS();
+        }
+
+        const workbook = new ExcelJS.Workbook();
+        workbook.creator = 'Cronograma SEP';
+        workbook.created = new Date();
+        const headerFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE8F0FE' } };
+
+        // ---------------- Hoja: Plan Anual ----------------
+        const wsPlan = workbook.addWorksheet('Plan Anual');
+        const planMetaHeader = wsPlan.addRow(['Título', 'Materia', 'Nivel', 'Ciclo', 'Fecha', 'Elaboró', 'Elaboró (título)', 'Revisó', 'Vo.Bo.', 'Vo.Bo. (título)']);
+        planMetaHeader.font = { bold: true };
+        planMetaHeader.eachCell(c => c.fill = headerFill);
+        wsPlan.addRow([
+            planData.titulo || '', planData.materia || '', planData.nivel || '', planData.ciclo || '',
+            planData.fecha || '', planData.elaboro || '', planData.elaboroTitulo || '',
+            planData.reviso || '', planData.voBo || '', planData.voBoTitulo || ''
+        ]);
+        wsPlan.addRow([]);
+        const metasHeaderRow = wsPlan.addRow(['Dimensión', 'Enfoque', 'Meta', 'Acciones (una por línea)', 'Periodo', 'Recursos']);
+        metasHeaderRow.font = { bold: true };
+        metasHeaderRow.eachCell(c => c.fill = headerFill);
+        (planData.dimensiones || []).forEach(dim => {
+            (dim.metas || []).forEach(m => {
+                const row = wsPlan.addRow([
+                    dim.nombre || '', dim.enfoque || '', m.meta || '',
+                    (m.acciones || []).join('\n'), m.periodo || '', m.recursos || ''
+                ]);
+                row.eachCell(c => c.alignment = { wrapText: true, vertical: 'top' });
+            });
+        });
+        [26, 30, 34, 55, 20, 34].forEach((w, i) => wsPlan.getColumn(i + 1).width = w);
+
+        // ---------------- Hoja: Dosificación ----------------
+        const wsDos = workbook.addWorksheet('Dosificación');
+        const dosHeader = wsDos.addRow(['Grado', 'Título', 'Escuela', 'Docente', 'Ciclo', 'Trimestre', 'Proyecto / Tema', 'Contenido', 'PDA', 'Sesiones']);
+        dosHeader.font = { bold: true };
+        dosHeader.eachCell(c => c.fill = headerFill);
+        [1, 2, 3].forEach(grade => {
+            const d = dosificacionData[grade];
+            if (!d) return;
+            (d.trimestres || []).forEach(trim => {
+                (trim.proyectos || []).forEach(p => {
+                    const row = wsDos.addRow([
+                        grade, d.titulo || '', d.escuela || '', d.docente || '', d.ciclo || '',
+                        trim.nombre || '', p.nombre || '', p.contenido || '', p.pda || '', p.sesiones || 0
+                    ]);
+                    row.eachCell(c => c.alignment = { wrapText: true, vertical: 'top' });
+                });
+            });
+        });
+        [8, 30, 22, 24, 12, 10, 34, 32, 45, 10].forEach((w, i) => wsDos.getColumn(i + 1).width = w);
+
+        // ---------------- Hoja: Planeación Semanal ----------------
+        const wsPla = workbook.addWorksheet('Planeación Semanal');
+        const plaHeader = wsPla.addRow(['Grado', 'Periodo', 'Actividades', 'Recursos', 'Producto']);
+        plaHeader.font = { bold: true };
+        plaHeader.eachCell(c => c.fill = headerFill);
+        [1, 2, 3].forEach(grade => {
+            (planeacionData[grade] || []).forEach(item => {
+                const row = wsPla.addRow([grade, item.periodo || '', item.actividades || '', item.recursos || '', item.producto || '']);
+                row.eachCell(c => c.alignment = { wrapText: true, vertical: 'top' });
+            });
+        });
+        [8, 24, 55, 32, 36].forEach((w, i) => wsPla.getColumn(i + 1).width = w);
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Plantilla_Plan_Dosificacion_Planeacion_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+
+        showToast('✅ Plantilla Excel descargada (Plan, Dosificación y Planeación)');
+    } catch (error) {
+        console.error('Error al exportar plantilla:', error);
+        showToast('⚠️ Error al exportar plantilla: ' + error.message);
+    }
+}
+
+function triggerImportPlantilla() {
+    document.getElementById('plantillaExcelInput').click();
+}
+
+async function importPlantillaExcel(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+        showToast('📤 Leyendo archivo Excel...');
+        if (typeof ExcelJS === 'undefined') {
+            await loadExcelJS();
+        }
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+
+        const cellText = (row, i) => {
+            const v = row.getCell(i).value;
+            if (v === null || v === undefined) return '';
+            if (typeof v === 'object' && v.richText) return v.richText.map(t => t.text).join('');
+            if (typeof v === 'object' && v.text) return v.text;
+            return String(v);
+        };
+
+        let huboCambios = false;
+
+        // ---------------- Plan Anual ----------------
+        const wsPlan = workbook.getWorksheet('Plan Anual');
+        if (wsPlan) {
+            const metaRow = wsPlan.getRow(2);
+            const nuevoPlan = {
+                titulo: cellText(metaRow, 1), materia: cellText(metaRow, 2), nivel: cellText(metaRow, 3),
+                ciclo: cellText(metaRow, 4), fecha: cellText(metaRow, 5), elaboro: cellText(metaRow, 6),
+                elaboroTitulo: cellText(metaRow, 7), reviso: cellText(metaRow, 8), voBo: cellText(metaRow, 9),
+                voBoTitulo: cellText(metaRow, 10), dimensiones: []
+            };
+            let dimActual = null;
+            wsPlan.eachRow((row, rowNumber) => {
+                if (rowNumber <= 4) return; // filas de metadatos/encabezados
+                const dimNombre = cellText(row, 1);
+                const enfoque = cellText(row, 2);
+                const metaTxt = cellText(row, 3);
+                const acciones = cellText(row, 4);
+                const periodo = cellText(row, 5);
+                const recursos = cellText(row, 6);
+                if (!dimNombre && !metaTxt) return;
+                if (!dimActual || dimActual.nombre !== dimNombre) {
+                    dimActual = { nombre: dimNombre, enfoque: enfoque, metas: [] };
+                    nuevoPlan.dimensiones.push(dimActual);
+                }
+                if (metaTxt) {
+                    dimActual.metas.push({
+                        meta: metaTxt,
+                        acciones: acciones.split('\n').map(a => a.trim()).filter(a => a),
+                        periodo: periodo,
+                        recursos: recursos
+                    });
+                }
+            });
+            if (nuevoPlan.dimensiones.length) {
+                planData = nuevoPlan;
+                localStorage.setItem('cronograma_plan', JSON.stringify(planData));
+                renderPlan();
+                huboCambios = true;
+            }
+        }
+
+        // ---------------- Dosificación ----------------
+        const wsDos = workbook.getWorksheet('Dosificación');
+        if (wsDos) {
+            const nuevaDos = {};
+            wsDos.eachRow((row, rowNumber) => {
+                if (rowNumber === 1) return;
+                const grade = parseInt(cellText(row, 1));
+                if (!grade) return;
+                const titulo = cellText(row, 2), escuela = cellText(row, 3), docente = cellText(row, 4), ciclo = cellText(row, 5);
+                const trimNombre = cellText(row, 6);
+                const nombre = cellText(row, 7), contenido = cellText(row, 8), pda = cellText(row, 9);
+                const sesiones = parseInt(cellText(row, 10)) || 0;
+                if (!nuevaDos[grade]) {
+                    nuevaDos[grade] = {
+                        titulo, escuela, docente,
+                        grado: (dosificacionData[grade] && dosificacionData[grade].grado) || `${grade}.º Año`,
+                        ciclo, meses: (dosificacionData[grade] && dosificacionData[grade].meses) || {}, trimestres: []
+                    };
+                }
+                let trim = nuevaDos[grade].trimestres.find(t => t.nombre === trimNombre);
+                if (!trim) { trim = { nombre: trimNombre, proyectos: [] }; nuevaDos[grade].trimestres.push(trim); }
+                if (nombre) trim.proyectos.push({ nombre, contenido, pda, sesiones });
+            });
+            if (Object.keys(nuevaDos).length) {
+                dosificacionData = nuevaDos;
+                localStorage.setItem('cronograma_dosificacion', JSON.stringify(dosificacionData));
+                renderDosificacion();
+                huboCambios = true;
+            }
+        }
+
+        // ---------------- Planeación Semanal ----------------
+        const wsPla = workbook.getWorksheet('Planeación Semanal');
+        if (wsPla) {
+            const nuevaPla = {};
+            wsPla.eachRow((row, rowNumber) => {
+                if (rowNumber === 1) return;
+                const grade = parseInt(cellText(row, 1));
+                if (!grade) return;
+                const periodo = cellText(row, 2), actividades = cellText(row, 3), recursos = cellText(row, 4), producto = cellText(row, 5);
+                if (!periodo && !actividades) return;
+                if (!nuevaPla[grade]) nuevaPla[grade] = [];
+                nuevaPla[grade].push({ periodo, actividades, recursos, producto });
+            });
+            if (Object.keys(nuevaPla).length) {
+                planeacionData = nuevaPla;
+                localStorage.setItem('cronograma_planeacion', JSON.stringify(planeacionData));
+                renderPlaneacion();
+                huboCambios = true;
+            }
+        }
+
+        if (huboCambios) {
+            syncAllToFirebase();
+            showToast('✅ Plan, Dosificación y Planeación actualizados desde el Excel');
+        } else {
+            showToast('⚠️ No se encontraron datos válidos en el Excel');
+        }
+    } catch (error) {
+        console.error('Error al importar plantilla:', error);
+        showToast('⚠️ Error al leer el Excel: ' + error.message);
+    }
+    event.target.value = '';
 }
 
 // ============================================================
