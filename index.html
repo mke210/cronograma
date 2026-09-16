@@ -3374,36 +3374,43 @@ database.ref('.info/connected').on('value', (snapshot) => {
     updateConnectionStatus(snapshot.val() === true);
 });
 
-function checkFirebaseConnection() {
-    return database.ref('.info/connected').once('value')
-        .then((snapshot) => {
-            return snapshot.val() === true;
-        })
-        .catch(() => false);
-}
-
 async function initApp() {
     // Cargamos lo que haya en localStorage para pintar algo de inmediato, pero
     // OJO: esto NO habilita la sincronización todavía (dataReady sigue en false).
     loadDataLocal();
-    
-    try {
-        const connected = await checkFirebaseConnection();
-        if (connected) {
-            console.log('🔗 Conectado a Firebase');
-            await loadFromFirebase(); // deja dataReady = true al terminar (éxito o error)
-        } else {
-            console.log('📡 Sin conexión a Firebase, usando datos locales');
-            showToast('📡 Sin conexión a internet. Usando datos locales.');
-            // Sin conexión: los datos locales son los únicos disponibles y es seguro
-            // permitir que, si más adelante hay conexión, se puedan sincronizar.
+
+    // IMPORTANTE: ya no usamos '.info/connected' como filtro previo para decidir
+    // si intentar cargar desde Firebase. Ese indicador puede reportar "false"
+    // brevemente justo al abrir la página (mientras el WebSocket termina de
+    // conectarse) incluso con internet funcionando, lo que antes hacía que la
+    // app se rindiera sin siquiera intentar comparar con la nube. Ahora se
+    // intenta SIEMPRE la carga real (database.ref('cronograma').once('value')),
+    // con un límite de tiempo de espera para no bloquear la app si de verdad
+    // no hay conexión.
+    let yaListo = false;
+    const marcarListo = () => {
+        if (!yaListo) {
+            yaListo = true;
             dataReady = true;
+        }
+    };
+
+    const tiempoLimite = new Promise(resolve => setTimeout(resolve, 8000));
+
+    try {
+        await Promise.race([loadFromFirebase(), tiempoLimite]);
+        // Si loadFromFirebase() ya terminó, esto no hace nada (dataReady ya es true).
+        // Si fue el tiempo límite el que "ganó" la carrera, seguimos con los datos
+        // locales por ahora; la carga real de Firebase sigue en curso en segundo
+        // plano y se aplicará sola cuando termine (loadFromFirebase gestiona su
+        // propio dataReady al resolver).
+        if (!dataReady) {
+            console.log('⌛ Firebase está tardando en responder; se continúa con los datos locales mientras tanto');
         }
     } catch (error) {
         console.log('📡 Error de conexión a Firebase, usando datos locales');
-        showToast('📡 Usando datos locales');
-        dataReady = true;
     }
+    marcarListo();
     
     setInterval(() => {
         if (navigator.onLine) {
