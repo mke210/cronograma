@@ -1971,6 +1971,10 @@ const database = firebase.database();
 // Estado de sincronización
 let isSyncing = false;
 let syncQueue = [];
+// Bandera de seguridad: NO se permite sincronizar (subir datos a Firebase) hasta que la
+// app haya determinado con certeza cuáles son los datos correctos (locales o de la nube).
+// Esto evita que una carga inicial vacía sobrescriba datos reales en la nube.
+let dataReady = false;
 
 // ============================================================
 // DATOS DEL PLAN ANUAL
@@ -2383,6 +2387,16 @@ function updateConnectionStatus(connected) {
 }
 
 function syncAllToFirebase() {
+    // Salvaguarda anti-pérdida de datos: nunca subir nada a Firebase hasta que la app
+    // haya terminado de decidir con certeza cuáles son los datos correctos (ver initApp).
+    // Sin esto, una carga inicial que aún no confirmó los datos reales podía subir un
+    // estado vacío y sobrescribir el cronograma guardado en la nube.
+    if (!dataReady) {
+        console.warn('⏳ Sincronización pospuesta: los datos todavía no terminan de cargar');
+        syncQueue.push('syncAll');
+        return;
+    }
+
     if (isSyncing) {
         syncQueue.push('syncAll');
         return;
@@ -2390,7 +2404,6 @@ function syncAllToFirebase() {
     
     isSyncing = true;
     const localTimestamp = Date.now();
-    localStorage.setItem('cronograma_updatedAt', String(localTimestamp));
     
     const data = {
         activities: activities,
@@ -2408,6 +2421,11 @@ function syncAllToFirebase() {
     
     database.ref('cronograma').set(data)
         .then(() => {
+            // Solo marcamos el timestamp local como "sincronizado" DESPUÉS de que
+            // Firebase confirma que el guardado tuvo éxito (antes se marcaba antes
+            // de saber si el guardado funcionaba, lo cual podía dar falsas señales
+            // de qué copia es la más reciente).
+            localStorage.setItem('cronograma_updatedAt', String(localTimestamp));
             console.log('✅ Datos guardados en Firebase');
             isSyncing = false;
             if (syncQueue.length > 0) {
@@ -2425,7 +2443,7 @@ function syncAllToFirebase() {
 function loadFromFirebase() {
     showToast('🔄 Verificando datos en la nube...');
     
-    database.ref('cronograma').once('value')
+    return database.ref('cronograma').once('value')
         .then((snapshot) => {
             const data = snapshot.val();
             const localTimestamp = parseInt(localStorage.getItem('cronograma_updatedAt') || '0', 10);
@@ -2434,7 +2452,9 @@ function loadFromFirebase() {
                 const remoteTimestamp = typeof data.localUpdatedAt === 'number' ? data.localUpdatedAt : 0;
                 
                 if (remoteTimestamp > localTimestamp) {
-                    // La nube tiene cambios más recientes que este dispositivo: los usamos
+                    // La nube tiene cambios más recientes que este dispositivo: los usamos.
+                    // Solo se sobreescribe cada campo si realmente viene con datos (evita que
+                    // un campo vacío/ausente en la nube borre lo que ya teníamos en memoria).
                     if (data.activities) activities = data.activities;
                     if (data.config) config = { ...DEFAULT_CONFIG, ...data.config };
                     if (data.planData) planData = data.planData;
@@ -2454,7 +2474,9 @@ function loadFromFirebase() {
                 } else if (localTimestamp > 0) {
                     // Este dispositivo tiene cambios más recientes (o iguales) sin subir: los preservamos y los subimos
                     console.log('📤 Los datos locales son más recientes; se conservan y se suben a la nube');
+                    dataReady = true;
                     syncAllToFirebase();
+                    return;
                 } else {
                     // Sin cambios locales previos: usamos lo que haya en la nube
                     if (data.activities) activities = data.activities;
@@ -2474,6 +2496,12 @@ function loadFromFirebase() {
             } else {
                 console.log('📝 No hay datos en Firebase, usando datos locales');
                 loadDataLocal();
+            }
+            // La decisión ya está tomada (nube, local, o ninguna): a partir de aquí
+            // sí es seguro permitir que la sincronización automática/manual suba datos.
+            dataReady = true;
+            if (syncQueue.length > 0) {
+                syncQueue = [];
                 syncAllToFirebase();
             }
         })
@@ -2481,6 +2509,9 @@ function loadFromFirebase() {
             console.error('❌ Error al cargar desde Firebase:', error);
             showToast('⚠️ Error al cargar datos. Usando datos locales.');
             loadDataLocal();
+            // Aun en caso de error de lectura, ya se decidió usar los datos locales
+            // tal cual están: es seguro (y necesario) permitir sincronizar desde aquí.
+            dataReady = true;
         });
 }
 
@@ -2652,15 +2683,28 @@ function loadDataLocal() {
     const savedPlan = localStorage.getItem('cronograma_plan');
     if (savedPlan) {
         try { planData = JSON.parse(savedPlan); } 
-        catch(e) { planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL)); }
+        catch(e) {
+            console.error('⚠️ cronograma_plan corrupto en localStorage, se conserva sin tocar:', e, savedPlan);
+            planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
+        }
     } else {
         planData = JSON.parse(JSON.stringify(PLAN_ANUAL_INICIAL));
     }
 
     const saved = localStorage.getItem('cronograma_activities');
     if (saved) {
-        try { activities = JSON.parse(saved); } 
-        catch(e) { activities = []; }
+        try {
+            activities = JSON.parse(saved);
+        } catch(e) {
+            // IMPORTANTE: si el JSON guardado está corrupto, NO lo reemplazamos por un
+            // arreglo vacío en memoria (eso provocaría que el próximo guardado borre
+            // el respaldo real). Guardamos el texto corrupto aparte para poder
+            // recuperarlo manualmente y avisamos claramente al usuario.
+            console.error('🚨 cronograma_activities corrupto en localStorage. Contenido crudo conservado en cronograma_activities_backup_corrupto:', e, saved);
+            try { localStorage.setItem('cronograma_activities_backup_corrupto', saved); } catch(e2) {}
+            activities = [];
+            showToast('🚨 Se detectaron datos dañados en el cronograma. No se perdieron: revisa la consola (F12) y contacta soporte.');
+        }
     } else {
         activities = [];
     }
@@ -3339,20 +3383,26 @@ function checkFirebaseConnection() {
 }
 
 async function initApp() {
+    // Cargamos lo que haya en localStorage para pintar algo de inmediato, pero
+    // OJO: esto NO habilita la sincronización todavía (dataReady sigue en false).
     loadDataLocal();
     
     try {
         const connected = await checkFirebaseConnection();
         if (connected) {
             console.log('🔗 Conectado a Firebase');
-            loadFromFirebase();
+            await loadFromFirebase(); // deja dataReady = true al terminar (éxito o error)
         } else {
             console.log('📡 Sin conexión a Firebase, usando datos locales');
             showToast('📡 Sin conexión a internet. Usando datos locales.');
+            // Sin conexión: los datos locales son los únicos disponibles y es seguro
+            // permitir que, si más adelante hay conexión, se puedan sincronizar.
+            dataReady = true;
         }
     } catch (error) {
         console.log('📡 Error de conexión a Firebase, usando datos locales');
         showToast('📡 Usando datos locales');
+        dataReady = true;
     }
     
     setInterval(() => {
